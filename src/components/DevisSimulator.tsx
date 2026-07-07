@@ -1,96 +1,29 @@
-import { useState } from 'react';
-import {
-  Send, TrendingUp, Info, CheckCircle,
-  Home, Waves, Leaf, Building2, Sparkles, Scissors, Trash2,
-} from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Send, TrendingUp, Info, CheckCircle, Home, Waves, Leaf, Building2 } from 'lucide-react';
 import {
   motion,
   AnimatePresence,
   useReducedMotion,
 } from 'framer-motion';
 
-// ─── Familles de prestations (ordre = cahier des charges) ────────────────────
+type ServiceKey = 'vitres' | 'terrasse' | 'tonte' | 'menage' | 'bricolage' | 'interieur';
 
-type Famille = 'jardinage' | 'terrasse' | 'finBail' | 'finChantier' | 'vitres';
-
-const FAMILLES: {
-  key: Famille;
-  label: string;   // libellé complet
-  short: string;   // libellé bouton
-  icon: React.ElementType;
-  dispo: boolean;  // implémentée ?
-}[] = [
-  { key: 'jardinage',   label: 'Jardinage & espaces verts',  short: 'Jardinage',       icon: Leaf,      dispo: true  },
-  { key: 'terrasse',    label: 'Terrasses (haute pression)', short: 'Terrasses',       icon: Waves,     dispo: false },
-  { key: 'finBail',     label: 'Nettoyage fin de bail',      short: 'Fin de bail',     icon: Building2, dispo: false },
-  { key: 'finChantier', label: 'Nettoyage fin de chantier',  short: 'Fin de chantier', icon: Home,      dispo: false },
-  { key: 'vitres',      label: 'Vitres (entretien)',         short: 'Vitres',          icon: Sparkles,  dispo: false },
-];
-
-// ─── Grille tarifaire (source unique de vérité — cahier des charges) ─────────
-
-const TARIFS = {
-  jardinage: {
-    // Tonte / débroussaillage : paliers par surface
-    tonte: { forfaitPetit: 50, seuilPetit: 100, tauxMoyen: 0.70, seuilMoyen: 400, tauxGrand: 0.40 },
-    // Taille de haies : au mètre linéaire, selon hauteur (seuil 2 m)
-    haies: { bas: 6, haut: 13 },
-    // Évacuation des déchets verts
-    evacuation: { tauxM3: 30 },
-  },
-};
-
-// ─── Types de calcul ─────────────────────────────────────────────────────────
-
-interface Ligne {
+const servicesConfig: Record<ServiceKey, {
+  base: number;
+  taux: number;
   label: string;
-  montant: number;
-}
-
-// État du formulaire Jardinage
-interface JardinageState {
-  tonte:      { on: boolean; surface: number };
-  haies:      { on: boolean; metres: number; hauteur: 'bas' | 'haut' };
-  evacuation: { on: boolean; volume: number };
-}
-
-// ─── Moteurs de calcul par famille ───────────────────────────────────────────
-
-function computeJardinage(j: JardinageState): Ligne[] {
-  const lines: Ligne[] = [];
-  const t = TARIFS.jardinage;
-
-  if (j.tonte.on) {
-    const s = j.tonte.surface;
-    let montant: number;
-    if (s < t.tonte.seuilPetit) montant = t.tonte.forfaitPetit;              // < 100 m² → forfait
-    else if (s <= t.tonte.seuilMoyen) montant = s * t.tonte.tauxMoyen;       // 100–400 m² → 0,70 €/m²
-    else montant = s * t.tonte.tauxGrand;                                    // > 400 m² → 0,40 €/m²
-    lines.push({ label: `Tonte / débroussaillage · ${s} m²`, montant: Math.round(montant) });
-  }
-
-  if (j.haies.on) {
-    const taux = j.haies.hauteur === 'bas' ? t.haies.bas : t.haies.haut;
-    lines.push({
-      label: `Taille de haies · ${j.haies.metres} ml (${j.haies.hauteur === 'bas' ? '< 2 m' : '> 2 m'})`,
-      montant: Math.round(j.haies.metres * taux),
-    });
-  }
-
-  if (j.evacuation.on) {
-    lines.push({
-      label: `Évacuation déchets verts · ${j.evacuation.volume} m³`,
-      montant: Math.round(j.evacuation.volume * t.evacuation.tauxM3),
-    });
-  }
-
-  return lines;
-}
-
-// Fond de piste du slider (progression teal)
-const sliderBg = (v: number, min: number, max: number) => {
-  const pct = ((v - min) / (max - min)) * 100;
-  return `linear-gradient(to right, #79DBDC 0%, #79DBDC ${pct}%, #e5e7eb ${pct}%, #e5e7eb 100%)`;
+  icon: React.ElementType;
+  description: string;
+  unit: string;
+  min: number;
+  max: number;
+}> = {
+  vitres:    { base: 45, taux: 0.85, label: 'Nettoyage de vitres',     icon: Waves,     description: 'Baies vitrées, fenêtres, vérandas',   unit: 'm²',    min: 10,  max: 200  },
+  terrasse:  { base: 30, taux: 0.60, label: 'Nettoyage terrasse',      icon: Home,      description: 'Nettoyage haute pression',             unit: 'm²',    min: 10,  max: 150  },
+  tonte:     { base: 20, taux: 0.45, label: 'Tonte de gazon',          icon: Leaf,      description: 'Entretien jardin',                     unit: 'm²',    min: 50,  max: 1000 },
+  menage:    { base: 80, taux: 1.20, label: 'Ménage fin de bail',      icon: Building2, description: 'Remise en état complète',              unit: 'm²',    min: 30,  max: 150  },
+  bricolage: { base: 35, taux: 0,    label: 'Petits bricolages',       icon: Waves,     description: 'Montage, réparations',                 unit: 'heure', min: 1,   max: 8    },
+  interieur: { base: 50, taux: 0.95, label: 'Nettoyage intérieur',     icon: Home,      description: 'Entretien courant',                    unit: 'm²',    min: 40,  max: 200  },
 };
 
 interface DevisSimulatorProps {
@@ -140,19 +73,24 @@ const detailLineVariants = {
 export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
   const prefersReducedMotion = useReducedMotion();
 
-  const [famille, setFamille] = useState<Famille>('jardinage');
-
-  const [jardinage, setJardinage] = useState<JardinageState>({
-    tonte:      { on: true,  surface: 200 },
-    haies:      { on: false, metres: 10, hauteur: 'bas' },
-    evacuation: { on: false, volume: 1 },
+  const [type, setType]           = useState<ServiceKey>('vitres');
+  const [surface, setSurface]     = useState(50);
+  const [extraServices, setExtraServices] = useState({
+    deplacement: true,
+    urgence: false,
+    materiel: true,
   });
 
-  // Lignes de détail selon la famille active
-  const lines: Ligne[] = famille === 'jardinage' ? computeJardinage(jardinage) : [];
-  const totalPrice = lines.reduce((sum, l) => sum + l.montant, 0);
+  const service      = servicesConfig[type];
+  const basePrice    = Math.round(service.base + surface * service.taux);
+  const deplacementCost = extraServices.deplacement ? 15 : 0;
+  const urgenceCost  = extraServices.urgence ? 45 : 0;
+  const totalPrice   = basePrice + deplacementCost + urgenceCost;
 
-  const familleDispo = FAMILLES.find((f) => f.key === famille)?.dispo ?? false;
+  // reset surface dans les bornes quand le type change
+  useEffect(() => {
+    setSurface(Math.min(Math.max(surface, service.min), service.max));
+  }, [type]);
 
   const formatPrice = (price: number) =>
     new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(price);
@@ -218,22 +156,22 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
 
               <div className="p-6 space-y-5">
 
-                {/* Choix de la prestation */}
+                {/* Type de prestation */}
                 <div>
                   <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
                     Type de prestation
                   </label>
                   <div className="grid grid-cols-2 gap-2">
-                    {FAMILLES.map((f) => {
-                      const Icon = f.icon;
-                      const isSelected = famille === f.key;
+                    {(Object.keys(servicesConfig) as ServiceKey[]).map((k) => {
+                      const Icon = servicesConfig[k].icon;
+                      const isSelected = type === k;
                       return (
                         <motion.button
-                          key={f.key}
-                          onClick={() => setFamille(f.key)}
+                          key={k}
+                          onClick={() => setType(k)}
                           whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
                           whileTap={prefersReducedMotion  ? {} : { scale: 0.97 }}
-                          className={`relative flex items-center gap-2 p-2.5 rounded-xl border transition-colors duration-200 ${
+                          className={`flex items-center gap-2 p-2.5 rounded-xl border transition-colors duration-200 ${
                             isSelected
                               ? 'border-[#79DBDC] bg-[#79DBDC]/5 shadow-sm'
                               : 'border-gray-200 hover:border-[#79DBDC] hover:bg-gray-50'
@@ -244,226 +182,89 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                             className={isSelected ? 'text-[#79DBDC]' : 'text-gray-400'}
                           />
                           <span className={`text-xs font-medium ${isSelected ? 'text-[#79DBDC]' : 'text-gray-700'}`}>
-                            {f.short}
+                            {servicesConfig[k].label.split(' ').slice(0, 2).join(' ')}
                           </span>
-                          {!f.dispo && (
-                            <span className="ml-auto text-[9px] font-semibold text-gray-400 bg-gray-100 rounded px-1 py-0.5">
-                              bientôt
-                            </span>
-                          )}
                         </motion.button>
                       );
                     })}
                   </div>
+
+                  {/* Description animée au changement de type */}
+                  <AnimatePresence mode="wait">
+                    <motion.p
+                      key={type}
+                      className="text-xs text-gray-400 mt-2"
+                      initial={prefersReducedMotion ? {} : { opacity: 0, y: 4 }}
+                      animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
+                      exit={prefersReducedMotion   ? {} : { opacity: 0, y: -4 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      {service.description}
+                    </motion.p>
+                  </AnimatePresence>
                 </div>
 
-                {/* ── Formulaire dynamique selon la famille ── */}
-                <AnimatePresence mode="wait">
-                  {famille === 'jardinage' ? (
-                    <motion.div
-                      key="jardinage"
-                      className="space-y-3"
-                      initial={prefersReducedMotion ? {} : { opacity: 0, y: 6 }}
-                      animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-                      exit={prefersReducedMotion   ? {} : { opacity: 0, y: -6 }}
+                {/* Surface / Durée */}
+                <div>
+                  <div className="flex justify-between items-center mb-2">
+                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                      {service.unit === 'm²' ? 'Surface estimée' : 'Durée estimée'} ({service.unit})
+                    </label>
+                    <motion.span
+                      key={`${type}-${surface}`}
+                      className="text-sm font-bold text-[#79DBDC]"
+                      initial={prefersReducedMotion ? {} : { scale: 1.25, opacity: 0.6 }}
+                      animate={prefersReducedMotion ? {} : { scale: 1,    opacity: 1   }}
                       transition={{ duration: 0.2 }}
                     >
-                      {/* Poste : Tonte / débroussaillage */}
-                      <div className="rounded-xl border border-gray-200 p-3">
-                        <label className="flex items-center justify-between cursor-pointer">
-                          <span className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                            <Leaf size={16} className="text-[#5BBFC0]" />
-                            Tonte / débroussaillage
-                          </span>
-                          <input
-                            type="checkbox"
-                            checked={jardinage.tonte.on}
-                            onChange={(e) =>
-                              setJardinage((j) => ({ ...j, tonte: { ...j.tonte, on: e.target.checked } }))
-                            }
-                            className="w-4 h-4 rounded border-gray-300 text-[#79DBDC] focus:ring-[#79DBDC]"
-                          />
-                        </label>
-                        <AnimatePresence>
-                          {jardinage.tonte.on && (
-                            <motion.div
-                              className="overflow-hidden"
-                              variants={prefersReducedMotion ? {} : detailLineVariants}
-                              initial="initial"
-                              animate="animate"
-                              exit="exit"
-                            >
-                              <div className="pt-3">
-                                <div className="flex justify-between items-center mb-1">
-                                  <span className="text-xs text-gray-400">Surface</span>
-                                  <span className="text-sm font-bold text-[#79DBDC]">{jardinage.tonte.surface} m²</span>
-                                </div>
-                                <input
-                                  type="range"
-                                  min={10}
-                                  max={1000}
-                                  step={10}
-                                  value={jardinage.tonte.surface}
-                                  onChange={(e) =>
-                                    setJardinage((j) => ({ ...j, tonte: { ...j.tonte, surface: parseInt(e.target.value) } }))
-                                  }
-                                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#79DBDC]"
-                                  style={{ background: sliderBg(jardinage.tonte.surface, 10, 1000) }}
-                                />
-                                <div className="flex justify-between text-xs text-gray-400 mt-1">
-                                  <span>10 m²</span>
-                                  <span>1000 m²</span>
-                                </div>
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
+                      {surface} {service.unit}
+                    </motion.span>
+                  </div>
+                  <input
+                    type="range"
+                    min={service.min}
+                    max={service.max}
+                    step={service.unit === 'm²' ? 5 : 0.5}
+                    value={surface}
+                    onChange={(e) => setSurface(parseFloat(e.target.value))}
+                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#79DBDC]"
+                    style={{
+                      background: `linear-gradient(to right, #79DBDC 0%, #79DBDC ${(surface - service.min) / (service.max - service.min) * 100}%, #e5e7eb ${(surface - service.min) / (service.max - service.min) * 100}%, #e5e7eb 100%)`,
+                    }}
+                  />
+                  <div className="flex justify-between text-xs text-gray-400 mt-1">
+                    <span>{service.min} {service.unit}</span>
+                    <span>{service.max} {service.unit}</span>
+                  </div>
+                </div>
 
-                      {/* Poste : Taille de haies / arbustes */}
-                      <div className="rounded-xl border border-gray-200 p-3">
-                        <label className="flex items-center justify-between cursor-pointer">
-                          <span className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                            <Scissors size={16} className="text-[#5BBFC0]" />
-                            Taille de haies / arbustes
-                          </span>
+                {/* Options supplémentaires */}
+                <div className="border-t border-gray-100 pt-4">
+                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
+                    Options complémentaires
+                  </p>
+                  <div className="space-y-2">
+                    {[
+                      { key: 'deplacement', label: 'Déplacement inclus',       extra: '+15€' },
+                      { key: 'urgence',     label: 'Intervention urgente (24h)', extra: '+45€' },
+                    ].map(({ key, label, extra }) => (
+                      <label key={key} className="flex items-center justify-between cursor-pointer">
+                        <div className="flex items-center gap-2">
                           <input
                             type="checkbox"
-                            checked={jardinage.haies.on}
+                            checked={extraServices[key as keyof typeof extraServices]}
                             onChange={(e) =>
-                              setJardinage((j) => ({ ...j, haies: { ...j.haies, on: e.target.checked } }))
+                              setExtraServices({ ...extraServices, [key]: e.target.checked })
                             }
                             className="w-4 h-4 rounded border-gray-300 text-[#79DBDC] focus:ring-[#79DBDC]"
                           />
-                        </label>
-                        <AnimatePresence>
-                          {jardinage.haies.on && (
-                            <motion.div
-                              className="overflow-hidden"
-                              variants={prefersReducedMotion ? {} : detailLineVariants}
-                              initial="initial"
-                              animate="animate"
-                              exit="exit"
-                            >
-                              <div className="pt-3 space-y-3">
-                                <div>
-                                  <div className="flex justify-between items-center mb-1">
-                                    <span className="text-xs text-gray-400">Longueur</span>
-                                    <span className="text-sm font-bold text-[#79DBDC]">{jardinage.haies.metres} ml</span>
-                                  </div>
-                                  <input
-                                    type="range"
-                                    min={1}
-                                    max={100}
-                                    step={1}
-                                    value={jardinage.haies.metres}
-                                    onChange={(e) =>
-                                      setJardinage((j) => ({ ...j, haies: { ...j.haies, metres: parseInt(e.target.value) } }))
-                                    }
-                                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#79DBDC]"
-                                    style={{ background: sliderBg(jardinage.haies.metres, 1, 100) }}
-                                  />
-                                </div>
-                                <div>
-                                  <span className="block text-xs text-gray-400 mb-1.5">Hauteur</span>
-                                  <div className="grid grid-cols-2 gap-2">
-                                    {([['bas', '< 2 m'], ['haut', '> 2 m']] as const).map(([val, txt]) => {
-                                      const active = jardinage.haies.hauteur === val;
-                                      return (
-                                        <button
-                                          key={val}
-                                          onClick={() =>
-                                            setJardinage((j) => ({ ...j, haies: { ...j.haies, hauteur: val } }))
-                                          }
-                                          className={`p-2 rounded-lg border text-xs font-medium transition-colors ${
-                                            active
-                                              ? 'border-[#79DBDC] bg-[#79DBDC]/5 text-[#79DBDC]'
-                                              : 'border-gray-200 text-gray-600 hover:border-[#79DBDC]'
-                                          }`}
-                                        >
-                                          {txt}
-                                        </button>
-                                      );
-                                    })}
-                                  </div>
-                                </div>
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-
-                      {/* Poste : Évacuation des déchets verts */}
-                      <div className="rounded-xl border border-gray-200 p-3">
-                        <label className="flex items-center justify-between cursor-pointer">
-                          <span className="flex items-center gap-2 text-sm font-medium text-gray-700">
-                            <Trash2 size={16} className="text-[#5BBFC0]" />
-                            Évacuation des déchets verts
-                          </span>
-                          <input
-                            type="checkbox"
-                            checked={jardinage.evacuation.on}
-                            onChange={(e) =>
-                              setJardinage((j) => ({ ...j, evacuation: { ...j.evacuation, on: e.target.checked } }))
-                            }
-                            className="w-4 h-4 rounded border-gray-300 text-[#79DBDC] focus:ring-[#79DBDC]"
-                          />
-                        </label>
-                        <AnimatePresence>
-                          {jardinage.evacuation.on && (
-                            <motion.div
-                              className="overflow-hidden"
-                              variants={prefersReducedMotion ? {} : detailLineVariants}
-                              initial="initial"
-                              animate="animate"
-                              exit="exit"
-                            >
-                              <div className="pt-3">
-                                <div className="flex justify-between items-center mb-1">
-                                  <span className="text-xs text-gray-400">Volume (30 €/m³)</span>
-                                  <span className="text-sm font-bold text-[#79DBDC]">{jardinage.evacuation.volume} m³</span>
-                                </div>
-                                <input
-                                  type="range"
-                                  min={0.5}
-                                  max={20}
-                                  step={0.5}
-                                  value={jardinage.evacuation.volume}
-                                  onChange={(e) =>
-                                    setJardinage((j) => ({ ...j, evacuation: { ...j.evacuation, volume: parseFloat(e.target.value) } }))
-                                  }
-                                  className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#79DBDC]"
-                                  style={{ background: sliderBg(jardinage.evacuation.volume, 0.5, 20) }}
-                                />
-                                <div className="flex justify-between text-xs text-gray-400 mt-1">
-                                  <span>0,5 m³</span>
-                                  <span>20 m³</span>
-                                </div>
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    </motion.div>
-                  ) : (
-                    /* Placeholder pour les familles pas encore intégrées */
-                    <motion.div
-                      key="placeholder"
-                      className="rounded-xl border border-dashed border-gray-200 bg-gray-50/50 p-6 text-center"
-                      initial={prefersReducedMotion ? {} : { opacity: 0 }}
-                      animate={prefersReducedMotion ? {} : { opacity: 1 }}
-                      exit={prefersReducedMotion   ? {} : { opacity: 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <p className="text-sm text-gray-500">
-                        Cette prestation sera bientôt disponible dans le simulateur.
-                      </p>
-                      <p className="text-xs text-gray-400 mt-1">
-                        En attendant, demandez votre devis gratuit — réponse sous 24h.
-                      </p>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
+                          <span className="text-sm text-gray-700">{label}</span>
+                        </div>
+                        <span className="text-xs text-gray-400">{extra}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
               </div>
             </motion.div>
 
@@ -481,32 +282,52 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                 {/* Détail des prix */}
                 <div className="space-y-3 mb-6">
 
-                  {/* Lignes dynamiques */}
-                  {familleDispo && lines.length === 0 && (
-                    <p className="text-sm text-white/50">
-                      Sélectionnez au moins un poste pour voir l'estimation.
-                    </p>
-                  )}
-                  {!familleDispo && (
-                    <p className="text-sm text-white/50">
-                      Estimation à venir pour cette prestation.
-                    </p>
-                  )}
+                  {/* Prestation de base */}
+                  <div className="flex justify-between text-sm text-white/70">
+                    <span>Prestation de base</span>
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={basePrice}
+                        variants={prefersReducedMotion ? {} : priceVariants}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                      >
+                        {formatPrice(basePrice)}
+                      </motion.span>
+                    </AnimatePresence>
+                  </div>
 
-                  <AnimatePresence initial={false}>
-                    {lines.map((line) => (
+                  {/* Déplacement — apparition/disparition fluide */}
+                  <AnimatePresence>
+                    {extraServices.deplacement && (
                       <motion.div
-                        key={line.label}
-                        className="flex justify-between text-sm text-white/70 overflow-hidden gap-3"
+                        className="flex justify-between text-sm text-white/70 overflow-hidden"
                         variants={prefersReducedMotion ? {} : detailLineVariants}
                         initial="initial"
                         animate="animate"
                         exit="exit"
                       >
-                        <span>{line.label}</span>
-                        <span className="whitespace-nowrap">{formatPrice(line.montant)}</span>
+                        <span>+ Déplacement</span>
+                        <span>{formatPrice(15)}</span>
                       </motion.div>
-                    ))}
+                    )}
+                  </AnimatePresence>
+
+                  {/* Urgence */}
+                  <AnimatePresence>
+                    {extraServices.urgence && (
+                      <motion.div
+                        className="flex justify-between text-sm text-white/70 overflow-hidden"
+                        variants={prefersReducedMotion ? {} : detailLineVariants}
+                        initial="initial"
+                        animate="animate"
+                        exit="exit"
+                      >
+                        <span>+ Urgence</span>
+                        <span>{formatPrice(45)}</span>
+                      </motion.div>
+                    )}
                   </AnimatePresence>
 
                   {/* Total */}
