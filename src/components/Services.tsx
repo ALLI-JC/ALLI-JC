@@ -1,66 +1,81 @@
-import { 
-  Droplets, Waves, Leaf, Building2, Home, Wrench, Store, Sparkles,
-  ArrowRight, CheckCircle, Star, Shield, Clock
+import {
+    Droplets, Waves, Leaf, Building2, Home, Wrench, Store, Sparkles,
+    ArrowRight, CheckCircle, Star, Shield, Clock, FileEdit, Zap
 } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+// Catégories affichées (ordre + titre + cible)
+const categories = [
+  { title: 'Entretien Extérieur & Espaces Verts', target: 'Particuliers' },
+  { title: 'Nettoyages Spécifiques & Remise en État', target: 'Transitions immobilières' },
+  { title: 'Services Professionnels & Copropriétés', target: 'Entreprises & Syndics' },
+];
+
 const services = [
-  { 
-    icon: Droplets, 
-    name: 'Nettoyage de vitres', 
+  {
+    icon: Droplets,
+    name: 'Nettoyage de vitres',
     desc: 'Baies vitrées, fenêtres, vérandas',
     mention: 'Intervention en hauteur jusqu\'au R+2',
-    features: ['Hauteur jusqu\'au R+2', 'Matériel professionnel', 'Sans traces']
+    features: ['Hauteur jusqu\'au R+2', 'Matériel professionnel', 'Sans traces'],
+      category: 'Entretien Extérieur & Espaces Verts'
   },
-  { 
-    icon: Waves, 
-    name: 'Nettoyage haute pression', 
+  {
+    icon: Waves,
+    name: 'Nettoyage haute pression',
     desc: 'Terrasses, allées, façades',
     mention: 'Résultat immédiat, traitement anti-mousse inclus',
-    features: ['Nettoyage écologique', 'Résultat immédiat', 'Prévention mousses']
+    features: ['Nettoyage écologique', 'Résultat immédiat', 'Prévention mousses'],
+      category: 'Entretien Extérieur & Espaces Verts'
   },
-  { 
-    icon: Leaf, 
-    name: 'Jardinage & espaces verts', 
+  {
+    icon: Leaf,
+    name: 'Jardinage & espaces verts',
     desc: 'Tonte, taille, entretien communs',
     mention: 'Collecte et évacuation des déchets verts',
-    features: ['Dératisation', 'Élagage', 'Collecte déchets verts']
+    features: ['Dératisation', 'Élagage', 'Collecte déchets verts'],
+      category: 'Entretien Extérieur & Espaces Verts'
   },
-  { 
-    icon: Building2, 
-    name: 'Ménage fin de bail', 
-    desc: 'Remise en état, états des lieux',
-    mention: 'Conforme aux normes — satisfaction garantie',
-    features: ['Conforme aux normes', 'Rapidité', 'Garantie satisfait']
-  },
-  { 
-    icon: Home, 
-    name: 'Fin de chantier', 
-    desc: 'Nettoyage après travaux',
-    mention: 'Dépoussiérage complet et évacuation des gravats',
-    features: ['Dépoussiérage', 'Lavage sols', 'Évacuation gravats']
-  },
-  { 
-    icon: Wrench, 
-    name: 'Petits bricolages', 
-    desc: 'Montage, fixation, petites réparations',
-    mention: 'Matériel fourni, déplacement inclus',
-    features: ['Matériel fourni', 'Déplacement inclus', 'Rapidité']
-  },
-  { 
-    icon: Store, 
-    name: 'Locaux commerciaux', 
-    desc: 'Nettoyage bureaux, parties communes',
-    mention: 'Horaires flexibles, intervention discrète',
-    features: ['Horaires flexibles', 'Discretion', 'Produits professionnels']
-  },
-  { 
-    icon: Sparkles, 
-    name: 'Nettoyage intérieur', 
+  {
+    icon: Sparkles,
+    name: 'Nettoyage intérieur',
     desc: 'Entretien courant, ménage régulier',
     mention: 'Produits écologiques, linge de maison inclus',
-    features: ['Linge de maison', 'Aération', 'Produits écologiques']
+    features: ['Linge de maison', 'Aération', 'Produits écologiques'],
+      category: 'Entretien Extérieur & Espaces Verts'
+  },
+  {
+    icon: Building2,
+    name: 'Ménage fin de bail',
+    desc: 'Remise en état, états des lieux',
+    mention: 'Conforme aux normes — satisfaction garantie',
+    features: ['Conforme aux normes', 'Rapidité', 'Garantie satisfait'],
+      category: 'Nettoyages Spécifiques & Remise en État'
+  },
+  {
+    icon: Home,
+    name: 'Fin de chantier',
+    desc: 'Nettoyage après travaux',
+    mention: 'Dépoussiérage complet et évacuation des gravats',
+    features: ['Dépoussiérage', 'Lavage sols', 'Évacuation gravats'],
+      category: 'Nettoyages Spécifiques & Remise en État'
+  },
+  {
+    icon: Wrench,
+    name: 'Petits bricolages',
+    desc: 'Montage, fixation, petites réparations',
+    mention: 'Matériel fourni, déplacement inclus',
+    features: ['Matériel fourni', 'Déplacement inclus', 'Rapidité'],
+      category: 'Nettoyages Spécifiques & Remise en État'
+  },
+  {
+    icon: Store,
+    name: 'Locaux commerciaux',
+    desc: 'Nettoyage bureaux, parties communes',
+    mention: 'Horaires flexibles, intervention discrète',
+    features: ['Horaires flexibles', 'Discretion', 'Produits professionnels'],
+      category: 'Services Professionnels & Copropriétés'
   },
 ];
 
@@ -260,18 +275,27 @@ export default function Services() {
             variants={fadeInUp}
             className="inline-flex flex-wrap items-center justify-center gap-4 px-6 py-3 rounded-2xl border border-gray-100 bg-white shadow-sm text-sm text-gray-500"
           >
-            <span className="flex items-center gap-1.5">
-              <CheckCircle size={14} className="text-[#79DBDC]" />
-              Devis gratuit
-            </span>
+            {/*<span className="flex items-center gap-1.5">*/}
+            {/*  <CheckCircle size={14} className="text-[#79DBDC]" />*/}
+            {/*  Devis gratuit*/}
+            {/*</span>*/}
+
+              <span className="flex items-center gap-1.5">
+                  <FileEdit size={14} className="text-[#79DBDC]"/>
+                  Devis gratuit
+              </span>
             <span className="w-px h-4 bg-gray-200" />
             <span className="flex items-center gap-1.5">
               <Shield size={14} className="text-[#79DBDC]" />
               Entreprise assurée
             </span>
             <span className="w-px h-4 bg-gray-200" />
-            <span className="flex items-center gap-1.5">
-              <Clock size={14} className="text-[#79DBDC]" />
+            {/*<span className="flex items-center gap-1.5">*/}
+            {/*  <Clock size={14} className="text-[#79DBDC]" />*/}
+            {/*  Intervention rapide*/}
+            {/*</span>*/}
+              <span className="flex items-center gap-1.5">
+              <Zap size={14} className="text-[#79DBDC]"/>
               Intervention rapide
             </span>
             <span className="w-px h-4 bg-gray-200" />
@@ -282,18 +306,59 @@ export default function Services() {
           </motion.div>
         </motion.div>
 
-        {/* Grille des services */}
-        <motion.div
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6"
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          variants={staggerContainer}
-        >
-          {services.map((service, index) => (
-            <ServiceCard key={service.name} {...service} index={index} />
-          ))}
-        </motion.div>
+        {/* Grille des services regroupée par catégorie */}
+        <div className="space-y-12 md:space-y-16">
+          {categories.map((category, catIndex) => {
+            const items = services.filter((s) => s.category === category.title);
+            if (items.length === 0) return null;
+
+            // Index global continu pour conserver un stagger fluide entre les sections
+            const offset = categories
+              .slice(0, catIndex)
+              .reduce((acc, c) => acc + services.filter((s) => s.category === c.title).length, 0);
+
+            return (
+              <div key={category.title}>
+                {/* En-tête de catégorie + badge cible */}
+                <motion.div
+                  className="mb-6 flex flex-wrap items-center justify-center gap-3 text-center"
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.5 }}
+                  transition={{ duration: 0.5 }}
+                >
+                  <h3
+                    className="text-xl md:text-2xl font-bold text-[#3a9a9b]"
+                    style={{ fontFamily: 'var(--font-roboto)' }}
+                  >
+                    {category.title}
+                  </h3>
+                  <span className="inline-flex items-center rounded-full bg-[#79DBDC]/10 border border-[#79DBDC]/20 px-3 py-1 text-xs font-medium text-[#3a9a9b]">
+                    Pour {category.target}
+                  </span>
+                </motion.div>
+
+                {/* Cartes de la catégorie — flex centré, largeurs = grille 4 colonnes */}
+                <motion.div
+                  className="flex flex-wrap justify-center gap-5 md:gap-6"
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true, amount: 0.1 }}
+                  variants={staggerContainer}
+                >
+                  {items.map((service, i) => (
+                    <div
+                      key={service.name}
+                      className="w-full sm:w-[calc(50%-0.625rem)] md:w-[calc(50%-0.75rem)] lg:w-[calc(25%-1.125rem)]"
+                    >
+                      <ServiceCard {...service} index={offset + i} />
+                    </div>
+                  ))}
+                </motion.div>
+              </div>
+            );
+          })}
+        </div>
 
         {/* Mention div globale bas de section */}
         <motion.div
