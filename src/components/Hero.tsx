@@ -1,5 +1,5 @@
-import { Send, Phone, ChevronDown } from 'lucide-react';
-import { useState, useRef } from 'react';
+import { Send, Phone, ChevronDown, ArrowRight } from 'lucide-react';
+import { useState, useRef, useEffect } from 'react';
 import {
   motion,
   AnimatePresence,
@@ -29,6 +29,25 @@ const SERVICES: Service[] = [
 ];
 
 const DEFAULT_IMG = '/Mug-alliéjc.jpeg';
+
+// 3 catégories cibles — affichées une par une (carrousel auto) dans le Hero
+const CATEGORIES = [
+  {
+    title: 'Entretien Extérieur & Espaces Verts',
+    target: 'Particuliers',
+    services: ['Nettoyage de vitres', 'Nettoyage haute pression', 'Jardinage & espaces verts', 'Nettoyage intérieur'],
+  },
+  {
+    title: 'Nettoyages Spécifiques & Remise en État',
+    target: 'Transitions immobilières',
+    services: ['Ménage fin de bail', 'Fin de chantier', 'Petits bricolages'],
+  },
+  {
+    title: 'Services Professionnels & Copropriétés',
+    target: 'Entreprises & Syndics',
+    services: ['Locaux commerciaux'],
+  },
+];
 
 // Stagger container pour les enfants
 const containerVariants = {
@@ -85,11 +104,37 @@ export default function Hero({ onDevisClick }: HeroProps) {
     }, 180);
   };
 
+  // Carrousel de catégories — change automatiquement toutes les 3,5 s
+  const [catIndex, setCatIndex] = useState(0);
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const id = setInterval(() => {
+      setCatIndex((i) => (i + 1) % CATEGORIES.length);
+    }, 3500);
+    return () => clearInterval(id);
+  }, [prefersReducedMotion]);
+
+  // Diaporama auto de l'image de droite — affiche les images de SERVICES une par une
+  useEffect(() => {
+    setActiveImg(SERVICES[0].img);
+    if (prefersReducedMotion) return;
+    let i = 0;
+    const id = setInterval(() => {
+      i = (i + 1) % SERVICES.length;
+      setActiveImg(SERVICES[i].img);
+    }, 4000);
+    return () => clearInterval(id);
+  }, [prefersReducedMotion]);
+
+  const scrollToServices = () => {
+    document.getElementById('sec-services')?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
     <section className="relative flex items-start bg-[#237395]">
 
       {/* ── LEFT PANEL ── */}
-      <div className="relative z-10 flex flex-col w-full lg:w-[55%] bg-[#237395] px-6 sm:px-10 lg:px-16 py-14 md:py-20">
+      <div className="relative z-10 flex flex-col w-full lg:w-[60%] bg-[#237395] px-6 sm:px-10 lg:px-16 py-14 md:py-20">
 
         {/* Titre */}
         <motion.h1
@@ -106,7 +151,7 @@ export default function Hero({ onDevisClick }: HeroProps) {
 
         {/* Séparateur */}
         <motion.div
-          className="flex items-center gap-3 mb-7"
+          className="flex items-center gap-3 mb-8"
           variants={prefersReducedMotion ? {} : dividerVariants}
           initial="hidden"
           animate="visible"
@@ -115,7 +160,9 @@ export default function Hero({ onDevisClick }: HeroProps) {
           <div className="h-[2px] w-4 rounded-full bg-[#D2B093]" />
         </motion.div>
 
-        {/* Liste de services — stagger */}
+        {/* Liste des 10 services — désactivée (code conservé, non affiché),
+            remplacée par le carrousel de catégories ci-dessous */}
+        {false && (
         <motion.ul
           className="mb-9 space-y-0.5"
           variants={prefersReducedMotion ? {} : containerVariants}
@@ -145,6 +192,74 @@ export default function Hero({ onDevisClick }: HeroProps) {
             </motion.li>
           ))}
         </motion.ul>
+        )}
+
+        {/* Catégories affichées une par une (carrousel automatique) */}
+        <div className="mb-6 min-h-[150px] flex flex-col justify-center">
+          {prefersReducedMotion ? (
+            <ul className="space-y-2">
+              {CATEGORIES.map((c) => (
+                <li key={c.title}>
+                  <span className="block text-lg font-semibold text-white">{c.title}</span>
+                  <span className="block text-sm text-[#D2B093]">Pour {c.target}</span>
+                  <span className="block text-sm text-white/70 mt-0.5">{c.services.join(' · ')}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={catIndex}
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.45, ease: 'easeOut' }}
+              >
+                <span className="block text-xl sm:text-2xl font-semibold text-white leading-tight">
+                  {CATEGORIES[catIndex].title}
+                </span>
+                <span className="block text-sm text-[#D2B093] mt-1">
+                  Pour {CATEGORIES[catIndex].target}
+                </span>
+                <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5">
+                  {CATEGORIES[catIndex].services.map((s) => (
+                    <li key={s} className="flex items-center gap-1.5 text-sm text-white/80">
+                      <span className="h-1 w-1 rounded-full bg-[#D2B093]" />
+                      {s}
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            </AnimatePresence>
+          )}
+        </div>
+
+        {/* Indicateurs de progression (points cliquables) */}
+        {!prefersReducedMotion && (
+          <div className="flex gap-2 mb-8">
+            {CATEGORIES.map((c, i) => (
+              <button
+                key={c.title}
+                onClick={() => setCatIndex(i)}
+                aria-label={`Afficher : ${c.title}`}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  i === catIndex ? 'w-6 bg-[#D2B093]' : 'w-2 bg-white/30 hover:bg-white/50'
+                }`}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Bouton vers la section « Nos services » */}
+        <motion.button
+          onClick={scrollToServices}
+          whileHover={prefersReducedMotion ? {} : { scale: 1.03 }}
+          whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
+          className="inline-flex items-center gap-2 mb-8 self-start border border-[#D2B093]/50 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-[#D2B093]/15 transition-colors"
+        >
+          Voir nos services
+          <ArrowRight size={16} className="text-[#D2B093]" />
+        </motion.button>
 
         {/* Boutons */}
         <motion.div
@@ -200,8 +315,8 @@ export default function Hero({ onDevisClick }: HeroProps) {
       </div>
 
       {/* ── RIGHT PANEL — sticky ── */}
-      <div className="hidden lg:block lg:w-[45%] self-stretch">
-        <div className="sticky top-0 h-screen overflow-hidden">
+      <div className="hidden lg:block lg:w-[40%] self-stretch">
+        <div className="relative h-full overflow-hidden">
 
           {/* Crossfade image via AnimatePresence */}
           <AnimatePresence mode="wait">

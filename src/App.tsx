@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
 import TrustBar from './components/TrustBar'
+import ServicesMarquee from './components/ServicesMarquee'
 import Services from './components/Services'
 import DevisSimulator from './components/DevisSimulator'
 import ZoneIntervention from './components/ZoneIntervention'
@@ -34,6 +35,7 @@ function PublicSite() {
     <div className="font-sans bg-white text-gray-900">
       <Navbar onDevisClick={scrollToDevis} />
       <Hero onDevisClick={scrollToDevis} />
+      <ServicesMarquee />
       <TrustBar />
       <Services />
       <DevisSimulator onConfirm={scrollToContact} />
