@@ -28,6 +28,12 @@
   }
 }
 
+body {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, rgba(35,115,149,0.06), transparent 28%), #f7f3ee;
+  color: #0e2b38;
+}
+
 /* ========== ANIMATIONS ========== */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(10px); }
@@ -251,3 +257,69 @@
 .overflow-hidden  { overflow: hidden; }
 .overflow-y-auto  { overflow-y: auto; }
 .overflow-x-auto  { overflow-x: auto; }
+@keyframes sway {
+  0% {
+    transform: translateX(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateX(8px) rotate(2deg);
+  }
+  75% {
+    transform: translateX(-8px) rotate(-2deg);
+  }
+  100% {
+    transform: translateX(0px) rotate(0deg);
+  }
+}
+
+@keyframes swaySoft {
+  0% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(12px);
+  }
+  100% {
+    transform: translateX(0px);
+  }
+}
+
+.animate-sway {
+  animation: sway 3s ease-in-out infinite;
+}
+
+/* Version plus douce avec pause */
+.animate-sway-soft {
+  animation: swaySoft 4s ease-in-out infinite;
+}
+
+/* Version qui s'arrête au survol */
+.animate-sway:hover {
+  animation-play-state: paused;
+}
+
+/* Version avec mouvement continu */
+.animate-sway-continuous {
+  animation: sway 2.5s ease-in-out infinite;
+}
+
+/* Différentes variantes de timing */
+.animate-sway-fast {
+  animation: sway 1.5s ease-in-out infinite;
+}
+
+.animate-sway-slow {
+  animation: sway 5s ease-in-out infinite;
+}
+@keyframes slideSway {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(15px); }
+}
+.animate-sway { animation: slideSway 3s ease-in-out infinite; }
+@keyframes swayWithPause {
+  0%, 10% { transform: translateX(0); }
+  30% { transform: translateX(10px); }
+  50%, 60% { transform: translateX(10px); }
+  80% { transform: translateX(-10px); }
+  100% { transform: translateX(0); }
+}

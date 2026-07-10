@@ -39,45 +39,10 @@ const categoryMentions: Record<string, string> = {
 };
 
 // Variants Framer Motion
-const fadeInUp = {
-  hidden: { opacity: 0, y: 24 },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.5, delay: i * 0.07, ease: 'easeOut' },
-  }),
-};
+// Simple animation props used directly on motion components
+const fadeTransition = { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+const popTransition = { duration: 0.35, ease: [0.22, 1, 0.36, 1] }
 
-const staggerContainer = {
-  hidden: {},
-  visible: { transition: { staggerChildren: 0.06 } },
-};
-
-const imageCardVariant = {
-  hidden: { opacity: 0, scale: 0.92 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 0.4, ease: 'easeOut' },
-  },
-  exit: {
-    opacity: 0,
-    scale: 0.88,
-    transition: { duration: 0.25, ease: 'easeIn' },
-  },
-};
-
-const lightboxVariant = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.25 } },
-  exit: { opacity: 0, transition: { duration: 0.2 } },
-};
-
-const lightboxImageVariant = {
-  hidden: { opacity: 0, scale: 0.96, y: 12 },
-  visible: { opacity: 1, scale: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
-  exit: { opacity: 0, scale: 0.96, y: -12, transition: { duration: 0.2 } },
-};
 
 export default function Gallery() {
   const [images, setImages] = useState<GalleryImage[]>([]);
@@ -154,12 +119,17 @@ export default function Gallery() {
           {/* En-tête */}
           <motion.div
             className="text-center max-w-2xl mx-auto mb-10 md:mb-12"
-            initial="hidden"
-            whileInView="visible"
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
             viewport={{ once: true, amount: 0.3 }}
-            variants={staggerContainer}
+           
           >
-            <motion.div variants={fadeInUp} custom={0}>
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+            >
               <div className="inline-flex items-center gap-2 bg-[#79DBDC]/10 rounded-full px-4 py-1.5 mb-4">
                 <Camera size={14} className="text-[#79DBDC]" />
                 <span className="text-xs font-medium text-[#79DBDC] uppercase tracking-wider">
@@ -169,21 +139,31 @@ export default function Gallery() {
             </motion.div>
 
             <motion.h2
-              variants={fadeInUp}
-              custom={1}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.5, delay: 0.07, ease: [0.22, 1, 0.36, 1] }}
               className="font-serif text-3xl md:text-4xl font-bold text-gray-900 mb-4"
             >
               Galerie de nos réalisations
             </motion.h2>
 
-            <motion.p variants={fadeInUp} custom={2} className="text-gray-500 mb-6">
+            <motion.p
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.5, delay: 0.14, ease: [0.22, 1, 0.36, 1] }}
+              className="text-gray-500 mb-6"
+            >
               Découvrez la qualité de nos prestations à travers nos réalisations
             </motion.p>
 
             {/* Mention div du titre */}
             <motion.div
-              variants={fadeInUp}
-              custom={3}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.5, delay: 0.21, ease: [0.22, 1, 0.36, 1] }}
               className="inline-flex flex-wrap items-center justify-center gap-4 px-6 py-3 rounded-2xl border border-gray-100 bg-white shadow-sm text-sm text-gray-500"
             >
               <span className="flex items-center gap-1.5">
@@ -212,12 +192,18 @@ export default function Gallery() {
           {featuredImages.length > 0 && (
             <motion.div
               className="mb-12"
-              initial="hidden"
-              whileInView="visible"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
               viewport={{ once: true, amount: 0.2 }}
-              variants={staggerContainer}
+            
             >
-              <motion.div variants={fadeInUp} custom={0} className="flex items-center justify-between mb-4">
+              <motion.div
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                className="flex items-center justify-between mb-4"
+              >
                 <h3 className="text-lg font-semibold text-gray-800">✨ À la une</h3>
                 <span className="text-xs text-gray-400">Nos meilleures réalisations</span>
               </motion.div>
@@ -225,8 +211,10 @@ export default function Gallery() {
                 {featuredImages.map((image, i) => (
                   <motion.div
                     key={image.id}
-                    variants={fadeInUp}
-                    custom={i + 1}
+                    initial={{ opacity: 0, y: 24 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, amount: 0.2 }}
+                    transition={{ duration: 0.5, delay: i * 0.06, ease: [0.22, 1, 0.36, 1] }}
                     onClick={() => openLightbox(image, filteredImages.findIndex(img => img.id === image.id))}
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
@@ -260,7 +248,7 @@ export default function Gallery() {
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.45, ease: 'easeOut' }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
             {categories.map((cat) => {
               const count = cat.id === 'all' ? images.length : images.filter(img => img.category === cat.id).length;
@@ -335,15 +323,18 @@ export default function Gallery() {
               <motion.div
                 key={selectedCategory}
                 className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
-                variants={staggerContainer}
-                initial="hidden"
-                animate="visible"
-                exit="hidden"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+               
               >
                 {filteredImages.map((image, index) => (
                   <motion.div
                     key={image.id}
-                    variants={imageCardVariant}
+                    initial={{ opacity: 0, scale: 0.92 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.88 }}
+                    transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
                     onClick={() => openLightbox(image, index)}
                     whileHover={{ scale: 1.03, transition: { duration: 0.2 } }}
                     whileTap={{ scale: 0.97 }}
@@ -408,10 +399,10 @@ export default function Gallery() {
         {selectedImage && (
           <motion.div
             className="fixed inset-0 z-50 bg-black/95 backdrop-blur-md flex items-center justify-center"
-            variants={lightboxVariant}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.25 }}
             onClick={closeLightbox}
           >
             {/* Bouton fermeture */}
@@ -453,10 +444,10 @@ export default function Gallery() {
                   src={selectedImage.image_url}
                   alt={selectedImage.title}
                   className="max-w-full max-h-[85vh] object-contain rounded-lg"
-                  variants={lightboxImageVariant}
-                  initial="hidden"
-                  animate="visible"
-                  exit="exit"
+                  initial={{ opacity: 0, scale: 0.96, y: 12 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.96, y: -12 }}
+                 
                 />
               </AnimatePresence>
 

@@ -236,7 +236,7 @@ function ServiceCard({ icon: Icon, name, desc, mention, features, index }: Servi
 
 export default function Services() {
   return (
-    <section className="relative py-16 md:py-24 overflow-hidden bg-gradient-to-b from-white to-gray-50/50" id="sec-services">
+    <section className="relative py-16 md:py-24 overflow-hidden bg-[#eef5f7]" id="sec-services">
 
       {/* Éléments décoratifs */}
       <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#79DBDC] to-transparent opacity-30" />

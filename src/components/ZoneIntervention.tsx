@@ -35,7 +35,7 @@ export default function ZoneIntervention() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <section className="py-16 bg-gray-50" id="sec-zone">
+    <section className="py-16 bg-[#eef7fa]" id="sec-zone">
       <div className="container mx-auto px-4 max-w-4xl">
 
         {/* ── En-tête ── */}
