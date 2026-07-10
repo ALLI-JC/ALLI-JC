@@ -1,6 +1,6 @@
 import {
     Droplets, Waves, Leaf, Building2, Home, Wrench, Store, Sparkles,
-    ArrowRight, CheckCircle, Star, Shield, Clock, FileEdit, Zap
+    ArrowRight, CheckCircle, Star, Shield, FileEdit, Zap
 } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -8,8 +8,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 // Catégories affichées (ordre + titre + cible)
 const categories = [
   { title: 'Entretien Extérieur & Espaces Verts', target: 'Particuliers' },
-  { title: 'Nettoyages Spécifiques & Remise en État', target: 'Transitions immobilières' },
   { title: 'Services Professionnels & Copropriétés', target: 'Entreprises & Syndics' },
+  { title: 'Nettoyages spécifiques', target: 'Transitions immobilières' },
 ];
 
 const services = [
@@ -51,7 +51,7 @@ const services = [
     desc: 'Remise en état, états des lieux',
     mention: 'Conforme aux normes — satisfaction garantie',
     features: ['Conforme aux normes', 'Rapidité', 'Garantie satisfait'],
-      category: 'Nettoyages Spécifiques & Remise en État'
+    category: 'Nettoyages spécifiques'
   },
   {
     icon: Home,
@@ -59,7 +59,7 @@ const services = [
     desc: 'Nettoyage après travaux',
     mention: 'Dépoussiérage complet et évacuation des gravats',
     features: ['Dépoussiérage', 'Lavage sols', 'Évacuation gravats'],
-      category: 'Nettoyages Spécifiques & Remise en État'
+    category: 'Nettoyages spécifiques'
   },
   {
     icon: Wrench,
@@ -67,15 +67,15 @@ const services = [
     desc: 'Montage, fixation, petites réparations',
     mention: 'Matériel fourni, déplacement inclus',
     features: ['Matériel fourni', 'Déplacement inclus', 'Rapidité'],
-      category: 'Nettoyages Spécifiques & Remise en État'
+    category: 'Nettoyages spécifiques'
   },
   {
     icon: Store,
     name: 'Locaux commerciaux',
     desc: 'Nettoyage bureaux, parties communes',
     mention: 'Horaires flexibles, intervention discrète',
-    features: ['Horaires flexibles', 'Discretion', 'Produits professionnels'],
-      category: 'Services Professionnels & Copropriétés'
+    features: ['Horaires flexibles', 'Discrétion', 'Produits professionnels'],
+    category: 'Services Professionnels & Copropriétés'
   },
 ];
 
@@ -85,29 +85,29 @@ const staggerContainer = {
   visible: { transition: { staggerChildren: 0.08 } },
 };
 
-const fadeInUp = {
+const fadeInUp: any = {
   hidden: { opacity: 0, y: 24 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { duration: 0.5, delay: i * 0.05, ease: 'easeOut' },
+    transition: { duration: 0.5, delay: i * 0.05, ease: 'easeOut' as any },
   }),
 };
 
-const cardVariant = {
+const cardVariant: any = {
   hidden: { opacity: 0, y: 28, scale: 0.96 },
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.45, delay: i * 0.07, ease: 'easeOut' },
+    transition: { duration: 0.45, delay: i * 0.07, ease: 'easeOut' as any },
   }),
 };
 
-const featuresVariant = {
+const featuresVariant: any = {
   hidden: { opacity: 0, height: 0 },
-  visible: { opacity: 1, height: 'auto', transition: { duration: 0.3, ease: 'easeOut' } },
-  exit:   { opacity: 0, height: 0,    transition: { duration: 0.2, ease: 'easeIn'  } },
+  visible: { opacity: 1, height: 'auto', transition: { duration: 0.3, ease: 'easeOut' as any } },
+  exit:   { opacity: 0, height: 0,    transition: { duration: 0.2, ease: 'easeIn' as any } },
 };
 
 const linkVariant = {

@@ -1,10 +1,9 @@
-import { Send, Phone, ChevronDown, ArrowRight } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
-import {
-  motion,
-  AnimatePresence,
-  useReducedMotion,
-} from 'framer-motion';
+import { Send, Phone, Sparkles, Building2, Leaf } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
+import TrustBar from './TrustBar';
+import ServicesMarquee from './ServicesMarquee';
+import ReassurancePillars from './ReassurancePillars';
 
 interface HeroProps {
   onDevisClick: () => void;
@@ -13,353 +12,242 @@ interface HeroProps {
 interface Service {
   label: string;
   img: string;
+  tag: string;
 }
 
+// 6 images de couverture selon le cahier des charges
 const SERVICES: Service[] = [
-  { label: 'Nettoyage de vitres', img: 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=1200' },
-  { label: 'Bricolage', img: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200' },
-  { label: 'Nettoyage intérieur / extérieur', img: 'https://images.unsplash.com/photo-1563453392212-326f5e854473?w=1200' },
-  { label: 'Entretien terrasses et jardin', img: 'https://images.unsplash.com/photo-1416879595882-3373a0480b5b?w=1200' },
-  { label: 'Espaces verts copropriétés & communes', img: 'https://images.unsplash.com/photo-1598902108854-10e335adac99?auto=format&fit=crop&w=1200&q=80' },
-  { label: 'Ménage de remise en état fin de bail', img: 'https://images.unsplash.com/photo-1585421514738-01798e348b17?w=1200' },
-  { label: 'Ménage de fin de chantier', img: 'https://images.unsplash.com/photo-1504307651254-35680f356dfd?w=1200' },
-  { label: 'Nettoyage de locaux commerciaux', img: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1200' },
-  { label: 'Nettoyage des parties communes', img: 'https://images.unsplash.com/photo-1527515637462-cff94eecc1ac?w=1200' },
-  { label: 'Et bien plus encore…', img: 'https://images.unsplash.com/photo-1556909114-44e3e9399f2e?w=1200' },
+  { 
+    label: 'Entretien Extérieur & Espaces Verts', 
+    img: '/3.png',
+    tag: 'Particuliers'
+  },
+  { 
+    label: 'Jardinage & Espaces Verts', 
+    img: '/7.png',
+    tag: 'Particuliers'
+  },
+  { 
+    label: 'Nettoyage de vitres & Façades', 
+    img: '/2.jpg',
+    tag: 'Particuliers & Pro'
+  },
+  { 
+    label: 'Services Professionnels & Copropriétés', 
+    img: '/8.png',
+    tag: 'Entreprises & Syndics'
+  },
+  { 
+    label: 'Nettoyage de fin de bail', 
+    img: '/5.png',
+    tag: 'Immobilier'
+  },
+  { 
+    label: 'Nettoyage de fin de chantier', 
+    img: '/6.png',
+    tag: 'Construction'
+  },
 ];
 
-const DEFAULT_IMG = '/Mug-alliéjc.jpeg';
-
-// 3 catégories cibles — affichées une par une (carrousel auto) dans le Hero
-const CATEGORIES = [
+// 3 boutons d'accès rapide vers la section services
+const QUICK_LINKS = [
   {
-    title: 'Entretien Extérieur & Espaces Verts',
-    target: 'Particuliers',
-    services: ['Nettoyage de vitres', 'Nettoyage haute pression', 'Jardinage & espaces verts', 'Nettoyage intérieur'],
+    label: 'Entretien Extérieur & Espaces Verts',
+    tag: 'Particuliers',
+    href: '#sec-services',
+    icon: Leaf,
   },
   {
-    title: 'Nettoyages Spécifiques & Remise en État',
-    target: 'Transitions immobilières',
-    services: ['Ménage fin de bail', 'Fin de chantier', 'Petits bricolages'],
+    label: 'Nettoyages Spécifiques & Remise en État',
+    tag: 'Transitions Immobilières',
+    href: '#sec-services',
+    icon: Sparkles,
   },
   {
-    title: 'Services Professionnels & Copropriétés',
-    target: 'Entreprises & Syndics',
-    services: ['Locaux commerciaux'],
+    label: 'Services Professionnels & Copropriétés',
+    tag: 'Entreprises & Syndics',
+    href: '#sec-services',
+    icon: Building2,
   },
 ];
 
-// Stagger container pour les enfants
-const containerVariants = {
-  hidden: {},
-  visible: {
-    transition: {
-      staggerChildren: 0.07,
-      delayChildren: 0.15,
-    },
-  },
-};
-
-// Chaque item de la liste entre par la gauche
-const itemVariants = {
-  hidden: { opacity: 0, x: -18 },
-  visible: { opacity: 1, x: 0, transition: { duration: 0.35, ease: 'easeOut' } },
-};
-
-// Titre : entrée par le haut
-const titleVariants = {
-  hidden: { opacity: 0, y: -24 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } },
-};
-
-// Séparateur : s'étire horizontalement
-const dividerVariants = {
-  hidden: { scaleX: 0, originX: 0 },
-  visible: { scaleX: 1, transition: { duration: 0.5, ease: 'easeOut', delay: 0.4 } },
-};
-
-// Boutons : fade-in léger
-const buttonsVariants = {
-  hidden: { opacity: 0, y: 12 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.45, ease: 'easeOut', delay: 0.2 } },
-};
+const HIGHLIGHTS = [
+  'Entretien soigné de l\'extérieur, des jardins et des espaces communs',
+  'Nettoyage spécifique pour les transitions immobilières',
+  'Interventions fiables pour les professionnels et les copropriétés',
+];
 
 export default function Hero({ onDevisClick }: HeroProps) {
   const prefersReducedMotion = useReducedMotion();
+  const [activeIndex, setActiveIndex] = useState<number>(0);
+  const [activeImg, setActiveImg] = useState<string>(SERVICES[0].img);
+  const [activeLabel, setActiveLabel] = useState<string>(SERVICES[0].label);
 
-  const [activeImg, setActiveImg] = useState<string>(DEFAULT_IMG);
-  const [activeLabel, setActiveLabel] = useState<string | null>(null);
-  const leaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const handleEnter = (service: Service) => {
-    if (leaveTimer.current) clearTimeout(leaveTimer.current);
-    setActiveImg(service.img);
-    setActiveLabel(service.label);
-  };
-
-  const handleLeave = () => {
-    leaveTimer.current = setTimeout(() => {
-      setActiveImg(DEFAULT_IMG);
-      setActiveLabel(null);
-    }, 180);
-  };
-
-  // Carrousel de catégories — change automatiquement toutes les 3,5 s
-  const [catIndex, setCatIndex] = useState(0);
   useEffect(() => {
-    if (prefersReducedMotion) return;
-    const id = setInterval(() => {
-      setCatIndex((i) => (i + 1) % CATEGORIES.length);
-    }, 3500);
-    return () => clearInterval(id);
-  }, [prefersReducedMotion]);
+    if (prefersReducedMotion) {
+      setActiveImg(SERVICES[0].img);
+      setActiveLabel(SERVICES[0].label);
+      return;
+    }
 
-  // Diaporama auto de l'image de droite — affiche les images de SERVICES une par une
-  useEffect(() => {
-    setActiveImg(SERVICES[0].img);
-    if (prefersReducedMotion) return;
-    let i = 0;
-    const id = setInterval(() => {
-      i = (i + 1) % SERVICES.length;
-      setActiveImg(SERVICES[i].img);
-    }, 4000);
-    return () => clearInterval(id);
-  }, [prefersReducedMotion]);
+    let index = 0;
+    const id = window.setInterval(() => {
+      index = (index + 1) % SERVICES.length;
+      setActiveIndex(index);
+      setActiveImg(SERVICES[index].img);
+      setActiveLabel(SERVICES[index].label);
+    }, 5000);
 
-  const scrollToServices = () => {
-    document.getElementById('sec-services')?.scrollIntoView({ behavior: 'smooth' });
-  };
+    return () => window.clearInterval(id);
+  }, [prefersReducedMotion]);
 
   return (
-    <section className="relative flex items-start bg-[#237395]">
-
-      {/* ── LEFT PANEL ── */}
-      <div className="relative z-10 flex flex-col w-full lg:w-[60%] bg-[#237395] px-6 sm:px-10 lg:px-16 py-14 md:py-20">
-
-        {/* Titre */}
-        <motion.h1
-          className="font-serif text-4xl sm:text-5xl lg:text-[3.5rem] text-white leading-[1.1] mb-5"
-          style={{ fontFamily: 'var(--font-palatino)' }}
-          variants={prefersReducedMotion ? {} : titleVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          Votre allié pour
-          <span className="block mt-1 text-[#D2B093]">l'entretien</span>
-          <span className="block text-white">de votre habitat</span>
-        </motion.h1>
-
-        {/* Séparateur */}
-        <motion.div
-          className="flex items-center gap-3 mb-8"
-          variants={prefersReducedMotion ? {} : dividerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <div className="h-[2px] w-10 rounded-full bg-[#237395]" />
-          <div className="h-[2px] w-4 rounded-full bg-[#D2B093]" />
-        </motion.div>
-
-        {/* Liste des 10 services — désactivée (code conservé, non affiché),
-            remplacée par le carrousel de catégories ci-dessous */}
-        {false && (
-        <motion.ul
-          className="mb-9 space-y-0.5"
-          variants={prefersReducedMotion ? {} : containerVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          {SERVICES.map((service, i) => (
-            <motion.li
-              key={`${service.label}-${i}`}
-              variants={prefersReducedMotion ? {} : itemVariants}
-              onMouseEnter={() => handleEnter(service)}
-              onMouseLeave={handleLeave}
-              whileHover={prefersReducedMotion ? {} : { x: 6 }}
-              transition={{ type: 'spring', stiffness: 400, damping: 28 }}
-              className="group flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-default border-l-2 border-transparent
-                         text-white/60 text-sm font-sans
-                         hover:text-[#D2B093]"
-            >
-              <motion.span
-                className="text-xs shrink-0"
-                animate={{ color: activeLabel === service.label ? '#D2B093' : 'rgba(255,255,255,0.4)' }}
-                transition={{ duration: 0.2 }}
-              >
-                —
-              </motion.span>
-              {service.label}
-            </motion.li>
-          ))}
-        </motion.ul>
-        )}
-
-        {/* Catégories affichées une par une (carrousel automatique) */}
-        <div className="mb-6 min-h-[150px] flex flex-col justify-center">
-          {prefersReducedMotion ? (
-            <ul className="space-y-2">
-              {CATEGORIES.map((c) => (
-                <li key={c.title}>
-                  <span className="block text-lg font-semibold text-white">{c.title}</span>
-                  <span className="block text-sm text-[#D2B093]">Pour {c.target}</span>
-                  <span className="block text-sm text-white/70 mt-0.5">{c.services.join(' · ')}</span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={catIndex}
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.45, ease: 'easeOut' }}
-              >
-                <span className="block text-xl sm:text-2xl font-semibold text-white leading-tight">
-                  {CATEGORIES[catIndex].title}
-                </span>
-                <span className="block text-sm text-[#D2B093] mt-1">
-                  Pour {CATEGORIES[catIndex].target}
-                </span>
-                <ul className="mt-3 flex flex-wrap gap-x-4 gap-y-1.5">
-                  {CATEGORIES[catIndex].services.map((s) => (
-                    <li key={s} className="flex items-center gap-1.5 text-sm text-white/80">
-                      <span className="h-1 w-1 rounded-full bg-[#D2B093]" />
-                      {s}
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            </AnimatePresence>
-          )}
-        </div>
-
-        {/* Indicateurs de progression (points cliquables) */}
-        {!prefersReducedMotion && (
-          <div className="flex gap-2 mb-8">
-            {CATEGORIES.map((c, i) => (
-              <button
-                key={c.title}
-                onClick={() => setCatIndex(i)}
-                aria-label={`Afficher : ${c.title}`}
-                className={`h-2 rounded-full transition-all duration-300 ${
-                  i === catIndex ? 'w-6 bg-[#D2B093]' : 'w-2 bg-white/30 hover:bg-white/50'
-                }`}
-              />
-            ))}
-          </div>
-        )}
-
-        {/* Bouton vers la section « Nos services » */}
-        <motion.button
-          onClick={scrollToServices}
-          whileHover={prefersReducedMotion ? {} : { scale: 1.03 }}
-          whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
-          className="inline-flex items-center gap-2 mb-8 self-start border border-[#D2B093]/50 text-white px-6 py-3 rounded-xl text-sm font-semibold hover:bg-[#D2B093]/15 transition-colors"
-        >
-          Voir nos services
-          <ArrowRight size={16} className="text-[#D2B093]" />
-        </motion.button>
-
-        {/* Boutons */}
-        <motion.div
-          className="flex flex-col sm:flex-row gap-3 pb-2"
-          variants={prefersReducedMotion ? {} : buttonsVariants}
-          initial="hidden"
-          animate="visible"
-        >
-          <motion.button
-            onClick={onDevisClick}
-            whileHover={prefersReducedMotion ? {} : { scale: 1.03 }}
-            whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
-            className="group relative inline-flex items-center justify-center gap-2 text-white px-7 py-3.5 rounded-xl text-sm font-bold shadow-lg overflow-hidden"
-            style={{ background: 'linear-gradient(135deg, #237395 0%, #1a5870 100%)' }}
+    <>
+    <section className="relative overflow-hidden bg-[#0e2b38] min-h-[70vh] lg:min-h-[80vh]">
+      {/* Image de fond en slideshow */}
+      <div className="absolute inset-0">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeImg}
+            className="absolute inset-0"
+            initial={{ opacity: 0, scale: 1.05 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
           >
-            <motion.div
-              className="absolute inset-0"
-              initial={{ opacity: 0 }}
-              whileHover={{ opacity: 1 }}
-              transition={{ duration: 0.25 }}
-              style={{ background: 'linear-gradient(135deg, #D2B093 0%, #b8936e 100%)' }}
+            <img 
+              src={activeImg} 
+              alt={activeLabel} 
+              className="h-full w-full object-cover object-center" 
             />
-            <Send size={14} className="relative z-10" />
-            <span className="relative z-10">Demander un devis gratuit</span>
-          </motion.button>
-
-          <motion.a
-            href="tel:0607979074"
-            whileHover={prefersReducedMotion ? {} : {
-              scale: 1.03,
-              backgroundColor: 'rgba(210,176,147,0.18)',
-            }}
-            whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
-            className="inline-flex items-center justify-center gap-2 border text-white px-7 py-3.5 rounded-xl text-sm font-semibold"
-            style={{
-              borderColor: 'rgba(210,176,147,0.45)',
-              backgroundColor: 'rgba(210,176,147,0.07)',
-            }}
-          >
-            <Phone size={14} style={{ color: '#D2B093' }} />
-            06 07 97 90 74
-          </motion.a>
-        </motion.div>
-
-        {/* Chevron mobile */}
-        <motion.div
-          className="flex justify-center mt-8 lg:hidden"
-          animate={prefersReducedMotion ? {} : { y: [0, 6, 0] }}
-          transition={{ repeat: Infinity, duration: 1.4, ease: 'easeInOut' }}
-        >
-          <ChevronDown size={22} className="text-white/30" />
-        </motion.div>
-      </div>
-
-      {/* ── RIGHT PANEL — sticky ── */}
-      <div className="hidden lg:block lg:w-[40%] self-stretch">
-        <div className="relative h-full overflow-hidden">
-
-          {/* Crossfade image via AnimatePresence */}
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={activeImg}
-              className="absolute inset-0"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-            >
-              <img
-                src={activeImg}
-                alt={activeLabel ?? 'Service'}
-                className="w-full h-full object-cover"
-              />
-              {/* Raccord dégradé gauche */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#237395] via-[#237395]/15 to-transparent" />
-            </motion.div>
-          </AnimatePresence>
-
-          {/* Label flottant */}
-          <AnimatePresence>
-            {activeLabel && (
-              <motion.div
-                key={activeLabel}
-                className="absolute bottom-10 left-8 z-10"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 8 }}
-                transition={{ duration: 0.25, ease: 'easeOut' }}
-              >
-                <span className="inline-block bg-[#237395]/80 backdrop-blur-sm border border-[#D2B093]/30 text-[#D2B093] text-xs font-semibold font-sans px-4 py-2 rounded-lg">
-                  {activeLabel}
-                </span>
-              </motion.div>
-            )}
-          </AnimatePresence>
+          </motion.div>
+        </AnimatePresence>
+        
+        {/* Overlay dégradé pour lisibilité */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0e2b38]/90 via-[#0e2b38]/70 to-[#0e2b38]/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0e2b38]/70 via-transparent to-transparent" />
+        
+        {/* Indicateurs de slide en bas à gauche */}
+        <div className="absolute bottom-8 left-8 z-20 flex gap-1.5">
+          {SERVICES.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                setActiveIndex(index);
+                setActiveImg(SERVICES[index].img);
+                setActiveLabel(SERVICES[index].label);
+              }}
+              className={`h-1 rounded-full transition-all duration-300 ${
+                index === activeIndex 
+                  ? 'w-8 bg-[#D2B093]' 
+                  : 'w-4 bg-white/30 hover:bg-white/50'
+              }`}
+              aria-label={`Voir slide ${index + 1}`}
+            />
+          ))}
         </div>
       </div>
 
-      {/* Bande décorative bas */}
-      <div className="absolute bottom-0 left-0 right-0 h-[3px] z-20 bg-gradient-to-r from-[#D2B093] via-[#237395] to-[#D2B093]" />
+      {/* Contenu principal */}
+      <div className="relative z-10 mx-auto flex min-h-[70vh] lg:min-h-[80vh] max-w-7xl items-center px-6 py-12 lg:px-12">
+        <div className="w-full max-w-3xl">
+          {/* Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.15em] text-[#D2B093] backdrop-blur-sm"
+          >
+            <span className="h-1.5 w-1.5 rounded-full bg-[#D2B093]" />
+            {activeLabel}
+          </motion.div>
+
+          {/* Titre principal */}
+          <motion.h1
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.05 }}
+            className="font-serif text-4xl font-light leading-[1.1] text-white sm:text-5xl lg:text-7xl"
+            style={{ fontFamily: 'var(--font-palatino)' }}
+          >
+            Prendre soin de
+            <span className="block text-[#D2B093]">votre habitat</span>
+          </motion.h1>
+
+          {/* Sous-titre */}
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="mt-4 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg"
+          >
+            Des interventions propres, rapides et soignées pour préserver le confort 
+            de votre intérieur comme de votre extérieur.
+          </motion.p>
+
+          {/* 3 BOUTONS D'ACCÈS RAPIDE - Style élégant */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="mt-6 flex flex-wrap gap-3"
+          >
+            {QUICK_LINKS.map((link) => (
+              <motion.a
+                key={link.label}
+                href={link.href}
+                whileHover={prefersReducedMotion ? {} : { y: -3, scale: 1.02 }}
+                whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
+                className="group relative overflow-hidden rounded-2xl border border-white/15 bg-white/5 px-5 py-3.5 backdrop-blur-sm transition-all hover:bg-white/15 hover:border-white/25 hover:shadow-lg hover:shadow-black/20"
+              >
+                <div className="flex items-start gap-3">
+                  <link.icon size={18} className="mt-0.5 text-[#D2B093] shrink-0" />
+                  <div>
+                    <span className="block text-sm font-medium text-white/90 group-hover:text-white">
+                      {link.label}
+                    </span>
+                    <span className="mt-0.5 block text-[10px] font-medium uppercase tracking-wider text-[#D2B093]">
+                      {link.tag}
+                    </span>
+                  </div>
+                </div>
+              </motion.a>
+            ))}
+          </motion.div>
+
+          {/* Boutons CTA */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.2 }}
+            className="mt-8 flex flex-col gap-3 sm:flex-row"
+          >
+            <motion.button
+              onClick={onDevisClick}
+              whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+              whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
+              className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-[#D2B093] px-8 py-4 text-sm font-medium text-[#0e2b38] transition-all hover:bg-[#e3c0a2] hover:shadow-lg hover:shadow-[#D2B093]/25"
+            >
+              <Send size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+              Demander un devis gratuit
+            </motion.button>
+
+            <motion.a
+              href="tel:0607979074"
+              whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+              whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
+              className="inline-flex items-center justify-center gap-2.5 rounded-full border border-white/20 bg-white/5 px-8 py-4 text-sm font-medium text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/30"
+            >
+              <Phone size={16} className="text-[#D2B093]" />
+              06 07 97 90 74
+            </motion.a>
+          </motion.div>
+        </div>
+      </div>
     </section>
+<ServicesMarquee />
+    <TrustBar />
+    <ReassurancePillars />
+    </>
   );
 }
