@@ -291,7 +291,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
 
   return (
     <section
-      className="relative py-16 md:py-24 bg-gradient-to-br from-gray-50 via-white to-gray-50 overflow-hidden"
+      className="relative py-16 md:py-24 bg-gradient-to-br from-[#f5efe7] via-[#eef5f7] to-[#fff8f2] overflow-hidden"
       id="sec-devis"
     >
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#79DBDC]/5 rounded-full blur-3xl pointer-events-none" />

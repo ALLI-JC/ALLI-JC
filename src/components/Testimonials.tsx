@@ -55,7 +55,7 @@ export default function Testimonials() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <section className="px-8 py-12" id="sec-temos">
+    <section className="px-4 py-16 bg-[#eef6f6] md:px-8" id="sec-temos">
 
       {/* En-tête */}
       <motion.div

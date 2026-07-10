@@ -172,7 +172,7 @@ export default function Contact() {
   ];
 
   return (
-    <section className="px-4 sm:px-8 py-12 md:py-16 bg-gray-50" id="sec-contact">
+    <section className="px-4 sm:px-8 py-16 md:py-20 bg-[#f7efe6]" id="sec-contact">
       <div className="container mx-auto max-w-6xl">
 
         {/* ── En-tête ── */}

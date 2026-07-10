@@ -36,7 +36,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
   return (
     <>
       <nav
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#237395]`}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-[#1d5265]/95 backdrop-blur-xl border-b border-[#D2B093]/15 shadow-glow`}
         style={{ fontFamily: 'var(--font-roboto)' }}
       >
         <div className="container-custom">

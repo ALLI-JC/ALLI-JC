@@ -1,4 +1,4 @@
-// App.tsx - Version avec Outlet (plus propre)
+// App.tsx - Logo seulement sur la page d'accueil
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
@@ -19,7 +19,7 @@ import Login from './Pages/Login'
 import GalleryManagement from './components/admin/Gallery'
 import Chat from './components/Chat'
 import Messages from './components/admin/Bookings'
-
+import FloatingLogo from './components/FloatingLogo'
 
 function PublicSite() {
   const scrollToDevis = () => {
@@ -31,7 +31,7 @@ function PublicSite() {
   }
 
   return (
-    <div className="font-sans bg-white text-gray-900">
+    <div className="font-sans min-h-screen bg-[radial-gradient(circle_at_top,_rgba(35,115,149,0.08),_transparent_24%),_linear-gradient(180deg,_#f7f3ee,_#ede4d6)] text-[#0e2b38]">
       <Navbar onDevisClick={scrollToDevis} />
       <Hero onDevisClick={scrollToDevis} />
       
@@ -50,13 +50,22 @@ function PublicSite() {
 export default function App() {
   return (
     <Routes>
-      {/* Route publique */}
-      <Route path="/" element={<PublicSite />} />
+      {/* Route publique avec logo */}
+      <Route path="/" element={
+        <>
+          <PublicSite />
+          <FloatingLogo 
+            src="/alliéjc-logo-3.png" 
+            size={70} 
+            offset={120}
+          />
+        </>
+      } />
       
-      {/* Page de login */}
+      {/* Page de login SANS logo */}
       <Route path="/login" element={<Login />} />
       
-      {/* Routes admin protégées - Structure avec Outlet */}
+      {/* Routes admin protégées SANS logo */}
       <Route element={<ProtectedRoute />}>
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
@@ -68,8 +77,17 @@ export default function App() {
         </Route>
       </Route>
       
-      {/* Redirection 404 */}
-      <Route path="*" element={<PublicSite />} />
+      {/* Redirection 404 AVEC logo */}
+      <Route path="*" element={
+        <>
+          <PublicSite />
+          <FloatingLogo 
+            src="/alliéjc-logo-3.png" 
+            size={70} 
+            offset={120}
+          />
+        </>
+      } />
     </Routes>
   )
 }
