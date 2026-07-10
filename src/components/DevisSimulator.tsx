@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type ElementType } from 'react';
 import { Send, TrendingUp, Info, CheckCircle, Home, Waves, Leaf, Building2 } from 'lucide-react';
 import {
   motion,
@@ -6,49 +6,90 @@ import {
   useReducedMotion,
 } from 'framer-motion';
 
-type ServiceKey = 'vitres' | 'terrasse' | 'tonte' | 'menage' | 'bricolage' | 'interieur';
+type ServiceType = 'jardinage' | 'terrasse' | 'fin-de-bail' | 'fin-de-chantier';
+type HedgeHeight = 'small' | 'large';
+type TerraceLevel = 'low' | 'high';
+type FinishOption = 'none' | 'bois' | 'imperm' | 'wet';
+type CleanLevel = 'standard' | 'intensif';
+type OvenState = 'none' | 'standard' | 'sale';
+type FridgeState = 'none' | 'standard' | 'sale';
+type WindowKey = 'standard' | 'salleBain' | 'baies' | 'porte1' | 'porte2' | 'velux';
 
-const servicesConfig: Record<ServiceKey, {
-  base: number;
-  taux: number;
+const serviceTypes: Array<{
+  key: ServiceType;
   label: string;
-  icon: React.ElementType;
+  icon: ElementType;
   description: string;
   unit: string;
   min: number;
   max: number;
-}> = {
-  vitres:    { base: 45, taux: 0.85, label: 'Nettoyage de vitres',     icon: Waves,     description: 'Baies vitrées, fenêtres, vérandas',   unit: 'm²',    min: 10,  max: 200  },
-  terrasse:  { base: 30, taux: 0.60, label: 'Nettoyage terrasse',      icon: Home,      description: 'Nettoyage haute pression',             unit: 'm²',    min: 10,  max: 150  },
-  tonte:     { base: 20, taux: 0.45, label: 'Tonte de gazon',          icon: Leaf,      description: 'Entretien jardin',                     unit: 'm²',    min: 50,  max: 1000 },
-  menage:    { base: 80, taux: 1.20, label: 'Ménage fin de bail',      icon: Building2, description: 'Remise en état complète',              unit: 'm²',    min: 30,  max: 150  },
-  bricolage: { base: 35, taux: 0,    label: 'Petits bricolages',       icon: Waves,     description: 'Montage, réparations',                 unit: 'heure', min: 1,   max: 8    },
-  interieur: { base: 50, taux: 0.95, label: 'Nettoyage intérieur',     icon: Home,      description: 'Entretien courant',                    unit: 'm²',    min: 40,  max: 200  },
+}> = [
+  {
+    key: 'jardinage',
+    label: 'Jardinage & espaces verts',
+    icon: Leaf,
+    description: 'Tonte, taille de haies et évacuation de déchets verts',
+    unit: 'm²',
+    min: 20,
+    max: 1000,
+  },
+  {
+    key: 'terrasse',
+    label: 'Terrasses & extérieurs',
+    icon: Waves,
+    description: 'Nettoyage haute pression et finitions spéciales',
+    unit: 'm²',
+    min: 5,
+    max: 400,
+  },
+  {
+    key: 'fin-de-bail',
+    label: 'Fin de bail',
+    icon: Home,
+    description: 'Nettoyage locatif avant état des lieux',
+    unit: 'm²',
+    min: 20,
+    max: 300,
+  },
+  {
+    key: 'fin-de-chantier',
+    label: 'Fin de chantier',
+    icon: Building2,
+    description: 'Nettoyage après travaux',
+    unit: 'm²',
+    min: 20,
+    max: 300,
+  },
+];
+
+const surfaceConfig: Record<ServiceType, { label: string; unit: string; min: number; max: number }> = {
+  jardinage: { label: 'Surface de tonte', unit: 'm²', min: 20, max: 1000 },
+  terrasse: { label: 'Surface de terrasse', unit: 'm²', min: 5, max: 400 },
+  'fin-de-bail': { label: 'Surface du logement', unit: 'm²', min: 20, max: 300 },
+  'fin-de-chantier': { label: 'Surface du chantier', unit: 'm²', min: 20, max: 300 },
 };
 
 interface DevisSimulatorProps {
   onConfirm: () => void;
 }
 
-// ─── Variants ──────────────────────────────────────────────────────────────
-
-const sectionVariants = {
-  hidden:  {},
+const sectionVariants: any = {
+  hidden: {},
   visible: { transition: { staggerChildren: 0.12 } },
 };
 
-const fadeUpVariants = {
-  hidden:  { opacity: 0, y: 28 },
+const fadeUpVariants: any = {
+  hidden: { opacity: 0, y: 28 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: 'easeOut' } },
 };
 
-const cardVariants = {
-  hidden:  { opacity: 0, y: 32 },
+const cardVariants: any = {
+  hidden: { opacity: 0, y: 32 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.55, ease: 'easeOut' } },
 };
 
-const badgeVariants = {
-  hidden:  { opacity: 0, scale: 0.88 },
+const badgeVariants: any = {
+  hidden: { opacity: 0, scale: 0.88 },
   visible: (i: number) => ({
     opacity: 1,
     scale: 1,
@@ -56,57 +97,207 @@ const badgeVariants = {
   }),
 };
 
-// Prix — flip animé
-const priceVariants = {
+const priceVariants: any = {
   initial: { opacity: 0, y: -10, scale: 0.95 },
-  animate: { opacity: 1, y: 0,   scale: 1,    transition: { duration: 0.25, ease: 'easeOut' } },
-  exit:    { opacity: 0, y:  10, scale: 0.95, transition: { duration: 0.15 } },
+  animate: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.25, ease: 'easeOut' } },
+  exit: { opacity: 0, y: 10, scale: 0.95, transition: { duration: 0.15 } },
 };
 
-// Ligne de détail (entrée conditionnelle)
-const detailLineVariants = {
+const detailLineVariants: any = {
   initial: { opacity: 0, height: 0 },
   animate: { opacity: 1, height: 'auto', transition: { duration: 0.22 } },
-  exit:    { opacity: 0, height: 0,      transition: { duration: 0.18 } },
+  exit: { opacity: 0, height: 0, transition: { duration: 0.18 } },
 };
 
 export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
   const prefersReducedMotion = useReducedMotion();
 
-  const [type, setType]           = useState<ServiceKey>('vitres');
-  const [surface, setSurface]     = useState(50);
-  const [extraServices, setExtraServices] = useState({
-    deplacement: true,
-    urgence: false,
-    materiel: true,
+  const [serviceType, setServiceType] = useState<ServiceType>('jardinage');
+  const [surface, setSurface] = useState<number>(100);
+  const [hedgeHeight, setHedgeHeight] = useState<HedgeHeight>('small');
+  const [hedgeMeters, setHedgeMeters] = useState<number>(10);
+  const [greenWaste, setGreenWaste] = useState<boolean>(false);
+  const [greenWasteVolume, setGreenWasteVolume] = useState<number>(1);
+  const [terraceLevel, setTerraceLevel] = useState<TerraceLevel>('low');
+  const [finish, setFinish] = useState<FinishOption>('none');
+  const [cleanLevel, setCleanLevel] = useState<CleanLevel>('standard');
+  const [ovenState, setOvenState] = useState<OvenState>('none');
+  const [microwave, setMicrowave] = useState<boolean>(false);
+  const [fridgeState, setFridgeState] = useState<FridgeState>('none');
+  const [doubleFridge, setDoubleFridge] = useState<boolean>(false);
+  const [sanitaryState, setSanitaryState] = useState<'none' | 'standard' | 'sale'>('none');
+  const [windowCounts, setWindowCounts] = useState<Record<WindowKey, number>>({
+    standard: 0,
+    salleBain: 0,
+    baies: 0,
+    porte1: 0,
+    porte2: 0,
+    velux: 0,
   });
+  const [stageWindows, setStageWindows] = useState<boolean>(false);
 
-  const service      = servicesConfig[type];
-  const basePrice    = Math.round(service.base + surface * service.taux);
-  const deplacementCost = extraServices.deplacement ? 15 : 0;
-  const urgenceCost  = extraServices.urgence ? 45 : 0;
-  const totalPrice   = basePrice + deplacementCost + urgenceCost;
+  const surfaceMeta = surfaceConfig[serviceType];
 
-  // reset surface dans les bornes quand le type change
   useEffect(() => {
-    setSurface(Math.min(Math.max(surface, service.min), service.max));
-  }, [type]);
+    setSurface((current) => Math.min(Math.max(current, surfaceMeta.min), surfaceMeta.max));
+  }, [serviceType, surfaceMeta.min, surfaceMeta.max]);
 
   const formatPrice = (price: number) =>
     new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(price);
+
+  const round = (value: number) => Math.round(value * 100) / 100;
+
+  const getJardinageBase = () => {
+    if (surface < 100) return 50;
+    if (surface <= 400) return round(surface * 0.7);
+    return round(surface * 0.4);
+  };
+
+  const getHedgePrice = () => hedgeMeters * (hedgeHeight === 'small' ? 6 : 13);
+  const getGreenWastePrice = () => (greenWaste ? round(greenWasteVolume * 30) : 0);
+
+  const getTerrasseBase = () => {
+    if (surface < 30) {
+      if (terraceLevel === 'low') {
+        if (surface <= 10) return 150;
+        if (surface <= 20) return 190;
+        return 230;
+      }
+      if (surface <= 10) return 220;
+      if (surface <= 20) return 330;
+      return 380;
+    }
+    return round(surface * (terraceLevel === 'low' ? 6.5 : 12.5));
+  };
+
+  const getFinishRate = () => {
+    if (finish === 'bois') return 18;
+    if (finish === 'imperm') return 10;
+    if (finish === 'wet') return 16;
+    return 0;
+  };
+
+  const getTerrasseFinish = () => round(surface * getFinishRate());
+  const getTerrasseDiscount = () => {
+    if (surface > 200) return 0.15;
+    if (surface > 100) return 0.1;
+    return 0;
+  };
+
+  const getCleaningBase = () => round(surface * (cleanLevel === 'standard' ? 4.5 : 6));
+  const getOvenPrice = () => (ovenState === 'standard' ? 40 : ovenState === 'sale' ? 90 : 0);
+  const getMicrowavePrice = () => (microwave ? 15 : 0);
+  const getFridgePrice = () => (fridgeState === 'standard' ? 30 : fridgeState === 'sale' ? 60 : 0);
+  const getDoubleFridgePrice = () => (doubleFridge ? 90 : 0);
+  const getSanitaryPrice = () => (sanitaryState === 'standard' ? 60 : sanitaryState === 'sale' ? 130 : 0);
+
+  const getWindowRate = (key: WindowKey) => {
+    if (serviceType === 'fin-de-bail') {
+      return {
+        standard: 10,
+        salleBain: 8,
+        baies: 20,
+        porte1: 15,
+        porte2: 20,
+        velux: 18,
+      }[key];
+    }
+    return {
+      standard: 12,
+      salleBain: 10,
+      baies: 25,
+      porte1: 18,
+      porte2: 25,
+      velux: 18,
+    }[key];
+  };
+
+  const getWindowTotal = () => {
+    const base = (Object.entries(windowCounts) as Array<[WindowKey, number]>).reduce(
+      (sum, [key, count]) => sum + count * getWindowRate(key),
+      0,
+    );
+    const stageExtra = stageWindows
+      ? (Object.values(windowCounts).reduce((sum, count) => sum + count, 0) * 2)
+      : 0;
+    return base + stageExtra;
+  };
+
+  const baseTotal = (() => {
+    if (serviceType === 'jardinage') return getJardinageBase();
+    if (serviceType === 'terrasse') return getTerrasseBase();
+    return getCleaningBase();
+  })();
+
+  const extraTotal = (() => {
+    if (serviceType === 'jardinage') {
+      return getHedgePrice() + getGreenWastePrice();
+    }
+    if (serviceType === 'terrasse') {
+      return getTerrasseFinish();
+    }
+    return (
+      getOvenPrice()
+      + getMicrowavePrice()
+      + getFridgePrice()
+      + getDoubleFridgePrice()
+      + getSanitaryPrice()
+      + getWindowTotal()
+    );
+  })();
+
+  const discountAmount = serviceType === 'terrasse'
+    ? round((baseTotal + extraTotal) * getTerrasseDiscount())
+    : 0;
+
+  const totalPrice = round(baseTotal + extraTotal - discountAmount);
+
+  const detailLines: Array<{ label: string; price: number }> = [];
+
+  if (serviceType === 'jardinage') {
+    detailLines.push({ label: 'Tonte de pelouse', price: getJardinageBase() });
+    detailLines.push({ label: `Haies ${hedgeHeight === 'small' ? '6€/m' : '13€/m'}`, price: getHedgePrice() });
+    detailLines.push({ label: 'Évacuation déchets verts', price: getGreenWastePrice() });
+  }
+
+  if (serviceType === 'terrasse') {
+    detailLines.push({ label: `Base ${terraceLevel === 'low' ? 'Niveau faible' : 'Niveau élevé'}`, price: getTerrasseBase() });
+    if (finish !== 'none') {
+      detailLines.push({ label: `Finition ${finish === 'bois' ? 'Bois' : finish === 'imperm' ? 'Imperméabilisant' : 'Effet mouillé'}`, price: getTerrasseFinish() });
+    }
+    if (discountAmount > 0) {
+      detailLines.push({ label: 'Réduction volume', price: -discountAmount });
+    }
+  }
+
+  if (serviceType === 'fin-de-bail' || serviceType === 'fin-de-chantier') {
+    detailLines.push({ label: `Base ${cleanLevel === 'standard' ? 'Standard' : 'Intensif'}`, price: getCleaningBase() });
+    if (getOvenPrice() > 0) detailLines.push({ label: `Four (${ovenState === 'sale' ? 'Très sale' : 'Standard'})`, price: getOvenPrice() });
+    if (getMicrowavePrice() > 0) detailLines.push({ label: 'Micro-ondes', price: getMicrowavePrice() });
+    if (getFridgePrice() > 0) detailLines.push({ label: 'Réfrigérateur', price: getFridgePrice() });
+    if (getDoubleFridgePrice() > 0) detailLines.push({ label: 'Frigo double porte', price: getDoubleFridgePrice() });
+    if (getSanitaryPrice() > 0) detailLines.push({ label: 'Sanitaires / salle de bain', price: getSanitaryPrice() });
+    if (getWindowTotal() > 0) detailLines.push({ label: 'Vitres et baies vitrées', price: getWindowTotal() });
+  }
+
+  const windowFields = [
+    { key: 'standard' as WindowKey, label: 'Vitres 2 battants' },
+    { key: 'salleBain' as WindowKey, label: 'Vitres salle de bain' },
+    { key: 'baies' as WindowKey, label: 'Baies vitrées' },
+    { key: 'porte1' as WindowKey, label: 'Porte fenêtre 1 vantail' },
+    { key: 'porte2' as WindowKey, label: 'Porte fenêtre 2 vantaux' },
+    { key: 'velux' as WindowKey, label: 'Velux de toit' },
+  ];
 
   return (
     <section
       className="relative py-16 md:py-24 bg-gradient-to-br from-gray-50 via-white to-gray-50 overflow-hidden"
       id="sec-devis"
     >
-      {/* Blobs décoratifs */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#79DBDC]/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#F5DEB3]/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-
-        {/* ── En-tête ── */}
         <motion.div
           className="text-center max-w-2xl mx-auto mb-10 md:mb-12"
           variants={prefersReducedMotion ? {} : sectionVariants}
@@ -120,7 +311,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
           >
             Simulateur de devis
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#79DBDC] to-[#5BBFC0]">
-              en 3 clics
+              pour votre prestation
             </span>
           </motion.h2>
 
@@ -128,149 +319,368 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
             className="text-gray-500"
             variants={prefersReducedMotion ? {} : fadeUpVariants}
           >
-            Obtenez une estimation immédiate · Devis définitif gratuit après visite
+            Calculez rapidement votre tarif selon la prestation choisie, la surface et les options.
           </motion.p>
         </motion.div>
 
-        {/* ── Grid principal ── */}
         <motion.div
-          className="max-w-4xl mx-auto"
+          className="max-w-5xl mx-auto"
           variants={prefersReducedMotion ? {} : sectionVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.15 }}
         >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-            {/* ── FORMULAIRE ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_0.95fr] gap-6">
             <motion.div
-              className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
+              className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden"
               variants={prefersReducedMotion ? {} : cardVariants}
             >
-              <div className="bg-gradient-to-r from-[#79DBDC] to-[#5BBFC0] px-6 py-5 text-white">
-                <h3 className="text-xl font-bold">Calculer mon tarif</h3>
-                <p className="text-white/80 text-sm mt-1">
-                  Simulation indicative — devis définitif gratuit sur place
+              <div className="bg-gradient-to-r from-[#79DBDC] to-[#5BBFC0] px-6 py-6 text-white">
+                <h3 className="text-xl font-bold">Simulateur de devis</h3>
+                <p className="text-white/85 text-sm mt-1">
+                  Choisissez votre prestation, ajustez la surface et activez les options.
                 </p>
               </div>
 
-              <div className="p-6 space-y-5">
-
-                {/* Type de prestation */}
+              <div className="p-6 space-y-6">
                 <div>
-                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-[0.24em] mb-3">
                     Type de prestation
                   </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    {(Object.keys(servicesConfig) as ServiceKey[]).map((k) => {
-                      const Icon = servicesConfig[k].icon;
-                      const isSelected = type === k;
-                      return (
-                        <motion.button
-                          key={k}
-                          onClick={() => setType(k)}
-                          whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
-                          whileTap={prefersReducedMotion  ? {} : { scale: 0.97 }}
-                          className={`flex items-center gap-2 p-2.5 rounded-xl border transition-colors duration-200 ${
-                            isSelected
-                              ? 'border-[#79DBDC] bg-[#79DBDC]/5 shadow-sm'
-                              : 'border-gray-200 hover:border-[#79DBDC] hover:bg-gray-50'
-                          }`}
-                        >
-                          <Icon
-                            size={16}
-                            className={isSelected ? 'text-[#79DBDC]' : 'text-gray-400'}
-                          />
-                          <span className={`text-xs font-medium ${isSelected ? 'text-[#79DBDC]' : 'text-gray-700'}`}>
-                            {servicesConfig[k].label.split(' ').slice(0, 2).join(' ')}
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    {serviceTypes.map((item) => (
+                      <motion.button
+                        key={item.key}
+                        type="button"
+                        onClick={() => setServiceType(item.key)}
+                        whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
+                        whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
+                        className={`flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 ${
+                          serviceType === item.key
+                            ? 'border-[#79DBDC] bg-[#79DBDC]/10 shadow-sm'
+                            : 'border-gray-200 bg-white hover:border-[#79DBDC] hover:bg-gray-50'
+                        }`}
+                      >
+                        <item.icon size={18} className={serviceType === item.key ? 'text-[#79DBDC]' : 'text-gray-500'} />
+                        <div>
+                          <span className={`block font-semibold ${serviceType === item.key ? 'text-[#0e2b38]' : 'text-gray-700'}`}>
+                            {item.label}
                           </span>
-                        </motion.button>
-                      );
-                    })}
-                  </div>
-
-                  {/* Description animée au changement de type */}
-                  <AnimatePresence mode="wait">
-                    <motion.p
-                      key={type}
-                      className="text-xs text-gray-400 mt-2"
-                      initial={prefersReducedMotion ? {} : { opacity: 0, y: 4 }}
-                      animate={prefersReducedMotion ? {} : { opacity: 1, y: 0 }}
-                      exit={prefersReducedMotion   ? {} : { opacity: 0, y: -4 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      {service.description}
-                    </motion.p>
-                  </AnimatePresence>
-                </div>
-
-                {/* Surface / Durée */}
-                <div>
-                  <div className="flex justify-between items-center mb-2">
-                    <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">
-                      {service.unit === 'm²' ? 'Surface estimée' : 'Durée estimée'} ({service.unit})
-                    </label>
-                    <motion.span
-                      key={`${type}-${surface}`}
-                      className="text-sm font-bold text-[#79DBDC]"
-                      initial={prefersReducedMotion ? {} : { scale: 1.25, opacity: 0.6 }}
-                      animate={prefersReducedMotion ? {} : { scale: 1,    opacity: 1   }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      {surface} {service.unit}
-                    </motion.span>
-                  </div>
-                  <input
-                    type="range"
-                    min={service.min}
-                    max={service.max}
-                    step={service.unit === 'm²' ? 5 : 0.5}
-                    value={surface}
-                    onChange={(e) => setSurface(parseFloat(e.target.value))}
-                    className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-[#79DBDC]"
-                    style={{
-                      background: `linear-gradient(to right, #79DBDC 0%, #79DBDC ${(surface - service.min) / (service.max - service.min) * 100}%, #e5e7eb ${(surface - service.min) / (service.max - service.min) * 100}%, #e5e7eb 100%)`,
-                    }}
-                  />
-                  <div className="flex justify-between text-xs text-gray-400 mt-1">
-                    <span>{service.min} {service.unit}</span>
-                    <span>{service.max} {service.unit}</span>
-                  </div>
-                </div>
-
-                {/* Options supplémentaires */}
-                <div className="border-t border-gray-100 pt-4">
-                  <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-3">
-                    Options complémentaires
-                  </p>
-                  <div className="space-y-2">
-                    {[
-                      { key: 'deplacement', label: 'Déplacement inclus',       extra: '+15€' },
-                      { key: 'urgence',     label: 'Intervention urgente (24h)', extra: '+45€' },
-                    ].map(({ key, label, extra }) => (
-                      <label key={key} className="flex items-center justify-between cursor-pointer">
-                        <div className="flex items-center gap-2">
-                          <input
-                            type="checkbox"
-                            checked={extraServices[key as keyof typeof extraServices]}
-                            onChange={(e) =>
-                              setExtraServices({ ...extraServices, [key]: e.target.checked })
-                            }
-                            className="w-4 h-4 rounded border-gray-300 text-[#79DBDC] focus:ring-[#79DBDC]"
-                          />
-                          <span className="text-sm text-gray-700">{label}</span>
+                          <span className="text-xs text-gray-500">{item.description}</span>
                         </div>
-                        <span className="text-xs text-gray-400">{extra}</span>
-                      </label>
+                      </motion.button>
                     ))}
                   </div>
                 </div>
+
+                <div className="rounded-3xl border border-gray-100 bg-gray-50 p-5 shadow-sm">
+                  <div className="flex flex-wrap gap-4 items-center justify-between">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.24em] text-gray-500">{surfaceMeta.label}</p>
+                      <h4 className="mt-2 text-lg font-semibold text-gray-900">{surface} {surfaceMeta.unit}</h4>
+                    </div>
+                    <span className="rounded-full bg-[#79DBDC]/10 px-3 py-1 text-xs font-semibold text-[#237395]">
+                      {surfaceMeta.unit}
+                    </span>
+                  </div>
+
+                  <div className="mt-4 space-y-3">
+                    <input
+                      type="range"
+                      min={surfaceMeta.min}
+                      max={surfaceMeta.max}
+                      step={5}
+                      value={surface}
+                      onChange={(e) => setSurface(Number(e.target.value))}
+                      className="w-full h-2 rounded-full accent-[#79DBDC] bg-gray-200"
+                    />
+                    <div className="grid grid-cols-3 text-xs text-gray-500">
+                      <span>{surfaceMeta.min} {surfaceMeta.unit}</span>
+                      <span className="text-center font-semibold text-gray-800">{surface} {surfaceMeta.unit}</span>
+                      <span className="text-right">{surfaceMeta.max} {surfaceMeta.unit}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {serviceType === 'jardinage' && (
+                  <div className="space-y-5 rounded-3xl border border-gray-100 bg-white p-5">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.24em] text-gray-500 mb-3">Taille de haies / arbustes</p>
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {[
+                          { value: 'small' as HedgeHeight, label: 'Hauteur < 2 m', price: '6€/m linéaire' },
+                          { value: 'large' as HedgeHeight, label: 'Hauteur > 2 m', price: '13€/m linéaire' },
+                        ].map((option) => (
+                          <label
+                            key={option.value}
+                            className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 ${
+                              hedgeHeight === option.value ? 'border-[#79DBDC] bg-[#79DBDC]/10' : 'border-gray-200 bg-white'
+                            }`}
+                          >
+                            <div>
+                              <div className="text-sm font-semibold text-gray-900">{option.label}</div>
+                              <div className="text-xs text-gray-500">{option.price}</div>
+                            </div>
+                            <input
+                              type="radio"
+                              name="hedgeHeight"
+                              value={option.value}
+                              checked={hedgeHeight === option.value}
+                              onChange={() => setHedgeHeight(option.value)}
+                              className="h-4 w-4 accent-[#79DBDC]"
+                            />
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="grid gap-4 sm:grid-cols-2">
+                      <label className="space-y-2 text-sm text-gray-700">
+                        Mètres linéaires de haies
+                        <input
+                          type="number"
+                          value={hedgeMeters}
+                          min={0}
+                          max={200}
+                          onChange={(e) => setHedgeMeters(Number(e.target.value))}
+                          className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
+                        />
+                      </label>
+                      <label className="space-y-2 text-sm text-gray-700">
+                        Évacuation déchets verts
+                        <select
+                          value={greenWaste ? 'yes' : 'no'}
+                          onChange={(e) => setGreenWaste(e.target.value === 'yes')}
+                          className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
+                        >
+                          <option value="no">Non — déchets laissés sur place</option>
+                          <option value="yes">Oui — 30€/m³</option>
+                        </select>
+                      </label>
+                    </div>
+                    {greenWaste && (
+                      <label className="space-y-2 text-sm text-gray-700">
+                        Volume déchets verts (m³)
+                        <input
+                          type="number"
+                          value={greenWasteVolume}
+                          min={0}
+                          step={0.5}
+                          onChange={(e) => setGreenWasteVolume(Number(e.target.value))}
+                          className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
+                        />
+                      </label>
+                    )}
+                  </div>
+                )}
+
+                {serviceType === 'terrasse' && (
+                  <div className="space-y-5 rounded-3xl border border-gray-100 bg-white p-5">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.24em] text-gray-500 mb-3">Niveau de saleté</p>
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {[
+                          { value: 'low' as TerraceLevel, label: 'Niveau faible', subtitle: '6,5€/m²' },
+                          { value: 'high' as TerraceLevel, label: 'Niveau élevé', subtitle: '12,5€/m²' },
+                        ].map((option) => (
+                          <label
+                            key={option.value}
+                            className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 ${
+                              terraceLevel === option.value ? 'border-[#79DBDC] bg-[#79DBDC]/10' : 'border-gray-200 bg-white'
+                            }`}
+                          >
+                            <div>
+                              <div className="text-sm font-semibold text-gray-900">{option.label}</div>
+                              <div className="text-xs text-gray-500">{option.subtitle}</div>
+                            </div>
+                            <input
+                              type="radio"
+                              name="terraceLevel"
+                              value={option.value}
+                              checked={terraceLevel === option.value}
+                              onChange={() => setTerraceLevel(option.value)}
+                              className="h-4 w-4 accent-[#79DBDC]"
+                            />
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.24em] text-gray-500 mb-3">Finition</p>
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {[
+                          { value: 'none' as FinishOption, title: 'Aucune', description: 'Sans finition' },
+                          { value: 'bois' as FinishOption, title: 'Terrasse en bois', description: '+18€/m²' },
+                          { value: 'imperm' as FinishOption, title: 'Imperméabilisant', description: '+10€/m²' },
+                          { value: 'wet' as FinishOption, title: 'Effet mouillé', description: '+16€/m²' },
+                        ].map((option) => (
+                          <label
+                            key={option.value}
+                            className={`flex cursor-pointer flex-col gap-2 rounded-2xl border p-4 ${
+                              finish === option.value ? 'border-[#79DBDC] bg-[#79DBDC]/10' : 'border-gray-200 bg-white'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="text-sm font-semibold text-gray-900">{option.title}</span>
+                              <input
+                                type="radio"
+                                name="finish"
+                                value={option.value}
+                                checked={finish === option.value}
+                                onChange={() => setFinish(option.value)}
+                                className="h-4 w-4 accent-[#79DBDC]"
+                              />
+                            </div>
+                            <span className="text-xs text-gray-500">{option.description}</span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="rounded-2xl bg-gray-50 p-4 border border-gray-200 text-sm text-gray-600">
+                      <p className="font-semibold text-gray-900">Surface réduite</p>
+                      <p className="mt-2 text-xs leading-5 text-gray-500">
+                        Pour les petites surfaces {'<30 m²'}, un forfait adapté est appliqué selon le niveau de saleté.
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {(serviceType === 'fin-de-bail' || serviceType === 'fin-de-chantier') && (
+                  <div className="space-y-5 rounded-3xl border border-gray-100 bg-white p-5">
+                    <div>
+                      <p className="text-xs uppercase tracking-[0.24em] text-gray-500 mb-3">Niveau de saleté</p>
+                      <div className="grid gap-3 sm:grid-cols-2">
+                        {[
+                          { value: 'standard' as CleanLevel, label: 'Standard', subtitle: '4,5€/m²' },
+                          { value: 'intensif' as CleanLevel, label: 'Intensif', subtitle: '6€/m²' },
+                        ].map((option) => (
+                          <label
+                            key={option.value}
+                            className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 ${
+                              cleanLevel === option.value ? 'border-[#79DBDC] bg-[#79DBDC]/10' : 'border-gray-200 bg-white'
+                            }`}
+                          >
+                            <div>
+                              <div className="text-sm font-semibold text-gray-900">{option.label}</div>
+                              <div className="text-xs text-gray-500">{option.subtitle}</div>
+                            </div>
+                            <input
+                              type="radio"
+                              name="cleanLevel"
+                              value={option.value}
+                              checked={cleanLevel === option.value}
+                              onChange={() => setCleanLevel(option.value)}
+                              className="h-4 w-4 accent-[#79DBDC]"
+                            />
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="grid gap-4 md:grid-cols-2">
+                      <label className="space-y-2 text-sm text-gray-700">
+                        Four
+                        <select
+                          value={ovenState}
+                          onChange={(e) => setOvenState(e.target.value as OvenState)}
+                          className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
+                        >
+                          <option value="none">Aucun</option>
+                          <option value="standard">Standard — 40€</option>
+                          <option value="sale">Très sale — 90€</option>
+                        </select>
+                      </label>
+                      <label className="space-y-2 text-sm text-gray-700">
+                        Micro-ondes
+                        <select
+                          value={microwave ? 'yes' : 'no'}
+                          onChange={(e) => setMicrowave(e.target.value === 'yes')}
+                          className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
+                        >
+                          <option value="no">Aucun</option>
+                          <option value="yes">15€</option>
+                        </select>
+                      </label>
+                      <label className="space-y-2 text-sm text-gray-700">
+                        Réfrigérateur
+                        <select
+                          value={fridgeState}
+                          onChange={(e) => setFridgeState(e.target.value as FridgeState)}
+                          className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
+                        >
+                          <option value="none">Aucun</option>
+                          <option value="standard">Standard — 30€</option>
+                          <option value="sale">Très sale — 60€</option>
+                        </select>
+                      </label>
+                      <label className="space-y-2 text-sm text-gray-700">
+                        Frigo double porte
+                        <select
+                          value={doubleFridge ? 'yes' : 'no'}
+                          onChange={(e) => setDoubleFridge(e.target.value === 'yes')}
+                          className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
+                        >
+                          <option value="no">Aucun</option>
+                          <option value="yes">90€</option>
+                        </select>
+                      </label>
+                    </div>
+
+                    <label className="space-y-2 text-sm text-gray-700">
+                      Sanitaires / salle de bain
+                      <select
+                        value={sanitaryState}
+                        onChange={(e) => setSanitaryState(e.target.value as 'none' | 'standard' | 'sale')}
+                        className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
+                      >
+                        <option value="none">Aucun</option>
+                        <option value="standard">Standard — 60€</option>
+                        <option value="sale">Très sale — 130€</option>
+                      </select>
+                    </label>
+
+                    <div className="rounded-2xl bg-gray-50 p-4 border border-gray-200 text-sm text-gray-600">
+                      <p className="font-semibold text-gray-900">Vitres & baies</p>
+                      <div className="grid gap-3 mt-3 sm:grid-cols-2">
+                        {windowFields.map((field) => (
+                          <label key={field.key} className="space-y-2 text-sm text-gray-700">
+                            {field.label}
+                            <input
+                              type="number"
+                              value={windowCounts[field.key]}
+                              min={0}
+                              onChange={(e) => setWindowCounts({ ...windowCounts, [field.key]: Number(e.target.value) })}
+                              className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
+                            />
+                          </label>
+                        ))}
+                      </div>
+                      <label className="mt-3 flex items-center gap-2 text-sm text-gray-700">
+                        <input
+                          type="checkbox"
+                          checked={stageWindows}
+                          onChange={(e) => setStageWindows(e.target.checked)}
+                          className="h-4 w-4 rounded border-gray-300 text-[#79DBDC]"
+                        />
+                        À l'étage (+2€/vitre)
+                      </label>
+                    </div>
+
+                    <div className="rounded-2xl bg-yellow-50 p-4 border border-yellow-200 text-sm text-yellow-800">
+                      <p className="font-semibold">Attention</p>
+                      <p className="mt-2 text-xs leading-5">
+                        Lessivage murs et plafonds non inclus, tarification sur visite technique uniquement.
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
             </motion.div>
 
-            {/* ── RÉSULTAT ── */}
             <motion.div
-              className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl shadow-xl overflow-hidden"
+              className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl shadow-xl overflow-hidden"
               variants={prefersReducedMotion ? {} : cardVariants}
             >
               <div className="p-6 text-white">
@@ -279,58 +689,29 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                   <h3 className="font-semibold">Votre estimation</h3>
                 </div>
 
-                {/* Détail des prix */}
                 <div className="space-y-3 mb-6">
-
-                  {/* Prestation de base */}
                   <div className="flex justify-between text-sm text-white/70">
-                    <span>Prestation de base</span>
-                    <AnimatePresence mode="wait">
-                      <motion.span
-                        key={basePrice}
-                        variants={prefersReducedMotion ? {} : priceVariants}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                      >
-                        {formatPrice(basePrice)}
-                      </motion.span>
-                    </AnimatePresence>
+                    <span>Base de calcul</span>
+                    <span>{formatPrice(baseTotal)}</span>
                   </div>
 
-                  {/* Déplacement — apparition/disparition fluide */}
-                  <AnimatePresence>
-                    {extraServices.deplacement && (
-                      <motion.div
-                        className="flex justify-between text-sm text-white/70 overflow-hidden"
-                        variants={prefersReducedMotion ? {} : detailLineVariants}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                      >
-                        <span>+ Déplacement</span>
-                        <span>{formatPrice(15)}</span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                  {detailLines.map((line) => (
+                    <AnimatePresence key={line.label} mode="wait">
+                      {line.price !== 0 && (
+                        <motion.div
+                          className="flex justify-between text-sm text-white/70 overflow-hidden"
+                          variants={prefersReducedMotion ? {} : detailLineVariants}
+                          initial="initial"
+                          animate="animate"
+                          exit="exit"
+                        >
+                          <span>{line.label}</span>
+                          <span>{formatPrice(line.price)}</span>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  ))}
 
-                  {/* Urgence */}
-                  <AnimatePresence>
-                    {extraServices.urgence && (
-                      <motion.div
-                        className="flex justify-between text-sm text-white/70 overflow-hidden"
-                        variants={prefersReducedMotion ? {} : detailLineVariants}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                      >
-                        <span>+ Urgence</span>
-                        <span>{formatPrice(45)}</span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-
-                  {/* Total */}
                   <div className="border-t border-white/20 pt-3">
                     <div className="flex justify-between items-center">
                       <span className="font-medium">Total TTC</span>
@@ -347,29 +728,26 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                             {formatPrice(totalPrice)}
                           </motion.span>
                         </AnimatePresence>
-                        <p className="text-xs text-white/50">Hors TVA (non applicable)</p>
+                        <p className="text-xs text-white/50">Estimation indicative, devis final sur place</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                {/* Note info */}
-                <div className="bg-white/10 rounded-xl p-4 mb-5">
+                <div className="bg-white/10 rounded-2xl p-4 mb-5">
                   <div className="flex items-start gap-2">
                     <Info size={14} className="text-[#79DBDC] flex-shrink-0 mt-0.5" />
                     <p className="text-xs text-white/80 leading-relaxed">
-                      Cette estimation est indicative. Le devis définitif sera établi
-                      après une visite sur place, sans engagement.
+                      Estimation indicative. Le devis définitif est gratuit et établi après visite technique.
                     </p>
                   </div>
                 </div>
 
-                {/* CTA */}
                 <motion.button
                   onClick={onConfirm}
                   whileHover={prefersReducedMotion ? {} : { scale: 1.03, boxShadow: '0 8px 30px rgba(121,219,220,0.35)' }}
-                  whileTap={prefersReducedMotion   ? {} : { scale: 0.97 }}
-                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#79DBDC] to-[#5BBFC0] text-white py-3.5 rounded-xl text-sm font-semibold"
+                  whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
+                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#79DBDC] to-[#5BBFC0] text-white py-3.5 rounded-2xl text-sm font-semibold"
                 >
                   <Send size={16} />
                   Confirmer et recevoir un devis
@@ -382,7 +760,6 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
             </motion.div>
           </div>
 
-          {/* ── Badges de confiance ── */}
           <div className="flex flex-wrap justify-center gap-6 mt-8 pt-4">
             {['Devis gratuit', 'Sans engagement', 'Réponse sous 24h'].map((text, i) => (
               <motion.div
