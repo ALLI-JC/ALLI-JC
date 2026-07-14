@@ -19,6 +19,24 @@ const getSimulatorLink = (): string => {
 };
 
 const services = [
+   {
+    icon: Waves,
+    name: 'Nettoyage haute pression',
+    desc: 'Terrasses, allées, façades',
+    mention: 'Résultat immédiat avec traitement anti-mousse inclus',
+    features: ['Nettoyage écologique', 'Résultat immédiat', 'Prévention des mousses'],
+    category: 'Entretien Extérieur & Espaces Verts',
+    color: 'from-emerald-400 to-teal-400'
+  },
+    {
+    icon: Leaf,
+    name: 'Jardinage & espaces verts',
+    desc: 'Tonte, taille, entretien des espaces communs',
+    mention: 'Collecte et évacuation complète des déchets verts',
+    features: ['Élagage et taille', 'Entretien régulier', 'Collecte déchets verts'],
+    category: 'Entretien Extérieur & Espaces Verts',
+    color: 'from-green-400 to-emerald-400'
+  },
   {
     icon: Droplets,
     name: 'Nettoyage de vitres',
@@ -28,24 +46,8 @@ const services = [
     category: 'Entretien Extérieur & Espaces Verts',
     color: 'from-cyan-400 to-blue-400'
   },
-  {
-    icon: Waves,
-    name: 'Nettoyage haute pression',
-    desc: 'Terrasses, allées, façades',
-    mention: 'Résultat immédiat avec traitement anti-mousse inclus',
-    features: ['Nettoyage écologique', 'Résultat immédiat', 'Prévention des mousses'],
-    category: 'Entretien Extérieur & Espaces Verts',
-    color: 'from-emerald-400 to-teal-400'
-  },
-  {
-    icon: Leaf,
-    name: 'Jardinage & espaces verts',
-    desc: 'Tonte, taille, entretien des espaces communs',
-    mention: 'Collecte et évacuation complète des déchets verts',
-    features: ['Élagage et taille', 'Entretien régulier', 'Collecte déchets verts'],
-    category: 'Entretien Extérieur & Espaces Verts',
-    color: 'from-green-400 to-emerald-400'
-  },
+ 
+
   {
     icon: Sparkles,
     name: 'Nettoyage intérieur',

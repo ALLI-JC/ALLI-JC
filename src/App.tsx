@@ -18,7 +18,7 @@ import Bookings from './components/admin/Bookings'
 import Gallery from './components/galleri'
 import Login from './Pages/Login'
 import GalleryManagement from './components/admin/Gallery'
-import Chat from './components/Chat'
+
 import Messages from './components/admin/Bookings'
 import FloatingLogo from './components/FloatingLogo'
 import SplashScreen from './components/SplashScreen'
@@ -44,7 +44,7 @@ function PublicSite() {
       <Testimonials />
       <Contact />
       <Footer />
-      <Chat />
+   
     </div>
   )
 }
