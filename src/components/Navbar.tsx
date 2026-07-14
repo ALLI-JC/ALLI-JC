@@ -87,7 +87,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
     { href: "#sec-services", label: "Services" },
     { href: "#sec-gallery", label: "Galerie" },
     { href: "#sec-devis", label: "Tarifs" },
-    { href: "#sec-contact", label: "Contact" },
+    { href: "#sec-contact", label: "Nos contacts" },
   ];
 
   const handleLinkClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
@@ -166,74 +166,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
               </a>
 
               {/* Boutons utilisateur / admin */}
-              <div className="relative user-menu-container">
-                {user.isAuthenticated ? (
-                  <>
-                    <button
-                      onClick={() => setUserMenuOpen(!userMenuOpen)}
-                      className="flex items-center gap-2 px-3 py-2 text-white hover:text-lagon transition-colors rounded-lg hover:bg-lagon/10"
-                    >
-                      <div className="w-8 h-8 rounded-full bg-gradient-to-br from-lagon to-[#5BBFC0] flex items-center justify-center text-white text-sm font-bold">
-                        {user.name.charAt(0).toUpperCase()}
-                      </div>
-                    </button>
-
-                    {/* Menu utilisateur déroulant */}
-                    {userMenuOpen && (
-                      <div className="absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50">
-                        <div className="px-4 py-3 border-b border-gray-100">
-                          <p className="text-sm font-semibold text-gray-800">{user.name}</p>
-                          <p className="text-xs text-gray-500">{user.email}</p>
-                          {user.role === 'admin' && (
-                            <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full bg-[#237395]/10 text-[#237395] text-xs font-medium">
-                              <Shield size={10} />
-                              Administrateur
-                            </span>
-                          )}
-                        </div>
-                        
-                        <div className="py-1">
-                          <button
-                            onClick={handleProfile}
-                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                          >
-                            <UserCircle size={16} className="text-lagon" />
-                            Mon profil
-                          </button>
-                          
-                          {user.role === 'admin' && (
-                            <button
-                              onClick={handleDashboard}
-                              className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-                            >
-                              <Settings size={16} className="text-lagon" />
-                              Administration
-                            </button>
-                          )}
-                          
-                          <hr className="my-1 border-gray-100" />
-                          
-                          <button
-                            onClick={handleLogout}
-                            className="w-full flex items-center gap-3 px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
-                          >
-                            <LogOut size={16} />
-                            Se déconnecter
-                          </button>
-                        </div>
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  <button
-                    onClick={handleLogin}
-                    className="flex items-center gap-2 px-4 py-2 text-white hover:text-lagon transition-colors rounded-lg hover:bg-lagon/10 border border-white/20"
-                  >
-                    <User size={16} />
-                    <span className="text-sm font-medium">Connexion</span>
-                  </button>
-                )}
-              </div>
+            
 
               <button
                 onClick={onDevisClick}
