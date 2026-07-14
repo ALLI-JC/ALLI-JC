@@ -1,4 +1,4 @@
-// App.tsx - Logo seulement sur la page d'accueil
+// App.tsx - Version simplifiée
 import { Routes, Route, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import Navbar from './components/Navbar'
@@ -51,59 +51,68 @@ function PublicSite() {
 
 export default function App() {
   const location = useLocation()
-  const [showSplash, setShowSplash] = useState(() => {
-    // Affiche la splash screen seulement au premier chargement de la page d'accueil
-    return location.pathname === '/'
-  })
+  const [showSplash, setShowSplash] = useState(true)
+  const [showApp, setShowApp] = useState(false)
 
   useEffect(() => {
-    // Réinitialiser la splash screen si on revient à la page d'accueil
-    setShowSplash(location.pathname === '/')
+    // Si on est sur la page d'accueil, on montre la splash
+    if (location.pathname === '/') {
+      setShowSplash(true)
+      setShowApp(false)
+    } else {
+      // Sur les autres pages, on cache la splash et on montre le contenu
+      setShowSplash(false)
+      setShowApp(true)
+    }
   }, [location.pathname])
 
+  const handleSplashComplete = () => {
+    setShowSplash(false)
+    setShowApp(true)
+  }
+
+  // Si on est sur la page d'accueil et que la splash est active, on la montre
+  if (location.pathname === '/' && showSplash) {
+    return <SplashScreen onComplete={handleSplashComplete} />
+  }
+
+  // Sinon, on montre l'application normale
   return (
-    <>
-      {showSplash && <SplashScreen onComplete={() => setShowSplash(false)} />}
-      <Routes>
-        {/* Route publique avec logo */}
-        <Route path="/" element={
-          <>
-            <PublicSite />
-            <FloatingLogo 
-              src="/alliéjc-logo-3.png" 
-              size={70} 
-              offset={120}
-            />
-          </>
-        } />
-        
-        {/* Page de login SANS logo */}
-        <Route path="/login" element={<Login />} />
-        
-        {/* Routes admin protégées SANS logo */}
-        <Route element={<ProtectedRoute />}>
-          <Route path="/admin" element={<AdminLayout />}>
-            <Route index element={<Dashboard />} />
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="users" element={<Users />} />
-            <Route path="bookings" element={<Bookings />} />
-            <Route path="messages" element={<Messages />} />
-            <Route path="gallery" element={<GalleryManagement />} />
-          </Route>
+    <Routes>
+      <Route path="/" element={
+        <>
+          <PublicSite />
+          <FloatingLogo 
+            src="/alliéjc-logo-3.png" 
+            size={70} 
+            offset={120}
+          />
+        </>
+      } />
+      
+      <Route path="/login" element={<Login />} />
+      
+      <Route element={<ProtectedRoute />}>
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="users" element={<Users />} />
+          <Route path="bookings" element={<Bookings />} />
+          <Route path="messages" element={<Messages />} />
+          <Route path="gallery" element={<GalleryManagement />} />
         </Route>
-        
-        {/* Redirection 404 AVEC logo */}
-        <Route path="*" element={
-          <>
-            <PublicSite />
-            <FloatingLogo 
-              src="/alliéjc-logo-3.png" 
-              size={70} 
-              offset={120}
-            />
-          </>
-        } />
-      </Routes>
-    </>
+      </Route>
+      
+      <Route path="*" element={
+        <>
+          <PublicSite />
+          <FloatingLogo 
+            src="/alliéjc-logo-3.png" 
+            size={70} 
+            offset={120}
+          />
+        </>
+      } />
+    </Routes>
   )
 }
