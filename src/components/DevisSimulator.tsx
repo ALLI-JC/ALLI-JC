@@ -5,6 +5,7 @@ import {
   AnimatePresence,
   useReducedMotion,
 } from 'framer-motion';
+import ReassurancePillars from './ReassurancePillars';
 
 type ServiceType = 'jardinage' | 'terrasse' | 'fin-de-bail' | 'fin-de-chantier';
 type HedgeHeight = 'small' | 'large';
@@ -776,6 +777,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
               </motion.div>
             ))}
           </div>
+          <ReassurancePillars/>
         </motion.div>
       </div>
     </section>

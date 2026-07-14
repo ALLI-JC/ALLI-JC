@@ -123,9 +123,9 @@ export default function Hero({ onDevisClick }: HeroProps) {
           </motion.div>
         </AnimatePresence>
         
-        {/* Overlay dégradé pour lisibilité */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0e2b38]/90 via-[#0e2b38]/70 to-[#0e2b38]/30" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0e2b38]/70 via-transparent to-transparent" />
+        {/* Overlay plus clair et plus transparent pour mieux voir les photos */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#0e2b38]/60 via-[#0e2b38]/40 to-[#0e2b38]/10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0e2b38]/50 via-transparent to-transparent" />
         
         {/* Indicateurs de slide en bas à gauche */}
         <div className="absolute bottom-8 left-8 z-20 flex gap-1.5">
@@ -140,7 +140,7 @@ export default function Hero({ onDevisClick }: HeroProps) {
               className={`h-1 rounded-full transition-all duration-300 ${
                 index === activeIndex 
                   ? 'w-8 bg-[#D2B093]' 
-                  : 'w-4 bg-white/30 hover:bg-white/50'
+                  : 'w-4 bg-white/40 hover:bg-white/60'
               }`}
               aria-label={`Voir slide ${index + 1}`}
             />
@@ -156,7 +156,7 @@ export default function Hero({ onDevisClick }: HeroProps) {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.15em] text-[#D2B093] backdrop-blur-sm"
+            className="mb-6 inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/15 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.15em] text-[#D2B093] backdrop-blur-sm"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-[#D2B093]" />
             {activeLabel}
@@ -179,7 +179,7 @@ export default function Hero({ onDevisClick }: HeroProps) {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="mt-4 max-w-xl text-base leading-relaxed text-white/80 sm:text-lg"
+            className="mt-4 max-w-xl text-base leading-relaxed text-white/90 sm:text-lg"
           >
             Des interventions propres, rapides et soignées pour préserver le confort 
             de votre intérieur comme de votre extérieur.
@@ -198,7 +198,7 @@ export default function Hero({ onDevisClick }: HeroProps) {
                 href={link.href}
                 whileHover={prefersReducedMotion ? {} : { y: -3, scale: 1.02 }}
                 whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
-                className="group relative overflow-hidden rounded-2xl border border-white/15 bg-white/5 px-5 py-3.5 backdrop-blur-sm transition-all hover:bg-white/15 hover:border-white/25 hover:shadow-lg hover:shadow-black/20"
+                className="group relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 px-5 py-3.5 backdrop-blur-sm transition-all hover:bg-white/20 hover:border-white/30 hover:shadow-lg hover:shadow-black/20"
               >
                 <div className="flex items-start gap-3">
                   <link.icon size={18} className="mt-0.5 text-[#D2B093] shrink-0" />
@@ -236,7 +236,7 @@ export default function Hero({ onDevisClick }: HeroProps) {
               href="tel:0607979074"
               whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
               whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
-              className="inline-flex items-center justify-center gap-2.5 rounded-full border border-white/20 bg-white/5 px-8 py-4 text-sm font-medium text-white backdrop-blur-sm transition-all hover:bg-white/10 hover:border-white/30"
+              className="inline-flex items-center justify-center gap-2.5 rounded-full border border-white/30 bg-white/10 px-8 py-4 text-sm font-medium text-white backdrop-blur-sm transition-all hover:bg-white/20 hover:border-white/40"
             >
               <Phone size={16} className="text-[#D2B093]" />
               06 07 97 90 74
@@ -245,9 +245,8 @@ export default function Hero({ onDevisClick }: HeroProps) {
         </div>
       </div>
     </section>
-<ServicesMarquee />
+    <ServicesMarquee />
     <TrustBar />
-    <ReassurancePillars />
     </>
   );
 }
