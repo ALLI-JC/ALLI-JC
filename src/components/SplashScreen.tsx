@@ -12,53 +12,144 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
     const timer = setTimeout(() => {
       setIsVisible(false);
       // On attend que l'animation de sortie soit terminée avant d'appeler onComplete
-      setTimeout(() => {
+      const exitTimer = setTimeout(() => {
         onComplete();
       }, 600); // Durée de l'animation de sortie
+
+      return () => clearTimeout(exitTimer);
     }, 5000);
 
     return () => clearTimeout(timer);
   }, [onComplete]);
 
   // Animation du chamois qui saute 2 fois : droite → centre, puis centre → gauche (très à gauche)
+  // Utilisation de transitions séparées pour X et Y afin de créer des paraboles arrondies (demi-cercles)
   const chamoisTraverseVariants: Variants = {
-    initial: { 
-      x: '120vw', 
-      y: 0, 
-      scale: 0.8 
+    initial: {
+      x: "120vw",
+      y: 0,
+      scale: 0.8,
+      rotate: 8,
     },
-    animate: { 
-      x: ['140vw', '00vw', '00vw', '-45vw'],
-      y: [0, -220, 0, 0, -220, 0],
-      scale: [0.8, 1.4, 1, 1, 1.4, 0.8],
-      transition: { 
+
+    animate: {
+      x: [
+        "120vw",
+        "100vw",
+        "80vw",
+        "60vw",
+        "40vw",
+        "20vw",
+        "0vw",
+        "-20vw",
+        "-40vw",
+        "-60vw"
+      ],
+
+      y: [
+        0,
+        -60,
+        -150,
+        -250,
+        -150,
+        -60,
+        0,
+        -150,
+        -250,
+        0
+      ],
+
+      scale: [
+        0.8,
+        0.9,
+        1,
+        1.2,
+        1.1,
+        1,
+        1,
+        1.1,
+        1.2,
+        0.8
+      ],
+
+      rotate: [
+        8,
+        5,
+        2,
+        0,
+        -2,
+        -4,
+        -5,
+        -7,
+        -9,
+        -10
+      ],
+
+      transition: {
+        duration: 5,
+        ease: [0.45, 0, 0.55, 1],
+        times: [
+          0,
+          0.10,
+          0.22,
+          0.35,
+          0.50,
+          0.65,
+          0.78,
+          0.90,
+          1
+        ]
+      }
+    },
+
+    exit: {
+      opacity: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  // Animation de l'ombre du chamois au sol (synchronisée sur le rythme du saut)
+  const shadowVariants: Variants = {
+    initial: {
+      opacity: 0,
+      scale: 0.5
+    },
+    animate: {
+      // L'ombre devient très discrète et s'étale lorsque le chamois est au sommet du saut (-220px)
+      opacity: [0, 0.15, 0.5, 0.5, 0.15, 0],
+      scale: [0.5, 0.6, 1.2, 1.2, 0.6, 0.5],
+      transition: {
         duration: 4.5,
-        ease: [0.33, 1.53, 0.68, 1],
-        times: [0, 0.2, 0.35, 0.45, 0.65, 0.8, 1]
-      } 
+        times: [0, 0.25, 0.45, 0.55, 0.75, 1],
+        ease: ["easeOut", "easeIn", "linear", "easeOut", "easeIn"]
+      }
     },
     exit: {
       opacity: 0,
-      transition: { duration: 0.6, ease: 'easeOut' }
+      scale: 0.3,
+      transition: { duration: 0.5 }
     }
   };
 
   // Animation du logo central
   const logoVariants: Variants = {
-    initial: { 
-      scale: 0.6, 
-      opacity: 0, 
-      y: 20 
+    initial: {
+      scale: 0.6,
+      opacity: 0,
+      y: 20
     },
-    animate: { 
-      scale: 1, 
-      opacity: 1, 
+    animate: {
+      scale: 1,
+      opacity: 1,
       y: 0,
-      transition: { 
-        duration: 0.8, 
+      transition: {
+        duration: 0.8,
         delay: 0.3,
         ease: [0.25, 0.1, 0.25, 1]
-      } 
+      }
     },
     exit: {
       opacity: 0,
@@ -69,10 +160,10 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
 
   // Animation du fond
   const bgVariants: Variants = {
-    initial: { 
-      opacity: 0 
+    initial: {
+      opacity: 0
     },
-    animate: { 
+    animate: {
       opacity: 1,
       transition: { duration: 0.8 }
     },
@@ -84,9 +175,9 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
 
   // Animation de la particule
   const particleVariants: Variants = {
-    initial: { 
-      opacity: 0, 
-      scale: 0 
+    initial: {
+      opacity: 0,
+      scale: 0
     },
     animate: (i: number) => ({
       opacity: [0, 0.4, 0],
@@ -108,27 +199,6 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
     }
   };
 
-  // Animation d'ombre du chamois
-  const shadowVariants: Variants = {
-    initial: { 
-      opacity: 0,
-      scale: 0.5
-    },
-    animate: { 
-      opacity: [0, 0.5, 0.2, 0.2, 0.5, 0],
-      scale: [0.5, 1.2, 0.7, 0.7, 1.2, 0.5],
-      transition: { 
-        duration: 4.5,
-        times: [0, 0.2, 0.35, 0.45, 0.65, 0.8, 1]
-      } 
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.3,
-      transition: { duration: 0.5 }
-    }
-  };
-
   return (
     <AnimatePresence>
       {isVisible && (
@@ -145,36 +215,36 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
           {/* Cercles décoratifs en arrière-plan */}
           <motion.div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-white/5"
-            animate={{ 
+            animate={{
               scale: [1, 1.1, 1],
               rotate: [0, 360, 0],
             }}
-            transition={{ 
-              duration: 20, 
+            transition={{
+              duration: 20,
               repeat: Infinity,
               ease: 'linear'
             }}
           />
           <motion.div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-white/10"
-            animate={{ 
+            animate={{
               scale: [1, 0.9, 1],
               rotate: [360, 0, 360],
             }}
-            transition={{ 
-              duration: 15, 
+            transition={{
+              duration: 15,
               repeat: Infinity,
               ease: 'linear'
             }}
           />
           <motion.div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] rounded-full bg-white/5 blur-3xl"
-            animate={{ 
+            animate={{
               scale: [1, 1.2, 1],
               opacity: [0.3, 0.6, 0.3],
             }}
-            transition={{ 
-              duration: 4, 
+            transition={{
+              duration: 4,
               repeat: Infinity,
               ease: 'easeInOut'
             }}
@@ -208,22 +278,19 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
             {/* Cercle de lumière derrière le logo */}
             <motion.div
               className="absolute -inset-24 rounded-full bg-white/10 blur-3xl"
-              animate={{ 
+              animate={{
                 scale: [1, 1.3, 1],
                 opacity: [0.4, 0.8, 0.4],
               }}
-              transition={{ 
-                duration: 3, 
+              transition={{
+                duration: 3,
                 repeat: Infinity,
                 ease: 'easeInOut'
               }}
             />
 
-            {/* Logo image central */}
-            {/* Votre logo ici */}
-
-            {/* Sous-titre */}
-            {/* Votre sous-titre ici */}
+            {/* Logo image central - Ton logo ici */}
+            {/* Sous-titre - Ton sous-titre ici */}
           </motion.div>
 
           {/* Ombre du chamois au sol */}
@@ -233,7 +300,7 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
             initial="initial"
             animate="animate"
             exit="exit"
-            style={{ 
+            style={{
               top: '58%',
               left: '50%',
               transform: 'translateX(-50%)',
@@ -245,14 +312,14 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
             }}
           />
 
-          {/* Chamois qui saute 2 fois : droite → centre, puis centre → très à gauche */}
+          {/* Chamois qui saute en demi-cercle : droite → centre, puis centre → très à gauche */}
           <motion.div
             className="absolute z-5 pointer-events-none"
             variants={chamoisTraverseVariants}
             initial="initial"
             animate="animate"
             exit="exit"
-            style={{ 
+            style={{
               top: '50%',
               transform: 'translateY(-50%)',
               opacity: 1
