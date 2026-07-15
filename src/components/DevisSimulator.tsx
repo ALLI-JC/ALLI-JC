@@ -25,43 +25,43 @@ const serviceTypes: Array<{
   min: number;
   max: number;
 }> = [
-  {
-    key: 'jardinage',
-    label: 'Jardinage & espaces verts',
-    icon: Leaf,
-    description: 'Tonte, taille de haies et évacuation de déchets verts',
-    unit: 'm²',
-    min: 20,
-    max: 1000,
-  },
-  {
-    key: 'terrasse',
-    label: 'Terrasses & extérieurs',
-    icon: Waves,
-    description: 'Nettoyage haute pression et finitions spéciales',
-    unit: 'm²',
-    min: 5,
-    max: 400,
-  },
-  {
-    key: 'fin-de-bail',
-    label: 'Fin de bail',
-    icon: Home,
-    description: 'Nettoyage locatif avant état des lieux',
-    unit: 'm²',
-    min: 20,
-    max: 300,
-  },
-  {
-    key: 'fin-de-chantier',
-    label: 'Fin de chantier',
-    icon: Building2,
-    description: 'Nettoyage après travaux',
-    unit: 'm²',
-    min: 20,
-    max: 300,
-  },
-];
+    {
+      key: 'jardinage',
+      label: 'Jardinage & espaces verts',
+      icon: Leaf,
+      description: 'Tonte, taille de haies et évacuation de déchets verts',
+      unit: 'm²',
+      min: 20,
+      max: 1000,
+    },
+    {
+      key: 'terrasse',
+      label: 'Terrasses & extérieurs',
+      icon: Waves,
+      description: 'Nettoyage haute pression et finitions spéciales',
+      unit: 'm²',
+      min: 5,
+      max: 400,
+    },
+    {
+      key: 'fin-de-bail',
+      label: 'Fin de bail',
+      icon: Home,
+      description: 'Nettoyage locatif avant état des lieux',
+      unit: 'm²',
+      min: 20,
+      max: 300,
+    },
+    {
+      key: 'fin-de-chantier',
+      label: 'Fin de chantier',
+      icon: Building2,
+      description: 'Nettoyage après travaux',
+      unit: 'm²',
+      min: 20,
+      max: 300,
+    },
+  ];
 
 const surfaceConfig: Record<ServiceType, { label: string; unit: string; min: number; max: number }> = {
   jardinage: { label: 'Surface de tonte', unit: 'm²', min: 20, max: 1000 },
@@ -115,6 +115,8 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
 
   const [serviceType, setServiceType] = useState<ServiceType>('jardinage');
   const [surface, setSurface] = useState<number>(100);
+  const [hasTonteSurface, setHasTonteSurface] = useState<boolean>(false);
+  const [hasHedgeSurface, setHasHedgeSurface] = useState<boolean>(false);
   const [hedgeHeight, setHedgeHeight] = useState<HedgeHeight>('small');
   const [hedgeMeters, setHedgeMeters] = useState<number>(10);
   const [greenWaste, setGreenWaste] = useState<boolean>(false);
@@ -142,6 +144,13 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
   useEffect(() => {
     setSurface((current) => Math.min(Math.max(current, surfaceMeta.min), surfaceMeta.max));
   }, [serviceType, surfaceMeta.min, surfaceMeta.max]);
+
+  useEffect(() => {
+    if (serviceType !== 'jardinage') {
+      setHasTonteSurface(false);
+      setHasHedgeSurface(false);
+    }
+  }, [serviceType]);
 
   const formatPrice = (price: number) =>
     new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(price);
@@ -292,7 +301,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
 
   return (
     <section
-      className="relative py-16 md:py-24 bg-gradient-to-br from-[#f5efe7] via-[#eef5f7] to-[#fff8f2] overflow-hidden"
+      className=""
       id="sec-devis"
     >
       <div className="absolute top-0 right-0 w-96 h-96 bg-[#79DBDC]/5 rounded-full blur-3xl pointer-events-none" />
@@ -356,11 +365,10 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                         onClick={() => setServiceType(item.key)}
                         whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
                         whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
-                        className={`flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 ${
-                          serviceType === item.key
+                        className={`flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 ${serviceType === item.key
                             ? 'border-[#79DBDC] bg-[#79DBDC]/10 shadow-sm'
                             : 'border-gray-200 bg-white hover:border-[#79DBDC] hover:bg-gray-50'
-                        }`}
+                          }`}
                       >
                         <item.icon size={18} className={serviceType === item.key ? 'text-[#79DBDC]' : 'text-gray-500'} />
                         <div>
@@ -374,104 +382,209 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                   </div>
                 </div>
 
-                <div className="rounded-3xl border border-gray-100 bg-gray-50 p-5 shadow-sm">
-                  <div className="flex flex-wrap gap-4 items-center justify-between">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-gray-500">{surfaceMeta.label}</p>
-                      <h4 className="mt-2 text-lg font-semibold text-gray-900">{surface} {surfaceMeta.unit}</h4>
-                    </div>
-                    <span className="rounded-full bg-[#79DBDC]/10 px-3 py-1 text-xs font-semibold text-[#237395]">
-                      {surfaceMeta.unit}
-                    </span>
-                  </div>
-
-                  <div className="mt-4 space-y-3">
-                    <input
-                      type="range"
-                      min={surfaceMeta.min}
-                      max={surfaceMeta.max}
-                      step={5}
-                      value={surface}
-                      onChange={(e) => setSurface(Number(e.target.value))}
-                      className="w-full h-2 rounded-full accent-[#79DBDC] bg-gray-200"
-                    />
-                    <div className="grid grid-cols-3 text-xs text-gray-500">
-                      <span>{surfaceMeta.min} {surfaceMeta.unit}</span>
-                      <span className="text-center font-semibold text-gray-800">{surface} {surfaceMeta.unit}</span>
-                      <span className="text-right">{surfaceMeta.max} {surfaceMeta.unit}</span>
-                    </div>
-                  </div>
-                </div>
-
-                {serviceType === 'jardinage' && (
-                  <div className="space-y-5 rounded-3xl border border-gray-100 bg-white p-5">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.24em] text-gray-500 mb-3">Taille de haies / arbustes</p>
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        {[
-                          { value: 'small' as HedgeHeight, label: 'Hauteur < 2 m', price: '6€/m linéaire' },
-                          { value: 'large' as HedgeHeight, label: 'Hauteur > 2 m', price: '13€/m linéaire' },
-                        ].map((option) => (
-                          <label
-                            key={option.value}
-                            className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 ${
-                              hedgeHeight === option.value ? 'border-[#79DBDC] bg-[#79DBDC]/10' : 'border-gray-200 bg-white'
-                            }`}
-                          >
-                            <div>
-                              <div className="text-sm font-semibold text-gray-900">{option.label}</div>
-                              <div className="text-xs text-gray-500">{option.price}</div>
-                            </div>
-                            <input
-                              type="radio"
-                              name="hedgeHeight"
-                              value={option.value}
-                              checked={hedgeHeight === option.value}
-                              onChange={() => setHedgeHeight(option.value)}
-                              className="h-4 w-4 accent-[#79DBDC]"
-                            />
-                          </label>
-                        ))}
+                {serviceType === 'jardinage' ? (
+                  <div className="space-y-4">
+                    <div className="rounded-3xl border border-gray-100 bg-gray-50 p-5 shadow-sm">
+                      <p className="text-xs uppercase tracking-[0.24em] text-gray-500 mb-3">Avez-vous une surface de tonte ?</p>
+                      <div className="flex gap-3">
+                        <button
+                          type="button"
+                          onClick={() => setHasTonteSurface(true)}
+                          className={`rounded-full px-4 py-2 text-sm font-semibold transition ${hasTonteSurface ? 'bg-[#C4A882] text-white shadow-sm' : 'bg-white text-gray-700 border border-gray-200'}`}
+                        >
+                          Oui
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setHasTonteSurface(false)}
+                          className={`rounded-full px-4 py-2 text-sm font-semibold transition ${!hasTonteSurface ? 'bg-[#C4A882] text-white shadow-sm' : 'bg-white text-gray-700 border border-gray-200'}`}
+                        >
+                          Non
+                        </button>
                       </div>
                     </div>
 
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <label className="space-y-2 text-sm text-gray-700">
-                        Mètres linéaires de haies
-                        <input
-                          type="number"
-                          value={hedgeMeters}
-                          min={0}
-                          max={200}
-                          onChange={(e) => setHedgeMeters(Number(e.target.value))}
-                          className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
-                        />
-                      </label>
-                      <label className="space-y-2 text-sm text-gray-700">
-                        Évacuation déchets verts
-                        <select
-                          value={greenWaste ? 'yes' : 'no'}
-                          onChange={(e) => setGreenWaste(e.target.value === 'yes')}
-                          className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
-                        >
-                          <option value="no">Non — déchets laissés sur place</option>
-                          <option value="yes">Oui — 30€/m³</option>
-                        </select>
-                      </label>
-                    </div>
-                    {greenWaste && (
-                      <label className="space-y-2 text-sm text-gray-700">
-                        Volume déchets verts (m³)
-                        <input
-                          type="number"
-                          value={greenWasteVolume}
-                          min={0}
-                          step={0.5}
-                          onChange={(e) => setGreenWasteVolume(Number(e.target.value))}
-                          className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
-                        />
-                      </label>
+                    {hasTonteSurface && (
+                      <div className="rounded-3xl border border-gray-100 bg-gray-50 p-5 shadow-sm">
+                        <div className="flex flex-wrap gap-4 items-center justify-between">
+                          <div>
+                            <p className="text-xs uppercase tracking-[0.24em] text-gray-500">{surfaceMeta.label}</p>
+                            <h4 className="mt-2 text-lg font-semibold text-gray-900">{surface} {surfaceMeta.unit}</h4>
+                          </div>
+                          <span className="rounded-full bg-[#79DBDC]/10 px-3 py-1 text-xs font-semibold text-[#237395]">
+                            {surfaceMeta.unit}
+                          </span>
+                        </div>
+
+                        <div className="mt-4 space-y-3">
+                          <input
+                            type="range"
+                            min={surfaceMeta.min}
+                            max={surfaceMeta.max}
+                            step={5}
+                            value={surface}
+                            onChange={(e) => setSurface(Number(e.target.value))}
+                            className="w-full h-2 rounded-full accent-[#79DBDC] bg-gray-200"
+                          />
+                          <div className="grid grid-cols-3 text-xs text-gray-500">
+                            <span>{surfaceMeta.min} {surfaceMeta.unit}</span>
+                            <span className="text-center font-semibold text-gray-800">{surface} {surfaceMeta.unit}</span>
+                            <span className="text-right">{surfaceMeta.max} {surfaceMeta.unit}</span>
+                          </div>
+                        </div>
+                      </div>
                     )}
+
+                    <div className="rounded-3xl border border-gray-100 bg-white p-5">
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <p className="text-xs uppercase tracking-[0.24em] text-gray-500">Avez-vous une surface de haies ?</p>
+                        <div className="flex gap-3">
+                          <button
+                            type="button"
+                            onClick={() => setHasHedgeSurface(true)}
+                            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${hasHedgeSurface ? 'bg-[#C4A882] text-white shadow-sm' : 'bg-white text-gray-700 border border-gray-200'}`}
+                          >
+                            Oui
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => setHasHedgeSurface(false)}
+                            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${!hasHedgeSurface ? 'bg-[#C4A882] text-white shadow-sm' : 'bg-white text-gray-700 border border-gray-200'}`}
+                          >
+                            Non
+                          </button>
+                        </div>
+                      </div>
+
+                      {hasHedgeSurface && (
+                        <div className="mt-5 space-y-5">
+                          <div className="rounded-2xl border border-[#E8DCCB] bg-[#F9F2E8] p-4 shadow-sm">
+                            <div className="flex flex-wrap gap-4 items-center justify-between">
+                              <div>
+                                <p className="text-xs uppercase tracking-[0.24em] text-gray-500">Surface de haies</p>
+                                <h4 className="mt-2 text-lg font-semibold text-gray-900">{hedgeMeters} m</h4>
+                              </div>
+                              <span className="rounded-full bg-[#C4A882]/15 px-3 py-1 text-xs font-semibold text-[#9A7442]">
+                                m lin.
+                              </span>
+                            </div>
+
+                            <div className="mt-4 space-y-3">
+                              <input
+                                type="range"
+                                min={0}
+                                max={200}
+                                step={1}
+                                value={hedgeMeters}
+                                onChange={(e) => setHedgeMeters(Number(e.target.value))}
+                                className="w-full h-2 rounded-full accent-[#C4A882] bg-gray-200"
+                              />
+                              <div className="grid grid-cols-3 text-xs text-gray-500">
+                                <span>0 m</span>
+                                <span className="text-center font-semibold text-gray-800">{hedgeMeters} m</span>
+                                <span className="text-right">200 m</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          <div>
+                            <p className="text-xs uppercase tracking-[0.24em] text-gray-500 mb-3">Taille de haies / arbustes</p>
+                            <div className="grid gap-3 sm:grid-cols-2">
+                              {[
+                                { value: 'small' as HedgeHeight, label: 'Hauteur < 2 m', price: '6€/m linéaire' },
+                                { value: 'large' as HedgeHeight, label: 'Hauteur > 2 m', price: '13€/m linéaire' },
+                              ].map((option) => (
+                                <label
+                                  key={option.value}
+                                  className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 ${hedgeHeight === option.value ? 'border-[#79DBDC] bg-[#79DBDC]/10' : 'border-gray-200 bg-white'
+                                    }`}
+                                >
+                                  <div>
+                                    <div className="text-sm font-semibold text-gray-900">{option.label}</div>
+                                    <div className="text-xs text-gray-500">{option.price}</div>
+                                  </div>
+                                  <input
+                                    type="radio"
+                                    name="hedgeHeight"
+                                    value={option.value}
+                                    checked={hedgeHeight === option.value}
+                                    onChange={() => setHedgeHeight(option.value)}
+                                    className="h-4 w-4 accent-[#79DBDC]"
+                                  />
+                                </label>
+                              ))}
+                            </div>
+                          </div>
+
+                          <div className="grid gap-4 sm:grid-cols-2">
+                            <label className="space-y-2 text-sm text-gray-700">
+                              Mètres linéaires de haies
+                              <input
+                                type="number"
+                                value={hedgeMeters}
+                                min={0}
+                                max={200}
+                                onChange={(e) => setHedgeMeters(Number(e.target.value))}
+                                className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
+                              />
+                            </label>
+                            <label className="space-y-2 text-sm text-gray-700">
+                              Évacuation déchets verts
+                              <select
+                                value={greenWaste ? 'yes' : 'no'}
+                                onChange={(e) => setGreenWaste(e.target.value === 'yes')}
+                                className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
+                              >
+                                <option value="no">Non — déchets laissés sur place</option>
+                                <option value="yes">Oui — 30€/m³</option>
+                              </select>
+                            </label>
+                          </div>
+                          {greenWaste && (
+                            <label className="space-y-2 text-sm text-gray-700">
+                              Volume déchets verts (m³)
+                              <input
+                                type="number"
+                                value={greenWasteVolume}
+                                min={0}
+                                step={0.5}
+                                onChange={(e) => setGreenWasteVolume(Number(e.target.value))}
+                                className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
+                              />
+                            </label>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="rounded-3xl border border-gray-100 bg-gray-50 p-5 shadow-sm">
+                    <div className="flex flex-wrap gap-4 items-center justify-between">
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.24em] text-gray-500">{surfaceMeta.label}</p>
+                        <h4 className="mt-2 text-lg font-semibold text-gray-900">{surface} {surfaceMeta.unit}</h4>
+                      </div>
+                      <span className="rounded-full bg-[#79DBDC]/10 px-3 py-1 text-xs font-semibold text-[#237395]">
+                        {surfaceMeta.unit}
+                      </span>
+                    </div>
+
+                    <div className="mt-4 space-y-3">
+                      <input
+                        type="range"
+                        min={surfaceMeta.min}
+                        max={surfaceMeta.max}
+                        step={5}
+                        value={surface}
+                        onChange={(e) => setSurface(Number(e.target.value))}
+                        className="w-full h-2 rounded-full accent-[#79DBDC] bg-gray-200"
+                      />
+                      <div className="grid grid-cols-3 text-xs text-gray-500">
+                        <span>{surfaceMeta.min} {surfaceMeta.unit}</span>
+                        <span className="text-center font-semibold text-gray-800">{surface} {surfaceMeta.unit}</span>
+                        <span className="text-right">{surfaceMeta.max} {surfaceMeta.unit}</span>
+                      </div>
+                    </div>
                   </div>
                 )}
 
@@ -486,9 +599,8 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                         ].map((option) => (
                           <label
                             key={option.value}
-                            className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 ${
-                              terraceLevel === option.value ? 'border-[#79DBDC] bg-[#79DBDC]/10' : 'border-gray-200 bg-white'
-                            }`}
+                            className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 ${terraceLevel === option.value ? 'border-[#79DBDC] bg-[#79DBDC]/10' : 'border-gray-200 bg-white'
+                              }`}
                           >
                             <div>
                               <div className="text-sm font-semibold text-gray-900">{option.label}</div>
@@ -518,9 +630,8 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                         ].map((option) => (
                           <label
                             key={option.value}
-                            className={`flex cursor-pointer flex-col gap-2 rounded-2xl border p-4 ${
-                              finish === option.value ? 'border-[#79DBDC] bg-[#79DBDC]/10' : 'border-gray-200 bg-white'
-                            }`}
+                            className={`flex cursor-pointer flex-col gap-2 rounded-2xl border p-4 ${finish === option.value ? 'border-[#79DBDC] bg-[#79DBDC]/10' : 'border-gray-200 bg-white'
+                              }`}
                           >
                             <div className="flex items-center justify-between">
                               <span className="text-sm font-semibold text-gray-900">{option.title}</span>
@@ -559,9 +670,8 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                         ].map((option) => (
                           <label
                             key={option.value}
-                            className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 ${
-                              cleanLevel === option.value ? 'border-[#79DBDC] bg-[#79DBDC]/10' : 'border-gray-200 bg-white'
-                            }`}
+                            className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 ${cleanLevel === option.value ? 'border-[#79DBDC] bg-[#79DBDC]/10' : 'border-gray-200 bg-white'
+                              }`}
                           >
                             <div>
                               <div className="text-sm font-semibold text-gray-900">{option.label}</div>
@@ -580,56 +690,9 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                       </div>
                     </div>
 
-                    <div className="grid gap-4 md:grid-cols-2">
-                      <label className="space-y-2 text-sm text-gray-700">
-                        Four
-                        <select
-                          value={ovenState}
-                          onChange={(e) => setOvenState(e.target.value as OvenState)}
-                          className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
-                        >
-                          <option value="none">Aucun</option>
-                          <option value="standard">Standard — 40€</option>
-                          <option value="sale">Très sale — 90€</option>
-                        </select>
-                      </label>
-                      <label className="space-y-2 text-sm text-gray-700">
-                        Micro-ondes
-                        <select
-                          value={microwave ? 'yes' : 'no'}
-                          onChange={(e) => setMicrowave(e.target.value === 'yes')}
-                          className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
-                        >
-                          <option value="no">Aucun</option>
-                          <option value="yes">15€</option>
-                        </select>
-                      </label>
-                      <label className="space-y-2 text-sm text-gray-700">
-                        Réfrigérateur
-                        <select
-                          value={fridgeState}
-                          onChange={(e) => setFridgeState(e.target.value as FridgeState)}
-                          className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
-                        >
-                          <option value="none">Aucun</option>
-                          <option value="standard">Standard — 30€</option>
-                          <option value="sale">Très sale — 60€</option>
-                        </select>
-                      </label>
-                      <label className="space-y-2 text-sm text-gray-700">
-                        Frigo double porte
-                        <select
-                          value={doubleFridge ? 'yes' : 'no'}
-                          onChange={(e) => setDoubleFridge(e.target.value === 'yes')}
-                          className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#79DBDC] focus:outline-none"
-                        >
-                          <option value="no">Aucun</option>
-                          <option value="yes">90€</option>
-                        </select>
-                      </label>
-                    </div>
+                  
 
-                    <label className="space-y-2 text-sm text-gray-700">
+                   <label className="space-y-2 text-sm text-gray-700">
                       Sanitaires / salle de bain
                       <select
                         value={sanitaryState}
@@ -681,17 +744,17 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
             </motion.div>
 
             <motion.div
-              className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-3xl shadow-xl overflow-hidden"
+              className="bg-gradient-to-br from-[#73d5d6] to-[#5BBFC0] rounded-3xl shadow-xl overflow-hidden"
               variants={prefersReducedMotion ? {} : cardVariants}
             >
               <div className="p-6 text-white">
                 <div className="flex items-center gap-2 mb-4">
-                  <TrendingUp size={18} className="text-[#79DBDC]" />
+                  <TrendingUp size={18} className="text-white" />
                   <h3 className="font-semibold">Votre estimation</h3>
                 </div>
 
                 <div className="space-y-3 mb-6">
-                  <div className="flex justify-between text-sm text-white/70">
+                  <div className="flex justify-between text-sm text-white/80">
                     <span>Base de calcul</span>
                     <span>{formatPrice(baseTotal)}</span>
                   </div>
@@ -700,7 +763,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                     <AnimatePresence key={line.label} mode="wait">
                       {line.price !== 0 && (
                         <motion.div
-                          className="flex justify-between text-sm text-white/70 overflow-hidden"
+                          className="flex justify-between text-sm text-white/80 overflow-hidden"
                           variants={prefersReducedMotion ? {} : detailLineVariants}
                           initial="initial"
                           animate="animate"
@@ -713,14 +776,14 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                     </AnimatePresence>
                   ))}
 
-                  <div className="border-t border-white/20 pt-3">
+                  <div className="border-t border-white/30 pt-3">
                     <div className="flex justify-between items-center">
                       <span className="font-medium">Total TTC</span>
                       <div className="text-right">
                         <AnimatePresence mode="wait">
                           <motion.span
                             key={totalPrice}
-                            className="text-3xl font-bold text-[#79DBDC] inline-block"
+                            className="text-3xl font-bold text-white inline-block"
                             variants={prefersReducedMotion ? {} : priceVariants}
                             initial="initial"
                             animate="animate"
@@ -729,16 +792,16 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                             {formatPrice(totalPrice)}
                           </motion.span>
                         </AnimatePresence>
-                        <p className="text-xs text-white/50">Estimation indicative, devis final sur place</p>
+                        <p className="text-xs text-white/60">Estimation indicative, devis final sur place</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
-                <div className="bg-white/10 rounded-2xl p-4 mb-5">
+                <div className="bg-white/20 rounded-2xl p-4 mb-5">
                   <div className="flex items-start gap-2">
-                    <Info size={14} className="text-[#79DBDC] flex-shrink-0 mt-0.5" />
-                    <p className="text-xs text-white/80 leading-relaxed">
+                    <Info size={14} className="text-white flex-shrink-0 mt-0.5" />
+                    <p className="text-xs text-white/90 leading-relaxed">
                       Estimation indicative. Le devis définitif est gratuit et établi après visite technique.
                     </p>
                   </div>
@@ -746,15 +809,15 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
 
                 <motion.button
                   onClick={onConfirm}
-                  whileHover={prefersReducedMotion ? {} : { scale: 1.03, boxShadow: '0 8px 30px rgba(121,219,220,0.35)' }}
+                  whileHover={prefersReducedMotion ? {} : { scale: 1.03, boxShadow: '0 8px 30px rgba(196,168,130,0.35)' }}
                   whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
-                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#79DBDC] to-[#5BBFC0] text-white py-3.5 rounded-2xl text-sm font-semibold"
+                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#C4A882] to-[#D4B896] text-white py-3.5 rounded-2xl text-sm font-semibold hover:shadow-lg transition-all"
                 >
                   <Send size={16} />
                   Confirmer et recevoir un devis
                 </motion.button>
 
-                <p className="text-center text-xs text-white/40 mt-4">
+                <p className="text-center text-xs text-white/60 mt-4">
                   Réponse sous 24h · Devis gratuit
                 </p>
               </div>
@@ -777,7 +840,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
               </motion.div>
             ))}
           </div>
-          <ReassurancePillars/>
+          <ReassurancePillars />
         </motion.div>
       </div>
     </section>

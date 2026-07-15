@@ -24,12 +24,11 @@ function Logo() {
 }
 
 const services = [
-  'Nettoyage de vitres',
-  'Terrasses haute pression',
+  'Nettoyage haute pression',
   'Jardinage & espaces verts',
-  'Ménage fin de bail',
-  'Ménage fin de chantier',
-  'Locaux professionnels',
+  'Nettoyage de vitres',
+  'Nettoyage intérieur',
+  
 ];
 
 const contact = [
@@ -69,7 +68,7 @@ export default function Footer() {
     <>
       <footer
         className="relative overflow-hidden"
-        style={{ backgroundColor: '#237395' , fontFamily: 'var(--font-roboto)'  }}
+        style={{ backgroundColor: '#237395', fontFamily: 'var(--font-roboto)' }}
       >
         {/* Blob décoratif discret */}
         <div

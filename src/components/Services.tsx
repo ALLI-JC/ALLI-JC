@@ -1,7 +1,7 @@
 import {
-    Droplets, Waves, Leaf, Building2, Home, Wrench, Store, Sparkles,
-    ArrowRight, CheckCircle, Star, Shield, FileEdit, Zap, Calculator,
-    ChevronRight
+  Droplets, Waves, Leaf, Building2, Home, Wrench, Store, Sparkles,
+  ArrowRight, CheckCircle, Star, Shield, FileEdit, Zap, Calculator,
+  ChevronRight
 } from 'lucide-react';
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -9,8 +9,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 // Catégories affichées (ordre + titre + cible)
 const categories = [
   { title: 'Entretien Extérieur & Espaces Verts', target: 'Pour les particuliers', icon: Leaf },
- 
- 
+
+
 ];
 
 // Liens vers le simulateur de devis sur la page d'accueil
@@ -19,7 +19,7 @@ const getSimulatorLink = (): string => {
 };
 
 const services = [
-   {
+  {
     icon: Waves,
     name: 'Nettoyage haute pression',
     desc: 'Terrasses, allées, façades',
@@ -28,7 +28,7 @@ const services = [
     category: 'Entretien Extérieur & Espaces Verts',
     color: 'from-emerald-400 to-teal-400'
   },
-    {
+  {
     icon: Leaf,
     name: 'Jardinage & espaces verts',
     desc: 'Tonte, taille, entretien des espaces communs',
@@ -46,7 +46,7 @@ const services = [
     category: 'Entretien Extérieur & Espaces Verts',
     color: 'from-cyan-400 to-blue-400'
   },
- 
+
 
   {
     icon: Sparkles,
@@ -123,13 +123,13 @@ const cardVariant: any = {
 const featuresVariant: any = {
   hidden: { opacity: 0, height: 0 },
   visible: { opacity: 1, height: 'auto', transition: { duration: 0.3, ease: 'easeOut' as any } },
-  exit:   { opacity: 0, height: 0,    transition: { duration: 0.2, ease: 'easeIn' as any } },
+  exit: { opacity: 0, height: 0, transition: { duration: 0.2, ease: 'easeIn' as any } },
 };
 
 const linkVariant: any = {
   hidden: { opacity: 0, y: 8 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.3, ease: 'easeOut' as any } },
-  exit:   { opacity: 0, y: 8, transition: { duration: 0.2, ease: 'easeIn' as any } },
+  exit: { opacity: 0, y: 8, transition: { duration: 0.2, ease: 'easeIn' as any } },
 };
 
 interface ServiceCardProps {
@@ -162,7 +162,7 @@ function ServiceCard({ icon: Icon, name, desc, mention, features, index, color =
         animate={{ opacity: isHovered ? 1 : 0 }}
         transition={{ duration: 0.5 }}
       />
-      
+
       {/* Bande décorative en haut */}
       <motion.div
         className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#79DBDC] to-[#5BBFC0]"
@@ -176,7 +176,7 @@ function ServiceCard({ icon: Icon, name, desc, mention, features, index, color =
       <div className="relative mb-4">
         <motion.div
           className="absolute inset-0 bg-gradient-to-br from-[#79DBDC]/20 to-[#5BBFC0]/20 rounded-2xl blur-2xl pointer-events-none"
-          animate={{ 
+          animate={{
             opacity: isHovered ? 1 : 0,
             scale: isHovered ? 1.2 : 0.8
           }}
@@ -184,7 +184,7 @@ function ServiceCard({ icon: Icon, name, desc, mention, features, index, color =
         />
         <motion.div
           className={`relative w-14 h-14 bg-gradient-to-br ${color} rounded-2xl flex items-center justify-center shadow-lg`}
-          animate={{ 
+          animate={{
             scale: isHovered ? 1.1 : 1,
             rotate: isHovered ? [0, -5, 5, 0] : 0
           }}
@@ -255,7 +255,7 @@ function ServiceCard({ icon: Icon, name, desc, mention, features, index, color =
           >
             <motion.a
               href={simulatorLink}
-              className="group/link flex items-center gap-1.5 text-sm font-medium text-[#0e2b38] hover:text-[#79DBDC] transition-colors"
+              className="group/link flex items-center gap-1.5 text-sm font-medium text-[#0e2b38] hover:text-[#C4A882] transition-colors"
               onClick={(e) => e.stopPropagation()}
             >
               <span>En savoir plus</span>
@@ -271,7 +271,7 @@ function ServiceCard({ icon: Icon, name, desc, mention, features, index, color =
 
             <motion.a
               href={simulatorLink}
-              className="group/link flex items-center gap-1.5 text-sm font-medium text-[#79DBDC] hover:text-[#5BBFC0] transition-colors"
+              className="group/link flex items-center gap-1.5 text-sm font-medium text-[#C4A882] hover:text-[#D4B896] transition-colors"
               onClick={(e) => e.stopPropagation()}
             >
               <Calculator size={14} />
@@ -290,7 +290,7 @@ export default function Services() {
 
       {/* Éléments décoratifs */}
       <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#79DBDC] to-transparent opacity-30" />
-      
+
       {/* Cercles décoratifs flous */}
       <div className="absolute -top-60 -right-60 w-96 h-96 bg-[#79DBDC]/5 rounded-full blur-3xl" />
       <div className="absolute -bottom-60 -left-60 w-96 h-96 bg-[#F5DEB3]/10 rounded-full blur-3xl" />
@@ -422,7 +422,7 @@ export default function Services() {
         >
           <a
             href="/#sec-devis"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-[#79DBDC] to-[#5BBFC0] text-white font-medium shadow-lg shadow-[#79DBDC]/25 hover:shadow-xl hover:shadow-[#79DBDC]/30 transition-all hover:scale-105"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#C4A882] text-white font-medium shadow-lg shadow-[#C4A882]/25 hover:shadow-xl hover:shadow-[#C4A882]/30 transition-all hover:scale-105 hover:bg-[#D4B896]"
           >
             <span>Obtenir un devis personnalisé</span>
             <ChevronRight size={18} />

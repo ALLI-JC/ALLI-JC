@@ -1,6 +1,7 @@
 import { FileText, Menu, X, Phone, Mail, User, LogOut, Settings, UserCircle, Shield } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface NavbarProps {
   onDevisClick: () => void;
@@ -83,6 +84,18 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
     return () => document.removeEventListener('click', handleClickOutside);
   }, []);
 
+  // Bloquer le scroll du body quand le menu mobile est ouvert
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
   const navLinks = [
     { href: "#sec-services", label: "Services" },
     { href: "#sec-gallery", label: "Galerie" },
@@ -102,7 +115,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
   const handleLogout = () => {
     logout();
     setUserMenuOpen(false);
-    navigate('/'); // Redirection vers la page d'accueil
+    navigate('/');
   };
 
   const handleProfile = () => {
@@ -130,24 +143,24 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
 
             {/* Logo */}
             <div
-              className="flex items-center gap-3 cursor-pointer group"
+              className="flex items-center gap-3 cursor-pointer group flex-shrink-0"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
               <img
                 src="/alliéjc-logo-3.png"
                 alt="Allié JC"
-                className="h-full md:h-12 w-[150px] object-cover"
+                className=" w-[200px] md:w-[220px] object-contain"
               />
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-8">
+            <div className="hidden md:flex items-center gap-6 xl:gap-8">
               {navLinks.map((link) => (
                 <a 
                   key={link.href}
                   href={link.href}
                   onClick={(e) => handleLinkClick(e, link.href)}
-                  className="group relative text-xl font-black text-white hover:text-lagon transition-colors duration-200"
+                  className="group relative text-sm font-medium text-white hover:text-lagon transition-colors duration-200 whitespace-nowrap"
                 >
                   {link.label}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-primary transition-all duration-300 group-hover:w-full"></span>
@@ -156,141 +169,200 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
             </div>
 
             {/* Desktop Buttons */}
-            <div className="hidden md:flex items-center gap-3">
+            <div className="hidden md:flex items-center gap-2 lg:gap-3">
               <a 
                 href="tel:0607979074"
-                className="flex items-center gap-2 px-3 py-2 text-white hover:text-lagon transition-colors rounded-lg hover:bg-lagon/10"
+                className="flex items-center gap-1.5 lg:gap-2 px-2 lg:px-3 py-1.5 lg:py-2 text-white hover:text-lagon transition-colors rounded-lg hover:bg-lagon/10"
               >
                 <Phone size={16} />
-                <span className="text-sm font-medium">06 07 97 90 74</span>
+                <span className="text-sm font-medium hidden xl:inline">06 07 97 90 74</span>
+                <span className="text-sm font-medium xl:hidden">Appeler</span>
               </a>
-
-              {/* Boutons utilisateur / admin */}
-            
 
               <button
                 onClick={onDevisClick}
-                className="btn-primary flex items-center gap-2 px-6 py-2.5 rounded-xl text-sm font-semibold shadow-md hover:shadow-glow transition-all duration-300"
+                className="btn-primary flex items-center gap-1.5 lg:gap-2 px-4 lg:px-6 py-2.5 rounded-xl text-sm font-semibold shadow-md hover:shadow-glow transition-all duration-300 whitespace-nowrap"
               >
                 <FileText size={16} />
-                Devis gratuit
+                <span className="hidden sm:inline">Devis gratuit</span>
+                <span className="sm:hidden">Devis</span>
               </button>
             </div>
 
-            {/* Mobile Menu Button */}
+            {/* Menu Burger - Mobile */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-lg text-white hover:bg-beige/20 transition-colors"
+              className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-lg text-white hover:bg-white/10 transition-colors focus:outline-none"
+              aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
             >
-              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              <div className="relative w-6 h-5">
+                <motion.span
+                  animate={mobileMenuOpen ? { rotate: 45, y: 8 } : { rotate: 0, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute left-0 top-0 w-6 h-0.5 bg-white rounded-full"
+                />
+                <motion.span
+                  animate={mobileMenuOpen ? { opacity: 0 } : { opacity: 1 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute left-0 top-2 w-6 h-0.5 bg-white rounded-full"
+                />
+                <motion.span
+                  animate={mobileMenuOpen ? { rotate: -45, y: -8 } : { rotate: 0, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                  className="absolute left-0 top-4 w-6 h-0.5 bg-white rounded-full"
+                />
+              </div>
             </button>
           </div>
         </div>
+      </nav>
 
-        {/* Mobile Menu */}
-        <div
-          className={`md:hidden fixed top-16 left-0 right-0 bg-white shadow-hard border-t border-beige/20 transition-all duration-300 ease-in-out z-40 max-h-[calc(100vh-4rem)] overflow-y-auto ${
-            mobileMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-full pointer-events-none'
-          }`}
-        >
-          <div className="px-5 py-6 space-y-4">
-            {navLinks.map((link) => (
-              <a 
-                key={link.href}
-                href={link.href}
-                onClick={(e) => handleLinkClick(e, link.href)}
-                className="block py-3 text-base font-medium text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-lg px-3 transition-all duration-200"
-              >
-                {link.label}
-              </a>
-            ))}
+      {/* Overlay pour le menu mobile */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+        )}
+      </AnimatePresence>
 
-            <div className="pt-4 space-y-4 border-t border-beige/20">
-              {/* Utilisateur mobile */}
-              {user.isAuthenticated ? (
-                <>
-                  <div className="flex items-center gap-3 px-3 py-3 bg-gray-50 rounded-lg">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-lagon to-[#5BBFC0] flex items-center justify-center text-white font-bold">
-                      {user.name.charAt(0).toUpperCase()}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-gray-800">{user.name}</p>
-                      <p className="text-xs text-gray-500 truncate">{user.email}</p>
-                    </div>
-                  </div>
-                  
-                  <button
-                    onClick={handleProfile}
-                    className="w-full flex items-center gap-3 py-3 text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-lg px-3 transition-colors"
-                  >
-                    <UserCircle size={18} className="text-lagon" />
-                    <span className="font-medium">Mon profil</span>
-                  </button>
-                  
-                  {user.role === 'admin' && (
-                    <button
-                      onClick={handleDashboard}
-                      className="w-full flex items-center gap-3 py-3 text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-lg px-3 transition-colors"
-                    >
-                      <Settings size={18} className="text-lagon" />
-                      <span className="font-medium">Administration</span>
-                    </button>
-                  )}
-                  
-                  <button
-                    onClick={handleLogout}
-                    className="w-full flex items-center gap-3 py-3 text-red-600 hover:bg-red-50 rounded-lg px-3 transition-colors"
-                  >
-                    <LogOut size={18} />
-                    <span className="font-medium">Se déconnecter</span>
-                  </button>
-                </>
-              ) : (
-                <button
-                  onClick={() => {
-                    handleLogin();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="w-full flex items-center gap-3 py-3 text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-lg px-3 transition-colors"
-                >
-                  <User size={18} className="text-lagon" />
-                  <span className="font-medium">Se connecter</span>
-                </button>
-              )}
-
-              <a 
-                href="tel:0607979074"
-                className="flex items-center gap-3 py-3 text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-lg px-3 transition-colors"
-              >
-                <Phone size={18} className="text-lagon" />
-                <span className="font-medium">06 07 97 90 74</span>
-              </a>
-              
-              <a 
-                href="mailto:jeancharlesbiernat@yahoo.com"
-                className="flex items-center gap-3 py-3 text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-lg px-3 transition-colors"
-              >
-                <Mail size={18} className="text-lagon" />
-                <span className="text-sm break-all">jeancharlesbiernat@yahoo.com</span>
-              </a>
-
+      {/* Menu Mobile - Panneau latéral */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ x: '100%' }}
+            animate={{ x: 0 }}
+            exit={{ x: '100%' }}
+            transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+            className="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl z-50 md:hidden overflow-y-auto"
+          >
+            {/* En-tête du menu mobile */}
+            <div className="flex items-center justify-between p-4 border-b border-gray-100 sticky top-0 bg-white z-10">
+              <div className="flex items-center gap-2">
+                <img
+                  src="/alliéjc-logo-3.png"
+                  alt="Allié JC"
+                  className="h-10 w-auto object-contain"
+                />
+              </div>
               <button
-                onClick={() => {
-                  onDevisClick();
-                  setMobileMenuOpen(false);
-                }}
-                className="w-full btn-primary flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl text-sm font-semibold mt-6 shadow-md hover:shadow-glow transition-all duration-300"
+                onClick={() => setMobileMenuOpen(false)}
+                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                aria-label="Fermer le menu"
               >
-                <FileText size={16} />
-                Demander un devis gratuit
+                <X size={24} className="text-gray-600" />
               </button>
             </div>
-          </div>
-        </div>
-      </nav>
+
+            <div className="p-5 space-y-5">
+              {/* Navigation links */}
+              <div className="space-y-1">
+                {navLinks.map((link) => (
+                  <a 
+                    key={link.href}
+                    href={link.href}
+                    onClick={(e) => handleLinkClick(e, link.href)}
+                    className="flex items-center gap-3 py-3 px-4 text-base font-medium text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-xl transition-all duration-200"
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+
+              <div className="pt-4 space-y-4 border-t border-gray-100">
+                {/* Utilisateur mobile */}
+                {user.isAuthenticated ? (
+                  <>
+                    <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-lagon to-[#5BBFC0] flex items-center justify-center text-white font-bold text-sm">
+                        {user.name.charAt(0).toUpperCase()}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-semibold text-gray-800 truncate">{user.name}</p>
+                        <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                      </div>
+                    </div>
+                    
+                    <button
+                      onClick={handleProfile}
+                      className="w-full flex items-center gap-3 py-3 px-4 text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-xl transition-colors"
+                    >
+                      <UserCircle size={18} className="text-lagon" />
+                      <span className="font-medium">Mon profil</span>
+                    </button>
+                    
+                    {user.role === 'admin' && (
+                      <button
+                        onClick={handleDashboard}
+                        className="w-full flex items-center gap-3 py-3 px-4 text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-xl transition-colors"
+                      >
+                        <Settings size={18} className="text-lagon" />
+                        <span className="font-medium">Administration</span>
+                      </button>
+                    )}
+                    
+                    <button
+                      onClick={handleLogout}
+                      className="w-full flex items-center gap-3 py-3 px-4 text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+                    >
+                      <LogOut size={18} />
+                      <span className="font-medium">Se déconnecter</span>
+                    </button>
+                  </>
+                ) : (
+                  <button
+                    onClick={() => {
+                      handleLogin();
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full flex items-center gap-3 py-3 px-4 text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-xl transition-colors"
+                  >
+                    <User size={18} className="text-lagon" />
+                    <span className="font-medium">Se connecter</span>
+                  </button>
+                )}
+
+                <div className="space-y-2 pt-2">
+                  <a 
+                    href="tel:0607979074"
+                    className="flex items-center gap-3 py-3 px-4 text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-xl transition-colors"
+                  >
+                    <Phone size={18} className="text-lagon" />
+                    <span className="font-medium">06 07 97 90 74</span>
+                  </a>
+                  
+                  <a 
+                    href="mailto:jeancharlesbiernat@yahoo.com"
+                    className="flex items-center gap-3 py-3 px-4 text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-xl transition-colors"
+                  >
+                    <Mail size={18} className="text-lagon" />
+                    <span className="text-sm break-all">jeancharlesbiernat@yahoo.com</span>
+                  </a>
+                </div>
+
+                <button
+                  onClick={() => {
+                    onDevisClick();
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full btn-primary flex items-center justify-center gap-2 px-5 py-4 rounded-xl text-sm font-semibold mt-4 shadow-md hover:shadow-glow transition-all duration-300"
+                >
+                  <FileText size={16} />
+                  Demander un devis gratuit
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Spacer pour la navbar fixe */}
       <div className="h-16 md:h-20"></div>
     </>
   );
-} 
+}
