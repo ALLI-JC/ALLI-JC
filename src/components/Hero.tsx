@@ -190,23 +190,23 @@ export default function Hero({ onDevisClick }: HeroProps) {
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            className="mt-6 flex flex-wrap gap-3"
+            className="mt-6 flex flex-col gap-2 max-w-sm"
           >
             {QUICK_LINKS.map((link) => (
               <motion.a
                 key={link.label}
                 href={link.href}
-                whileHover={prefersReducedMotion ? {} : { y: -3, scale: 1.02 }}
-                whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
-                className="group relative overflow-hidden rounded-2xl border border-white/20 bg-white/10 px-5 py-3.5 backdrop-blur-sm transition-all hover:bg-white/20 hover:border-white/30 hover:shadow-lg hover:shadow-black/20"
+                whileHover={prefersReducedMotion ? {} : { y: -2, scale: 1.01 }}
+                whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
+                className="group relative overflow-hidden rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 backdrop-blur-sm transition-all hover:bg-white/20 hover:border-white/30 hover:shadow-lg hover:shadow-black/20"
               >
-                <div className="flex items-start gap-3">
-                  <link.icon size={18} className="mt-0.5 text-[#D2B093] shrink-0" />
+                <div className="flex items-start gap-2.5">
+                  <link.icon size={16} className="mt-0.5 text-[#D2B093] shrink-0" />
                   <div>
-                    <span className="block text-sm font-medium text-white/90 group-hover:text-white">
+                    <span className="block text-xs font-medium text-white/90 group-hover:text-white">
                       {link.label}
                     </span>
-                    <span className="mt-0.5 block text-[10px] font-medium uppercase tracking-wider text-[#D2B093]">
+                    <span className="mt-0.5 block text-[9px] font-medium uppercase tracking-wider text-[#D2B093]">
                       {link.tag}
                     </span>
                   </div>
@@ -226,7 +226,7 @@ export default function Hero({ onDevisClick }: HeroProps) {
               onClick={onDevisClick}
               whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
               whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
-              className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-[#D2B093] px-8 py-4 text-sm font-medium text-[#0e2b38] transition-all hover:bg-[#e3c0a2] hover:shadow-lg hover:shadow-[#D2B093]/25"
+              className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-[#C4A882] px-8 py-4 text-sm font-medium text-white transition-all hover:bg-[#D4B896] hover:shadow-lg hover:shadow-[#C4A882]/25"
             >
               <Send size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               Demander un devis gratuit

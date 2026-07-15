@@ -82,11 +82,10 @@ export default function App() {
       <Route path="/" element={
         <>
           <PublicSite />
-          <FloatingLogo 
-            src="/alliéjc-logo-3.png" 
-            size={70} 
-            offset={120}
-          />
+            <FloatingLogo 
+              src="/shamois.png" 
+           
+            />
         </>
       } />
       
