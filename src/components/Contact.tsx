@@ -31,49 +31,49 @@ type StatusType = 'idle' | 'sending' | 'success' | 'error';
 // ─── Variants ──────────────────────────────────────────────────────────────
 
 const fadeUp = {
-  hidden:  { opacity: 0, y: 22 },
+  hidden: { opacity: 0, y: 22 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.48, ease: 'easeOut' } },
 };
 
 const headerStagger = {
-  hidden:  {},
+  hidden: {},
   visible: { transition: { staggerChildren: 0.1 } },
 };
 
 const slideLeft = {
-  hidden:  { opacity: 0, x: -32 },
+  hidden: { opacity: 0, x: -32 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.52, ease: 'easeOut' } },
 };
 
 const slideRight = {
-  hidden:  { opacity: 0, x: 32 },
+  hidden: { opacity: 0, x: 32 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.52, ease: 'easeOut', delay: 0.08 } },
 };
 
 const infoRowStagger = {
-  hidden:  {},
+  hidden: {},
   visible: { transition: { staggerChildren: 0.09, delayChildren: 0.2 } },
 };
 
 const infoRowItem = {
-  hidden:  { opacity: 0, x: -14 },
+  hidden: { opacity: 0, x: -14 },
   visible: { opacity: 1, x: 0, transition: { duration: 0.35, ease: 'easeOut' } },
 };
 
 const fieldStagger = {
-  hidden:  {},
+  hidden: {},
   visible: { transition: { staggerChildren: 0.07, delayChildren: 0.1 } },
 };
 
 const fieldItem = {
-  hidden:  { opacity: 0, y: 14 },
+  hidden: { opacity: 0, y: 14 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.35, ease: 'easeOut' } },
 };
 
 const statusVariants = {
   initial: { opacity: 0, y: -8, scale: 0.97 },
-  animate: { opacity: 1, y: 0,  scale: 1,    transition: { duration: 0.28, ease: 'easeOut' } },
-  exit:    { opacity: 0, y:  8, scale: 0.97, transition: { duration: 0.18 } },
+  animate: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.28, ease: 'easeOut' } },
+  exit: { opacity: 0, y: 8, scale: 0.97, transition: { duration: 0.18 } },
 };
 
 export default function Contact() {
@@ -82,7 +82,7 @@ export default function Contact() {
   const [form, setForm] = useState<FormData>({
     name: '', email: '', phone: '', service: '', message: '',
   });
-  const [status, setStatus]           = useState<StatusType>('idle');
+  const [status, setStatus] = useState<StatusType>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -166,9 +166,9 @@ export default function Contact() {
 
   const infoRows = [
     { icon: MapPin, text: '7 rue de la gare, 25560 La Rivière-Drugeon', href: null },
-    { icon: Phone,  text: '06 07 97 90 74',                             href: 'tel:0607979074' },
-    { icon: Mail,   text: 'jeancharlesbiernat@yahoo.com',               href: 'mailto:jeancharlesbiernat@yahoo.com' },
-    { icon: Clock,  text: 'Lun–Sam · 8h–19h',                           href: null },
+    { icon: Phone, text: '06 07 97 90 74', href: 'tel:0607979074' },
+    { icon: Mail, text: 'jeancharlesbiernat@yahoo.com', href: 'mailto:jeancharlesbiernat@yahoo.com' },
+    { icon: Clock, text: 'Lun–Sam · 8h–19h', href: null },
   ];
 
   return (
@@ -252,7 +252,7 @@ export default function Contact() {
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-2 bg-[#25D366] text-white px-5 py-3 rounded-xl text-sm font-medium shadow-md"
                   whileHover={prefersReducedMotion ? {} : { scale: 1.05, backgroundColor: '#20bb5a' }}
-                  whileTap={prefersReducedMotion   ? {} : { scale: 0.97 }}
+                  whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
                   transition={{ type: 'spring', stiffness: 350, damping: 22 }}
                 >
                   <WhatsAppIcon />
@@ -388,10 +388,10 @@ export default function Contact() {
                 <motion.button
                   type="submit"
                   disabled={status === 'sending'}
-                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#79DBDC] to-[#5BBFC0] text-white rounded-xl py-3.5 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full flex items-center justify-center gap-2 bg-[#C4A882] text-white rounded-xl py-3.5 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#D4B896] transition-colors"
                   whileHover={status === 'sending' || prefersReducedMotion
                     ? {}
-                    : { scale: 1.02, boxShadow: '0 8px 28px rgba(121,219,220,0.35)' }}
+                    : { scale: 1.02, boxShadow: '0 8px 28px rgba(196,168,130,0.35)' }}
                   whileTap={status === 'sending' || prefersReducedMotion ? {} : { scale: 0.97 }}
                   transition={{ type: 'spring', stiffness: 350, damping: 22 }}
                 >
