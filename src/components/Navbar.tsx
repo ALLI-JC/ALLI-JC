@@ -149,7 +149,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
               <img
                 src="/alliéjc-logo-3.png"
                 alt="Allié JC"
-                className=" w-[200px] md:w-[220px] object-contain"
+                className=" w-[200px] md:w-[240px] object-contain"
               />
             </div>
 
