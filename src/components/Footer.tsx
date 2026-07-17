@@ -66,6 +66,22 @@ export default function Footer() {
 
   return (
     <>
+      {/* ── Bande de copyright — au-dessus du footer, en sable et texte blanc ── */}
+      <div className="relative">
+        <div
+          className="text-center py-3.5 text-[11px] relative z-10 border-b border-white/15"
+          style={{ backgroundColor: '#D2B093', color: '#ffffff', fontFamily: 'var(--font-roboto)' }}
+        >
+          © 2026 L'Allié JC · Tous droits réservés ·{' '}
+          <a
+            href="/mentions-legales"
+            className="transition-colors duration-150 hover:text-[#0e2b38]"
+          >
+            Mentions légales
+          </a>
+        </div>
+      </div>
+
       <footer
         className="relative overflow-hidden"
         style={{ backgroundColor: '#237395', fontFamily: 'var(--font-roboto)' }}
@@ -213,21 +229,6 @@ export default function Footer() {
           </div>
         </div>
       </footer>
-
-      {/* ── Barre de copyright ── */}
-      <div className="relative">
-        <div
-          className="text-center py-3.5 text-[11px] bg-[#1a4660] text-[#D2B093] relative z-10 border-t border-[#D2B093]/15"
-        >
-          © 2026 L'Allié JC · Tous droits réservés ·{' '}
-          <a
-            href="/mentions-legales"
-            className="transition-colors duration-150 hover:text-white"
-          >
-            Mentions légales
-          </a>
-        </div>
-      </div>
 
     </>
   );

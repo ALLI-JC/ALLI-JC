@@ -22,94 +22,66 @@ export default function SplashScreen({ onComplete }: SplashScreenProps) {
     return () => clearTimeout(timer);
   }, [onComplete]);
 
-  // Animation du chamois qui saute 2 fois : droite → centre, puis centre → gauche (très à gauche)
-  // Utilisation de transitions séparées pour X et Y afin de créer des paraboles arrondies (demi-cercles)
-  const chamoisTraverseVariants: Variants = {
-    initial: {
-      x: "120vw",
-      y: 0,
-      scale: 0.8,
-      rotate: 8,
-    },
+// Version avec des arcs de cercle parfaits (utilisant des transitions séparées)
+const chamoisTraverseVariants: Variants = {
+  initial: {
+    x: "120vw",
+    y: 0,
+    scale: 0.8,
+    rotate: 8,
+  },
 
-    animate: {
-      x: [
-        "120vw",
-        "100vw",
-        "80vw",
-        "60vw",
-        "40vw",
-        "20vw",
-        "0vw",
-        "-20vw",
-        "-40vw",
-        "-60vw"
-      ],
-
-      y: [
-        0,
-        -60,
-        -150,
-        -250,
-        -150,
-        -60,
-        0,
-        -150,
-        -250,
-        0
-      ],
-
-      scale: [
-        0.8,
-        0.9,
-        1,
-        1.2,
-        1.1,
-        1,
-        1,
-        1.1,
-        1.2,
-        0.8
-      ],
-
-      rotate: [
-        8,
-        5,
-        2,
-        0,
-        -2,
-        -4,
-        -5,
-        -7,
-        -9,
-        -10
-      ],
-
-      transition: {
-        duration: 5,
-        ease: [0.45, 0, 0.55, 1],
-        times: [
-          0,
-          0.10,
-          0.22,
-          0.35,
-          0.50,
-          0.65,
-          0.78,
-          0.90,
-          1
-        ]
-      }
-    },
-
-    exit: {
-      opacity: 0,
-      transition: {
-        duration: 0.6,
-        ease: "easeOut"
-      }
+  animate: {
+    // Position X - progression linéaire de droite à gauche
+    x: ["120vw", "80vw", "50vw", "20vw", "-10vw", "-40vw", "-70vw"],
+    
+    // Position Y - arcs de cercle (paraboles)
+    y: [
+      0,        // Départ
+      -200,     // Pic du 1er bond
+      0,        // Atterrissage
+      -250,     // Pic du 2ème bond (plus haut)
+      0,        // Atterrissage
+      -180,     // Pic du 3ème bond
+      0         // Sortie
+    ],
+    
+    scale: [
+      0.8,
+      1.15,     // S'étire à l'apogée
+      0.85,
+      1.25,     // S'étire plus à l'apogée
+      0.85,
+      1.1,
+      0.7
+    ],
+    
+    rotate: [
+      8,
+      -8,       // Pique du nez en montant
+      5,
+      -12,      // Pique plus fort
+      3,
+      -10,
+      -15
+    ],
+    
+    // Ajustement de la vitesse des transitions
+    transition: {
+      duration: 5,
+      ease: "easeInOut",
+      times: [0, 0.25, 0.40, 0.60, 0.75, 0.88, 1]
     }
-  };
+  },
+
+  exit: {
+    opacity: 0,
+    transition: {
+      duration: 0.6,
+      ease: "easeOut"
+    }
+  }
+};
 
   // Animation de l'ombre du chamois au sol (synchronisée sur le rythme du saut)
   const shadowVariants: Variants = {
