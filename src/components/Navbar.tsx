@@ -9,10 +9,10 @@ interface NavbarProps {
 
 // Simuler un état d'authentification
 const useAuth = () => {
-  const [user, setUser] = useState<{ 
-    id: string; 
-    name: string; 
-    email: string; 
+  const [user, setUser] = useState<{
+    id: string;
+    name: string;
+    email: string;
     role: 'user' | 'admin' | null;
     isAuthenticated: boolean;
   }>({
@@ -139,24 +139,24 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
         style={{ fontFamily: 'var(--font-roboto)' }}
       >
         <div className="container-custom">
-          <div className="flex items-center justify-between h-16 md:h-20">
+          <div className="flex items-center justify-between h-16 md:h-20 px-4 sm:px-6 lg:px-8">
 
-            {/* Logo */}
+            {/* Logo - responsive */}
             <div
-              className="flex items-center gap-3 cursor-pointer group flex-shrink-0"
+              className="flex items-center gap-2 sm:gap-3 cursor-pointer group flex-shrink-0"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
               <img
                 src="/alliéjc-logo-3.png"
                 alt="Allié JC"
-                className=" w-[200px] md:w-[240px] object-contain"
+                className="w-[140px] sm:w-[180px] md:w-[200px] lg:w-[240px] object-contain"
               />
             </div>
 
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-6 xl:gap-8">
+            <div className="hidden md:flex items-center gap-4 lg:gap-6 xl:gap-8">
               {navLinks.map((link) => (
-                <a 
+                <a
                   key={link.href}
                   href={link.href}
                   onClick={(e) => handleLinkClick(e, link.href)}
@@ -170,29 +170,33 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
 
             {/* Desktop Buttons */}
             <div className="hidden md:flex items-center gap-2 lg:gap-3">
-              <a 
+              <a
                 href="tel:0607979074"
                 className="flex items-center gap-1.5 lg:gap-2 px-2 lg:px-3 py-1.5 lg:py-2 text-white hover:text-lagon transition-colors rounded-lg hover:bg-lagon/10"
               >
-                <Phone size={16} />
+                <Phone size={16} className="flex-shrink-0" />
                 <span className="text-sm font-medium hidden xl:inline">06 07 97 90 74</span>
                 <span className="text-sm font-medium xl:hidden">Appeler</span>
               </a>
 
               <button
                 onClick={onDevisClick}
-                className="btn-primary flex items-center gap-1.5 lg:gap-2 px-4 lg:px-6 py-2.5 rounded-xl text-sm font-semibold shadow-md hover:shadow-glow transition-all duration-300 whitespace-nowrap"
+                className="flex items-center gap-1.5 lg:gap-2 px-3 lg:px-6 py-2 lg:py-2.5 rounded-xl text-sm font-semibold shadow-md hover:shadow-glow transition-all duration-300 whitespace-nowrap"
+                style={{
+                  backgroundColor: '#C4A882',
+                  color: '#FFFFFF',
+                }}
               >
-                <FileText size={16} />
+                <FileText size={16} color="#FFFFFF" className="flex-shrink-0" />
                 <span className="hidden sm:inline">Devis gratuit</span>
                 <span className="sm:hidden">Devis</span>
               </button>
             </div>
 
-            {/* Menu Burger - Mobile */}
+            {/* Menu Burger - Mobile - FIXE et RESPONSIVE */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-lg text-white hover:bg-white/10 transition-colors focus:outline-none"
+              className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-lg text-white hover:bg-white/10 transition-colors focus:outline-none flex-shrink-0 ml-2"
               aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
             >
               <div className="relative w-6 h-5">
@@ -231,7 +235,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
         )}
       </AnimatePresence>
 
-      {/* Menu Mobile - Panneau latéral */}
+      {/* Menu Mobile - Panneau latéral - FIXE et RESPONSIVE */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
@@ -239,7 +243,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed top-0 right-0 h-full w-80 max-w-[85vw] bg-white shadow-2xl z-50 md:hidden overflow-y-auto"
+            className="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-white shadow-2xl z-50 md:hidden overflow-y-auto"
           >
             {/* En-tête du menu mobile */}
             <div className="flex items-center justify-between p-4 border-b border-gray-100 sticky top-0 bg-white z-10">
@@ -247,7 +251,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                 <img
                   src="/alliéjc-logo-3.png"
                   alt="Allié JC"
-                  className="h-10 w-auto object-contain"
+                  className="h-8 w-auto object-contain"
                 />
               </div>
               <button
@@ -259,11 +263,11 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
               </button>
             </div>
 
-            <div className="p-5 space-y-5">
+            <div className="p-4 sm:p-5 space-y-4 sm:space-y-5">
               {/* Navigation links */}
               <div className="space-y-1">
                 {navLinks.map((link) => (
-                  <a 
+                  <a
                     key={link.href}
                     href={link.href}
                     onClick={(e) => handleLinkClick(e, link.href)}
@@ -279,7 +283,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                 {user.isAuthenticated ? (
                   <>
                     <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-lagon to-[#5BBFC0] flex items-center justify-center text-white font-bold text-sm">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-lagon to-[#5BBFC0] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                         {user.name.charAt(0).toUpperCase()}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -287,30 +291,30 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                         <p className="text-xs text-gray-500 truncate">{user.email}</p>
                       </div>
                     </div>
-                    
+
                     <button
                       onClick={handleProfile}
                       className="w-full flex items-center gap-3 py-3 px-4 text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-xl transition-colors"
                     >
-                      <UserCircle size={18} className="text-lagon" />
+                      <UserCircle size={18} className="text-lagon flex-shrink-0" />
                       <span className="font-medium">Mon profil</span>
                     </button>
-                    
+
                     {user.role === 'admin' && (
                       <button
                         onClick={handleDashboard}
                         className="w-full flex items-center gap-3 py-3 px-4 text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-xl transition-colors"
                       >
-                        <Settings size={18} className="text-lagon" />
+                        <Settings size={18} className="text-lagon flex-shrink-0" />
                         <span className="font-medium">Administration</span>
                       </button>
                     )}
-                    
+
                     <button
                       onClick={handleLogout}
                       className="w-full flex items-center gap-3 py-3 px-4 text-red-600 hover:bg-red-50 rounded-xl transition-colors"
                     >
-                      <LogOut size={18} />
+                      <LogOut size={18} className="flex-shrink-0" />
                       <span className="font-medium">Se déconnecter</span>
                     </button>
                   </>
@@ -322,25 +326,25 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                     }}
                     className="w-full flex items-center gap-3 py-3 px-4 text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-xl transition-colors"
                   >
-                    <User size={18} className="text-lagon" />
+                    <User size={18} className="text-lagon flex-shrink-0" />
                     <span className="font-medium">Se connecter</span>
                   </button>
                 )}
 
                 <div className="space-y-2 pt-2">
-                  <a 
+                  <a
                     href="tel:0607979074"
                     className="flex items-center gap-3 py-3 px-4 text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-xl transition-colors"
                   >
-                    <Phone size={18} className="text-lagon" />
-                    <span className="font-medium">06 07 97 90 74</span>
+                    <Phone size={18} className="text-lagon flex-shrink-0" />
+                    <span className="font-medium text-sm">06 07 97 90 74</span>
                   </a>
-                  
-                  <a 
+
+                  <a
                     href="mailto:jeancharlesbiernat@yahoo.com"
                     className="flex items-center gap-3 py-3 px-4 text-[#4A5B5E] hover:text-lagon hover:bg-lagon/5 rounded-xl transition-colors"
                   >
-                    <Mail size={18} className="text-lagon" />
+                    <Mail size={18} className="text-lagon flex-shrink-0" />
                     <span className="text-sm break-all">jeancharlesbiernat@yahoo.com</span>
                   </a>
                 </div>
@@ -350,9 +354,13 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                     onDevisClick();
                     setMobileMenuOpen(false);
                   }}
-                  className="w-full btn-primary flex items-center justify-center gap-2 px-5 py-4 rounded-xl text-sm font-semibold mt-4 shadow-md hover:shadow-glow transition-all duration-300"
+                  className="w-full flex items-center justify-center gap-2 px-5 py-4 rounded-xl text-sm font-semibold mt-4 shadow-md hover:shadow-glow transition-all duration-300"
+                  style={{
+                    backgroundColor: '#C4A882',
+                    color: '#FFFFFF',
+                  }}
                 >
-                  <FileText size={16} />
+                  <FileText size={16} color="#FFFFFF" className="flex-shrink-0" />
                   Demander un devis gratuit
                 </button>
               </div>
