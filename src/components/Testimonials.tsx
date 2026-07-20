@@ -17,7 +17,7 @@ const testimonials = [
     initials: 'PB',
     name: 'Pierre B.',
     location: 'La Rivière-Drugeon',
-    text: '"Ménage de fin de bail réalisé avec soin. L\'état des lieux s\'est très bien passé gràce à lui."',
+    text: '"Ménage de fin de bail réalisé avec soin. L\'état des lieux s\'est très bien passé grâce à lui."',
   },
 ];
 
@@ -55,7 +55,7 @@ export default function Testimonials() {
   const prefersReducedMotion = useReducedMotion();
 
   return (
-    <section className="px-4 py-16 bg-[#eef6f6] md:px-8" id="sec-temos">
+    <section className="px-4 py-16 md:px-8" id="sec-temos" style={{ backgroundColor: '#eef6f6' }}>
 
       {/* En-tête */}
       <motion.div
@@ -64,16 +64,17 @@ export default function Testimonials() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, amount: 0.6 }}
-        style={{ fontFamily: 'var(--font-palatino)' }}
       >
         <motion.div
-          className="text-[11px] font-medium uppercase tracking-widest text-teal-400 mb-2"
+          className="text-[11px] font-medium uppercase tracking-widest mb-2"
+          style={{ color: '#237395' }}
           variants={prefersReducedMotion ? {} : fadeUp}
         >
           Ce qu'ils en disent
         </motion.div>
         <motion.h2
-          className="font-serif text-[26px] font-semibold text-gray-900"
+          className="font-serif text-[26px] font-semibold"
+          style={{ color: '#1c3a47' }}
           variants={prefersReducedMotion ? {} : fadeUp}
         >
           Avis clients
@@ -82,7 +83,7 @@ export default function Testimonials() {
 
       {/* Grille */}
       <motion.div
-        className="grid grid-cols-1 sm:grid-cols-3 gap-4"
+        className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-5xl mx-auto"
         variants={prefersReducedMotion ? {} : gridVariants}
         initial="hidden"
         whileInView="visible"
@@ -94,11 +95,14 @@ export default function Testimonials() {
             variants={prefersReducedMotion ? {} : cardVariants}
             whileHover={prefersReducedMotion ? {} : {
               y: -4,
-              boxShadow: '0 12px 32px rgba(0,0,0,0.08)',
-              borderColor: 'rgba(94,234,212,0.5)',
+              boxShadow: '0 12px 32px rgba(35,115,149,0.12)',
+              borderColor: '#237395',
             }}
-            className="border border-gray-200 rounded-xl p-5 bg-white"
-            style={{ transition: 'border-color 0.2s' }}
+            className="border rounded-xl p-5 bg-white card-hover"
+            style={{ 
+              borderColor: 'rgba(35,115,149,0.15)',
+              transition: 'border-color 0.2s, box-shadow 0.3s, transform 0.3s'
+            }}
           >
             {/* Étoiles en stagger */}
             <motion.div
@@ -111,7 +115,8 @@ export default function Testimonials() {
               {Array.from({ length: 5 }).map((_, i) => (
                 <motion.span
                   key={i}
-                  className="text-yellow-400 text-[13px]"
+                  className="text-[13px]"
+                  style={{ color: '#e0a84a' }}
                   variants={prefersReducedMotion ? {} : starItem}
                 >
                   ★
@@ -119,19 +124,29 @@ export default function Testimonials() {
               ))}
             </motion.div>
 
-            <p className="text-[13px] text-gray-600 leading-relaxed italic mb-3.5">{text}</p>
+            <p className="text-[13px] leading-relaxed italic mb-3.5" style={{ color: '#4a6b78' }}>
+              {text}
+            </p>
 
             <div className="flex items-center gap-2.5">
               <motion.div
-                className="w-8 h-8 rounded-full bg-teal-100 flex items-center justify-center text-[12px] font-medium text-teal-700 shrink-0"
+                className="w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-medium shrink-0"
+                style={{ 
+                  backgroundColor: 'rgba(35,115,149,0.12)',
+                  color: '#237395'
+                }}
                 whileHover={prefersReducedMotion ? {} : { scale: 1.12 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 20 }}
               >
                 {initials}
               </motion.div>
               <div>
-                <div className="text-[12px] font-medium text-gray-900">{name}</div>
-                <div className="text-[11px] text-gray-400">{location}</div>
+                <div className="text-[12px] font-medium" style={{ color: '#1c3a47' }}>
+                  {name}
+                </div>
+                <div className="text-[11px]" style={{ color: '#4a6b78' }}>
+                  {location}
+                </div>
               </div>
             </div>
           </motion.div>
