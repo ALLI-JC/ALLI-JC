@@ -1,4 +1,4 @@
-// pages/admin/Users.tsx
+﻿// pages/admin/Users.tsx
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { 
@@ -181,7 +181,7 @@ export default function Users() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-96">
-        <Loader2 size={40} className="animate-spin text-[#79DBDC]" />
+        <Loader2 size={40} className="animate-spin text-[#237395]" />
       </div>
     )
   }
@@ -207,17 +207,17 @@ export default function Users() {
           toast.type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
         }`}>
           {toast.message}
-          <button onClick={() => setToast(null)} className="ml-2">✕</button>
+          <button onClick={() => setToast(null)} className="ml-2">àœ•</button>
         </div>
       )}
 
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-gray-800">👥 Utilisateurs</h1>
+          <h1 className="text-2xl font-bold text-gray-800">ðŸ‘¥ Utilisateurs</h1>
           <p className="text-gray-500">{stats.total} utilisateur(s)</p>
         </div>
-        <button onClick={() => setShowAddModal(true)} className="flex items-center gap-2 bg-gradient-to-r from-[#79DBDC] to-[#5BBFC0] text-white px-4 py-2 rounded-lg">
+        <button onClick={() => setShowAddModal(true)} className="flex items-center gap-2 bg-gradient-to-r from-[#237395] to-[#237395] text-white px-4 py-2 rounded-lg">
           <UserPlus size={16} /> Ajouter
         </button>
       </div>
@@ -229,7 +229,7 @@ export default function Users() {
           <p className="text-xs text-gray-400">Total</p>
         </div>
         <div className="bg-white rounded-xl p-4 border text-center">
-          <p className="text-2xl font-bold text-[#79DBDC]">{stats.admins}</p>
+          <p className="text-2xl font-bold text-[#237395]">{stats.admins}</p>
           <p className="text-xs text-gray-400">Admins</p>
         </div>
         <div className="bg-white rounded-xl p-4 border text-center">
@@ -255,7 +255,7 @@ export default function Users() {
             placeholder="Rechercher..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-[#79DBDC]"
+            className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-[#237395]"
           />
         </div>
       </div>
@@ -270,7 +270,7 @@ export default function Users() {
               <div key={user.id} className="p-4 flex items-center justify-between hover:bg-gray-50">
                 <div className="flex items-center gap-4">
                   <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg ${
-                    user.role === 'admin' ? 'bg-gradient-to-br from-[#79DBDC] to-[#5BBFC0]' : 'bg-gray-500'
+                    user.role === 'admin' ? 'bg-gradient-to-br from-[#237395] to-[#237395]' : 'bg-gray-500'
                   }`}>
                     {user.full_name?.charAt(0) || user.email.charAt(0).toUpperCase()}
                   </div>
@@ -278,7 +278,7 @@ export default function Users() {
                     <div className="flex items-center gap-2">
                       <p className="font-semibold">{user.full_name || 'Sans nom'}</p>
                       <span className={`px-2 py-0.5 rounded-full text-xs ${
-                        user.role === 'admin' ? 'bg-[#79DBDC]/20 text-[#5BBFC0]' : 'bg-gray-100'
+                        user.role === 'admin' ? 'bg-[#237395]/20 text-[#237395]' : 'bg-gray-100'
                       }`}>
                         {user.role === 'admin' ? <Crown size={10} /> : <User size={10} />}
                         {' '}{user.role === 'admin' ? 'Admin' : 'User'}
@@ -309,7 +309,7 @@ export default function Users() {
                   }} className="p-2 text-gray-500 hover:text-green-500 rounded-lg">
                     <Edit size={16} />
                   </button>
-                  <button onClick={() => toggleUserRole(user)} className="p-2 text-gray-500 hover:text-[#79DBDC] rounded-lg">
+                  <button onClick={() => toggleUserRole(user)} className="p-2 text-gray-500 hover:text-[#237395] rounded-lg">
                     <Crown size={16} />
                   </button>
                   <button onClick={() => deleteUser(user.id, user.email)} className="p-2 text-gray-500 hover:text-red-500 rounded-lg">
@@ -337,7 +337,7 @@ export default function Users() {
               </select>
               <div className="flex justify-end gap-2">
                 <button type="button" onClick={() => setShowAddModal(false)} className="px-4 py-2 text-gray-600">Annuler</button>
-                <button type="submit" className="px-4 py-2 bg-[#79DBDC] text-white rounded-lg">Créer</button>
+                <button type="submit" className="px-4 py-2 bg-[#237395] text-white rounded-lg">Créer</button>
               </div>
             </form>
           </div>
@@ -354,7 +354,7 @@ export default function Users() {
               <input type="tel" placeholder="Téléphone" value={editUser.phone} onChange={e => setEditUser({...editUser, phone: e.target.value})} className="w-full p-2 border rounded-lg mb-4" />
               <div className="flex justify-end gap-2">
                 <button type="button" onClick={() => setShowEditModal(null)} className="px-4 py-2 text-gray-600">Annuler</button>
-                <button type="submit" className="px-4 py-2 bg-[#79DBDC] text-white rounded-lg">Enregistrer</button>
+                <button type="submit" className="px-4 py-2 bg-[#237395] text-white rounded-lg">Enregistrer</button>
               </div>
             </form>
           </div>

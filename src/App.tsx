@@ -3,7 +3,6 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import Navbar from './components/Navbar'
 import Hero from './components/Hero'
-import ServicesMarquee from './components/ServicesMarquee'
 import Services from './components/Services'
 import DevisSimulator from './components/DevisSimulator'
 import ZoneIntervention from './components/ZoneIntervention'
@@ -13,6 +12,7 @@ import Footer from './components/Footer'
 import ProtectedRoute from './components/admin/ProtectedRoute'
 import AdminLayout from './components/admin/AdminLayout'
 import Dashboard from './components/admin/Dashboard'
+import DevisPage from './components/admin/DevisPage'
 import Users from './components/admin/Users'
 import Bookings from './components/admin/Bookings'
 import Gallery from './components/galleri'
@@ -52,26 +52,19 @@ function PublicSite() {
 export default function App() {
   const location = useLocation()
   const [showSplash, setShowSplash] = useState(true)
-  const [showApp, setShowApp] = useState(false)
 
   useEffect(() => {
-    // Si on est sur la page d'accueil, on montre la splash
     if (location.pathname === '/') {
       setShowSplash(true)
-      setShowApp(false)
     } else {
-      // Sur les autres pages, on cache la splash et on montre le contenu
       setShowSplash(false)
-      setShowApp(true)
     }
   }, [location.pathname])
 
   const handleSplashComplete = () => {
     setShowSplash(false)
-    setShowApp(true)
   }
 
-  // Si on est sur la page d'accueil et que la splash est active, on la montre
   if (location.pathname === '/' && showSplash) {
     return <SplashScreen onComplete={handleSplashComplete} />
   }
@@ -95,6 +88,7 @@ export default function App() {
         <Route path="/admin" element={<AdminLayout />}>
           <Route index element={<Dashboard />} />
           <Route path="dashboard" element={<Dashboard />} />
+          <Route path="devis" element={<DevisPage />} />
           <Route path="users" element={<Users />} />
           <Route path="bookings" element={<Bookings />} />
           <Route path="messages" element={<Messages />} />

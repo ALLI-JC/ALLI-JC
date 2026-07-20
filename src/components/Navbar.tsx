@@ -1,4 +1,4 @@
-import { FileText, Menu, X, Phone, Mail, User, LogOut, Settings, UserCircle, Shield } from 'lucide-react';
+﻿import { FileText, Menu, X, Phone, Mail, User, LogOut, Settings, UserCircle, Shield } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -153,14 +153,14 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
               />
             </div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center gap-4 lg:gap-6 xl:gap-8">
+            {/* Desktop Navigation - Taille intermédiaire corrigée */}
+            <div className="hidden md:flex items-center gap-5 lg:gap-7 xl:gap-9">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
                   href={link.href}
                   onClick={(e) => handleLinkClick(e, link.href)}
-                  className="group relative text-sm font-medium text-white hover:text-lagon transition-colors duration-200 whitespace-nowrap"
+                  className="group relative text-[15px] lg:text-base font-medium text-white hover:text-lagon transition-colors duration-200 whitespace-nowrap"
                 >
                   {link.label}
                   <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-gradient-primary transition-all duration-300 group-hover:w-full"></span>
@@ -168,20 +168,20 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
               ))}
             </div>
 
-            {/* Desktop Buttons */}
-            <div className="hidden md:flex items-center gap-2 lg:gap-3">
+            {/* Desktop Buttons - Taille intermédiaire corrigée */}
+            <div className="hidden md:flex items-center gap-3 lg:gap-4">
               <a
                 href="tel:0607979074"
-                className="flex items-center gap-1.5 lg:gap-2 px-2 lg:px-3 py-1.5 lg:py-2 text-white hover:text-lagon transition-colors rounded-lg hover:bg-lagon/10"
+                className="flex items-center gap-1.5 lg:gap-2 px-2.5 lg:px-3 py-1.5 lg:py-2 text-white hover:text-lagon transition-colors rounded-lg hover:bg-lagon/10"
               >
-                <Phone size={16} className="flex-shrink-0" />
-                <span className="text-sm font-medium hidden xl:inline">06 07 97 90 74</span>
-                <span className="text-sm font-medium xl:hidden">Appeler</span>
+                <Phone size={15} className="flex-shrink-0" />
+                <span className="text-[13px] lg:text-sm font-medium hidden xl:inline">06 07 97 90 74</span>
+                <span className="text-[13px] lg:text-sm font-medium xl:hidden">Appeler</span>
               </a>
 
               <button
                 onClick={onDevisClick}
-                className="flex items-center gap-1.5 lg:gap-2 px-3 lg:px-6 py-2 lg:py-2.5 rounded-xl text-sm font-semibold shadow-md hover:shadow-glow transition-all duration-300 whitespace-nowrap"
+                className="flex items-center gap-1.5 lg:gap-2 px-4 lg:px-6 py-2 lg:py-2.5 rounded-xl text-[14px] lg:text-[15px] font-semibold shadow-md hover:shadow-glow transition-all duration-300 whitespace-nowrap"
                 style={{
                   backgroundColor: '#C4A882',
                   color: '#FFFFFF',
@@ -283,7 +283,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                 {user.isAuthenticated ? (
                   <>
                     <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-lagon to-[#5BBFC0] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-lagon to-[#237395] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                         {user.name.charAt(0).toUpperCase()}
                       </div>
                       <div className="flex-1 min-w-0">

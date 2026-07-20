@@ -1,4 +1,4 @@
-// components/admin/ProtectedRoute.tsx
+﻿// components/admin/ProtectedRoute.tsx
 import { useEffect, useState } from 'react'
 import { Navigate, Outlet } from 'react-router-dom'
 import { supabase } from '../../lib/supabaseClient'
@@ -27,7 +27,7 @@ export default function ProtectedRoute() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#79DBDC]"></div>
+        <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#237395]"></div>
       </div>
     )
   }

@@ -1,4 +1,4 @@
-import { Compass, Users, FileSearch, ArrowRight } from 'lucide-react';
+﻿import { Compass, Users, FileSearch, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const PILLARS = [
@@ -23,7 +23,7 @@ export default function ReassurancePillars() {
   return (
     <section className="relative overflow-hidden border-t border-[#e7ddd2]/80">
       {/* Éléments décoratifs */}
-      <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-[#79DBDC]/5 rounded-full blur-3xl" />
+      <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-[#237395]/5 rounded-full blur-3xl" />
       <div className="absolute -top-20 -left-20 w-64 h-64 bg-[#F5DEB3]/10 rounded-full blur-3xl" />
       
       <div className="relative mx-auto max-w-7xl px-6 py-12 sm:px-8 lg:px-10 lg:py-16">
@@ -76,17 +76,12 @@ export default function ReassurancePillars() {
                 className="group relative rounded-2xl border border-[#e5d8ca] bg-white/95 p-6 shadow-[0_8px_30px_rgba(35,115,149,0.06)] backdrop-blur-sm transition-all duration-300 hover:-translate-y-2 hover:shadow-[0_20px_50px_rgba(35,115,149,0.10)]"
               >
                 {/* Bande décorative */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#237395] to-[#79DBDC] rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                {/* Numéro */}
-                <div className="absolute top-3 right-4 text-4xl font-bold text-[#237395]/5 group-hover:text-[#237395]/10 transition-colors duration-300 select-none">
-                  {String(index + 1).padStart(2, '0')}
-                </div>
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#237395] to-[#237395] rounded-t-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                 {/* Icône */}
                 <div className="relative mb-4">
                   <div className="absolute inset-0 bg-[#237395]/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#237395] to-[#79DBDC] text-white shadow-lg transition-all group-hover:scale-110 group-hover:shadow-xl">
+                  <div className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-[#237395] to-[#237395] text-white shadow-lg transition-all group-hover:scale-110 group-hover:shadow-xl">
                     <Icon size={20} />
                   </div>
                 </div>

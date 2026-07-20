@@ -1,6 +1,6 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+﻿import { useState, useRef, useEffect, useCallback } from "react";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// à”€à”€à”€ Types à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€
 interface Message {
   id: string;
   role: "user" | "assistant";
@@ -14,20 +14,20 @@ interface QuickReply {
   icon: string;
 }
 
-// ─── Constants ────────────────────────────────────────────────────────────────
+// à”€à”€à”€ Constants à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€
 const QUICK_REPLIES: QuickReply[] = [
-  { icon: "🪟", label: "Nettoyage vitres",       message: "Je voudrais un devis pour le nettoyage de mes vitres / baies vitrées." },
-  { icon: "💧", label: "Terrasse HP",             message: "Quel est le tarif pour nettoyer ma terrasse au nettoyeur haute pression ?" },
-  { icon: "🌿", label: "Entretien jardin",        message: "Quels sont vos services d'entretien de jardin et espaces verts ?" },
-  { icon: "✂️", label: "Tonte de gazon",          message: "Je cherche un devis pour la tonte de ma pelouse, quel est votre tarif au m² ?" },
-  { icon: "🧹", label: "Fin de bail / chantier",  message: "J'ai besoin d'un ménage de remise en état pour une fin de bail ou fin de chantier." },
-  { icon: "🏢", label: "Locaux commerciaux",      message: "Intervenez-vous pour le nettoyage de locaux commerciaux ou parties communes ?" },
-  { icon: "📅", label: "Prendre rendez-vous",     message: "Je souhaite prendre un rendez-vous pour un devis à mon domicile." },
+  { icon: "ðŸªŸ", label: "Nettoyage vitres",       message: "Je voudrais un devis pour le nettoyage de mes vitres / baies vitrées." },
+  { icon: "ðŸ’§", label: "Terrasse HP",             message: "Quel est le tarif pour nettoyer ma terrasse au nettoyeur haute pression ?" },
+  { icon: "ðŸŒ¿", label: "Entretien jardin",        message: "Quels sont vos services d'entretien de jardin et espaces verts ?" },
+  { icon: "àœ‚ï¸", label: "Tonte de gazon",          message: "Je cherche un devis pour la tonte de ma pelouse, quel est votre tarif au m² ?" },
+  { icon: "ðŸ§¹", label: "Fin de bail / chantier",  message: "J'ai besoin d'un ménage de remise en état pour une fin de bail ou fin de chantier." },
+  { icon: "ðŸ¢", label: "Locaux commerciaux",      message: "Intervenez-vous pour le nettoyage de locaux commerciaux ou parties communes ?" },
+  { icon: "ðŸ“…", label: "Prendre rendez-vous",     message: "Je souhaite prendre un rendez-vous pour un devis à mon domicile." },
 ];
 
 const SYSTEM_PROMPT = `Tu es l'assistant virtuel chaleureux et professionnel de "L'allié JC", une entreprise individuelle de multiservices dans l'habitat fondée en juin 2026 par Jean Charles Biernat, artisan basé à La Rivière Drugeon dans le Doubs.
 
-═══ ENTREPRISE ═══
+à•à•à• ENTREPRISE à•à•à•
 - Nom : L'allié JC
 - Fondateur : Jean Charles Biernat
 - Adresse : 7 rue de la gare, 25560 La Rivière Drugeon
@@ -36,7 +36,7 @@ const SYSTEM_PROMPT = `Tu es l'assistant virtuel chaleureux et professionnel de 
 - Zone d'intervention : Doubs (25) et une partie du Jura (39)
 - Pas de site web ni réseaux sociaux pour l'instant
 
-═══ SERVICES ═══
+à•à•à• SERVICES à•à•à•
 1. Nettoyage de vitres et baies vitrées (tarif à la baie)
 2. Nettoyage de terrasses au nettoyeur haute pression (tarif au m²)
 3. Tonte de gazon (tarif au m²)
@@ -49,28 +49,28 @@ const SYSTEM_PROMPT = `Tu es l'assistant virtuel chaleureux et professionnel de 
 10. Nettoyage de locaux commerciaux
 11. Nettoyage des parties communes d'immeuble
 
-═══ CLIENTS CIBLES ═══
-- Particuliers : frontaliers suisses (30–45 ans), personnes âgées
+à•à•à• CLIENTS CIBLES à•à•à•
+- Particuliers : frontaliers suisses (30–45 ans), personnes àgées
 - Entreprises : agences immobilières, locaux commerciaux
 - Professionnels : fins de chantier, gestionnaires de copropriétés
 
-═══ DEVIS & TARIFS ═══
+à•à•à• DEVIS & TARIFS à•à•à•
 - Forfaits indicatifs disponibles pour : baies vitrées, terrasses HP (au m²), tonte (au m²)
 - Tout devis est gratuit et doit être confirmé après évaluation du chantier
 - Aucun paiement en ligne — simulation indicative uniquement
 - Réservation de créneaux possible (prise de rendez-vous)
 
-═══ INSTRUCTIONS ═══
+à•à•à• INSTRUCTIONS à•à•à•
 - Réponds TOUJOURS en français, ton chaleureux, rassurant, professionnel — comme si Jean Charles lui-même répondait
 - Sois concis (3–5 phrases max par réponse) mais complet
 - Pour tout devis, collecte : type de service, commune, surface approximative si applicable, disponibilités souhaitées
-- Si on demande un tarif, donne une fourchette indicative réaliste (ex: terrasse HP entre 3 et 6 €/m² selon état) et précise qu'un devis précis sera établi sur place
+- Si on demande un tarif, donne une fourchette indicative réaliste (ex: terrasse HP entre 3 et 6 à‚¬/m² selon état) et précise qu'un devis précis sera établi sur place
 - Propose systématiquement de finaliser par téléphone ou WhatsApp : 06 07 97 90 74
 - Ne prends jamais de paiement, ne confirme jamais de réservation définitive par chat
 - Si la question ne concerne pas les services, redirige avec bienveillance
 - Termine chaque échange important avec une invitation à appeler ou écrire sur WhatsApp`;
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
+// à”€à”€à”€ Helpers à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€
 function uid(): string {
   return Math.random().toString(36).slice(2, 9);
 }
@@ -78,7 +78,7 @@ function formatTime(date: Date): string {
   return date.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" });
 }
 
-// ─── Sub-components ───────────────────────────────────────────────────────────
+// à”€à”€à”€ Sub-components à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€
 function TypingIndicator() {
   return (
     <div className="flex items-end gap-2 animate-in fade-in duration-200">
@@ -175,7 +175,7 @@ function AnimatedDots() {
   );
 }
 
-// ─── WhatsApp SVG ──────────────────────────────────────────────────────────────
+// à”€à”€à”€ WhatsApp SVG à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€
 const WhatsAppSVG = () => (
   <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
@@ -203,14 +203,14 @@ const SendSVG = () => (
   </svg>
 );
 
-// ─── Main Chat Component ──────────────────────────────────────────────────────
+// à”€à”€à”€ Main Chat Component à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€
 export default function Chat() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: uid(),
       role: "assistant",
       content:
-        "Bonjour ! 👋 Je suis l'assistant de L'allié JC, votre partenaire multiservices dans le Doubs et le Jura.\n\nJean Charles intervient chez vous pour le nettoyage, l'entretien extérieur, le jardinage, la remise en état et bien plus encore.\n\nComment puis-je vous aider aujourd'hui ?",
+        "Bonjour ! ðŸ‘‹ Je suis l'assistant de L'allié JC, votre partenaire multiservices dans le Doubs et le Jura.\n\nJean Charles intervient chez vous pour le nettoyage, l'entretien extérieur, le jardinage, la remise en état et bien plus encore.\n\nComment puis-je vous aider aujourd'hui ?",
       timestamp: new Date(),
     },
   ]);
@@ -261,9 +261,9 @@ export default function Chat() {
 
         let reply: string;
         if (res.status === 429) {
-          reply = "⏳ Trop de messages en peu de temps. Patientez quelques secondes avant de réessayer, ou contactez-nous au 06 07 97 90 74.";
+          reply = "à³ Trop de messages en peu de temps. Patientez quelques secondes avant de réessayer, ou contactez-nous au 06 07 97 90 74.";
         } else if (!res.ok) {
-          reply = `❌ Erreur serveur (${res.status}). Appelez-nous au 06 07 97 90 74 ou sur WhatsApp.`;
+          reply = `àŒ Erreur serveur (${res.status}). Appelez-nous au 06 07 97 90 74 ou sur WhatsApp.`;
         } else {
           reply =
             data.candidates?.[0]?.content?.parts?.[0]?.text ??
@@ -278,7 +278,7 @@ export default function Chat() {
         const errMsg: Message = {
           id: uid(),
           role: "assistant",
-          content: "🔌 Erreur de connexion. Vérifiez votre réseau ou contactez-nous au 06 07 97 90 74.",
+          content: "ðŸ”Œ Erreur de connexion. Vérifiez votre réseau ou contactez-nous au 06 07 97 90 74.",
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, errMsg]);
@@ -303,7 +303,7 @@ export default function Chat() {
     setTimeout(() => inputRef.current?.focus(), 300);
   };
 
-  // ── Floating bubble ──────────────────────────────────────────────────────────
+  // à”€à”€ Floating bubble à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€
   if (!isOpen) {
     return (
       <div className="fixed bottom-7 right-7 flex flex-col items-center gap-2 z-[1000]">
@@ -333,7 +333,7 @@ export default function Chat() {
     );
   }
 
-  // ── Full chat window ──────────────────────────────────────────────────────────
+  // à”€à”€ Full chat window à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€à”€
   return (
     <div
       className="fixed bottom-7 right-7 w-[380px] h-[600px] rounded-2xl shadow-2xl flex flex-col overflow-hidden z-[1000] animate-in zoom-in-95 slide-in-from-bottom-5 duration-320 origin-bottom-right max-[440px]:!bottom-0 max-[440px]:!right-0 max-[440px]:!w-screen max-[440px]:!h-dvh max-[440px]:!rounded-none"
@@ -341,7 +341,7 @@ export default function Chat() {
       role="dialog"
       aria-label="Chat L'allié JC"
     >
-      {/* ── Header ── */}
+      {/* à”€à”€ Header à”€à”€ */}
       <header
         className="px-4 py-3.5 flex items-center gap-3 flex-shrink-0"
         style={{ background: '#237395' }}
@@ -364,7 +364,7 @@ export default function Chat() {
               className="w-1.5 h-1.5 rounded-full animate-pulse"
               style={{ background: '#D2B093', boxShadow: '0 0 0 2px rgba(210,176,147,0.3)' }}
             />
-            En ligne · répond rapidement
+            En ligne  · répond rapidement
           </span>
         </div>
 
@@ -407,10 +407,10 @@ export default function Chat() {
         </div>
       </header>
 
-      {/* ── Filet doré sous le header ── */}
+      {/* à”€à”€ Filet doré sous le header à”€à”€ */}
       <div className="h-[2px] flex-shrink-0" style={{ background: 'linear-gradient(to right, #D2B093, rgba(210,176,147,0.2))' }} />
 
-      {/* ── Messages ── */}
+      {/* à”€à”€ Messages à”€à”€ */}
       <main
         className="flex-1 overflow-y-auto px-3.5 py-4 flex flex-col gap-2.5 scroll-smooth [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full"
         style={{
@@ -454,7 +454,7 @@ export default function Chat() {
         <div ref={messagesEndRef} />
       </main>
 
-      {/* ── Input ── */}
+      {/* à”€à”€ Input à”€à”€ */}
       <footer
         className="flex-shrink-0 border-t"
         style={{ background: 'white', borderColor: 'rgba(35,115,149,0.1)' }}
@@ -485,7 +485,7 @@ export default function Chat() {
           <button
             className="w-9 h-9 rounded-full border-none cursor-pointer flex items-center justify-center flex-shrink-0 transition-all duration-150 hover:scale-105 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
             style={{ background: '#237395', color: 'white' }}
-            onMouseEnter={e => { if (!e.currentTarget.disabled) e.currentTarget.style.background = '#1a5870'; }}
+            onMouseEnter={e => { if (!e.currentTarget.disabled) e.currentTarget.style.background = '#237395'; }}
             onMouseLeave={e => { e.currentTarget.style.background = '#237395'; }}
             onClick={() => sendMessage(input)}
             disabled={!input.trim() || loading}
@@ -507,7 +507,7 @@ export default function Chat() {
           >
             06 07 97 90 74
           </a>
-          <span>·</span>
+          <span> ·</span>
           <a
             href="mailto:jeancharlesbiernat@yahoo.com"
             className="transition-colors duration-150 hover:opacity-100"
@@ -515,7 +515,7 @@ export default function Chat() {
           >
             Email
           </a>
-          <span>·</span>
+          <span> ·</span>
           <span>Doubs &amp; Jura</span>
         </div>
       </footer>

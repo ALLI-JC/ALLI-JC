@@ -1,4 +1,4 @@
-// pages/admin/Gallery.tsx
+﻿// pages/admin/Gallery.tsx
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { 
@@ -154,9 +154,9 @@ function LoadingSpinner() {
   return (
     <div className="flex flex-col items-center justify-center py-20">
       <div className="relative">
-        <div className="w-16 h-16 border-4 border-[#79DBDC]/20 rounded-full animate-spin border-t-[#79DBDC]"></div>
+        <div className="w-16 h-16 border-4 border-[#237395]/20 rounded-full animate-spin border-t-[#237395]"></div>
         <div className="absolute inset-0 flex items-center justify-center">
-          <ImageIcon size={24} className="text-[#79DBDC] animate-pulse" />
+          <ImageIcon size={24} className="text-[#237395] animate-pulse" />
         </div>
       </div>
       <p className="text-gray-400 mt-4">Chargement de la galerie...</p>
@@ -188,7 +188,7 @@ function ImageCard({ image, index, onEdit, onDelete, onToggleFeatured, onPreview
       onDrop={(e) => onDrop(e, index)}
       onDragEnd={onDragEnd}
       className={`group relative bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-500 cursor-grab active:cursor-grabbing ${
-        isDragging ? 'opacity-40 scale-95 ring-2 ring-[#79DBDC]' : 'hover:-translate-y-1'
+        isDragging ? 'opacity-40 scale-95 ring-2 ring-[#237395]' : 'hover:-translate-y-1'
       }`}
     >
       {/* Image Container */}
@@ -348,7 +348,7 @@ function EditModal({ image, onClose, onSave, isEditing }: {
     <div className="fixed inset-0 bg-black/60 backdrop-blur-md flex items-center justify-center z-50 p-4" onClick={onClose}>
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-hidden animate-slide-up" onClick={e => e.stopPropagation()}>
         {/* Header */}
-        <div className="relative bg-gradient-to-r from-[#79DBDC] to-[#5BBFC0] px-6 py-5">
+        <div className="relative bg-gradient-to-r from-[#237395] to-[#237395] px-6 py-5">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             {isEditing ? <Edit size={22} /> : <Plus size={22} />}
             {isEditing ? 'Modifier l\'image' : 'Ajouter une image'}
@@ -369,14 +369,14 @@ function EditModal({ image, onClose, onSave, isEditing }: {
             </label>
             <div 
               className={`relative rounded-xl border-2 border-dashed transition-all ${
-                previewUrl ? 'border-[#79DBDC] bg-[#79DBDC]/5' : 'border-gray-300 hover:border-[#79DBDC] bg-gray-50'
+                previewUrl ? 'border-[#237395] bg-[#237395]/5' : 'border-gray-300 hover:border-[#237395] bg-gray-50'
               }`}
             >
               {previewUrl ? (
                 <div className="relative group">
                   <img
                     src={previewUrl}
-                    alt="Preview"
+                    alt="Aperçu"
                     className="max-h-56 w-full object-contain rounded-xl"
                   />
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center gap-3">
@@ -405,8 +405,8 @@ function EditModal({ image, onClose, onSave, isEditing }: {
                   onClick={() => fileInputRef.current?.click()}
                   className="w-full p-8 text-center cursor-pointer group"
                 >
-                  <div className="w-20 h-20 mx-auto bg-gradient-to-br from-[#79DBDC]/20 to-[#5BBFC0]/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform mb-3">
-                    <Upload size={32} className="text-[#79DBDC]" />
+                  <div className="w-20 h-20 mx-auto bg-gradient-to-br from-[#237395]/20 to-[#237395]/20 rounded-2xl flex items-center justify-center group-hover:scale-110 transition-transform mb-3">
+                    <Upload size={32} className="text-[#237395]" />
                   </div>
                   <p className="text-gray-600 font-medium">
                     {isEditing ? 'Changer l\'image' : 'Cliquez pour sélectionner'}
@@ -433,7 +433,7 @@ function EditModal({ image, onClose, onSave, isEditing }: {
               type="text"
               value={formData.title}
               onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-[#79DBDC] focus:ring-2 focus:ring-[#79DBDC]/20 transition"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-[#237395] focus:ring-2 focus:ring-[#237395]/20 transition"
               placeholder="Titre de l'image"
               maxLength={100}
               required
@@ -449,7 +449,7 @@ function EditModal({ image, onClose, onSave, isEditing }: {
               value={formData.description}
               onChange={(e) => setFormData({ ...formData, description: e.target.value })}
               rows={3}
-              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-[#79DBDC] focus:ring-2 focus:ring-[#79DBDC]/20 transition resize-none"
+              className="w-full px-4 py-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-[#237395] focus:ring-2 focus:ring-[#237395]/20 transition resize-none"
               placeholder="Description de l'image..."
               maxLength={500}
             />
@@ -502,7 +502,7 @@ function EditModal({ image, onClose, onSave, isEditing }: {
                 onChange={(e) => setFormData({ ...formData, featured: e.target.checked })}
                 className="sr-only peer"
               />
-              <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-[#79DBDC] transition-all"></div>
+              <div className="w-11 h-6 bg-gray-300 rounded-full peer peer-checked:bg-[#237395] transition-all"></div>
               <div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-all peer-checked:translate-x-5"></div>
             </div>
           </label>
@@ -519,7 +519,7 @@ function EditModal({ image, onClose, onSave, isEditing }: {
             <button
               type="submit"
               disabled={uploading || (!isEditing && !selectedFile)}
-              className="flex-1 bg-gradient-to-r from-[#79DBDC] to-[#5BBFC0] text-white py-2.5 rounded-xl font-semibold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105"
+              className="flex-1 bg-gradient-to-r from-[#237395] to-[#237395] text-white py-2.5 rounded-xl font-semibold hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed transition-all transform hover:scale-105"
             >
               {uploading ? (
                 <Loader2 size={18} className="animate-spin mx-auto" />
@@ -800,7 +800,7 @@ export default function GalleryManagement() {
         <div className="mb-8">
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
             <div>
-              <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-[#79DBDC] to-[#5BBFC0] bg-clip-text text-transparent">
+              <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-[#237395] to-[#237395] bg-clip-text text-transparent">
                 Galerie d'images
               </h1>
               <p className="text-gray-500 mt-2">
@@ -813,7 +813,7 @@ export default function GalleryManagement() {
                 setEditingImage(null)
                 setShowModal(true)
               }}
-              className="flex items-center gap-2 bg-gradient-to-r from-[#79DBDC] to-[#5BBFC0] text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all transform hover:scale-105"
+              className="flex items-center gap-2 bg-gradient-to-r from-[#237395] to-[#237395] text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all transform hover:scale-105"
             >
               <Plus size={20} />
               Ajouter une image
@@ -828,12 +828,12 @@ export default function GalleryManagement() {
               key={cat.id}
               onClick={() => setSelectedCategory(selectedCategory === cat.id ? 'all' : cat.id)}
               className={`${cat.bgColor} rounded-xl p-3 text-center transition-all hover:scale-105 ${
-                selectedCategory === cat.id ? 'ring-2 ring-[#79DBDC] shadow-md' : ''
+                selectedCategory === cat.id ? 'ring-2 ring-[#237395] shadow-md' : ''
               }`}
             >
               <span className="text-2xl">{cat.icon}</span>
               <p className="text-xs font-medium text-gray-700 mt-1 hidden sm:block">{cat.label}</p>
-              <p className="text-lg font-bold text-[#79DBDC]">{cat.count}</p>
+              <p className="text-lg font-bold text-[#237395]">{cat.count}</p>
             </button>
           ))}
         </div>
@@ -847,7 +847,7 @@ export default function GalleryManagement() {
               placeholder="Rechercher par titre ou description..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-[#79DBDC] focus:ring-2 focus:ring-[#79DBDC]/20 transition"
+              className="w-full pl-11 pr-4 py-2.5 bg-white border border-gray-200 rounded-xl focus:outline-none focus:border-[#237395] focus:ring-2 focus:ring-[#237395]/20 transition"
             />
           </div>
           
@@ -855,7 +855,7 @@ export default function GalleryManagement() {
             <button
               onClick={() => setViewMode('grid')}
               className={`p-2.5 rounded-xl transition ${
-                viewMode === 'grid' ? 'bg-[#79DBDC] text-white shadow-md' : 'bg-white text-gray-400 hover:text-gray-600'
+                viewMode === 'grid' ? 'bg-[#237395] text-white shadow-md' : 'bg-white text-gray-400 hover:text-gray-600'
               }`}
             >
               <Grid3x3 size={18} />
@@ -863,7 +863,7 @@ export default function GalleryManagement() {
             <button
               onClick={() => setViewMode('list')}
               className={`p-2.5 rounded-xl transition ${
-                viewMode === 'list' ? 'bg-[#79DBDC] text-white shadow-md' : 'bg-white text-gray-400 hover:text-gray-600'
+                viewMode === 'list' ? 'bg-[#237395] text-white shadow-md' : 'bg-white text-gray-400 hover:text-gray-600'
               }`}
             >
               <List size={18} />
@@ -881,7 +881,7 @@ export default function GalleryManagement() {
             {searchTerm && (
               <button
                 onClick={() => setSearchTerm('')}
-                className="mt-4 text-[#79DBDC] hover:underline"
+                className="mt-4 text-[#237395] hover:underline"
               >
                 Effacer la recherche
               </button>
