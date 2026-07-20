@@ -1,4 +1,4 @@
-// pages/admin/Dashboard.tsx
+﻿// pages/admin/Dashboard.tsx
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { 
@@ -131,8 +131,8 @@ export default function Dashboard() {
       title: 'Utilisateurs', 
       value: stats.totalUsers, 
       icon: Users, 
-      color: '#79DBDC',
-      bgColor: '#79DBDC10',
+      color: '#237395',
+      bgColor: '#23739510',
       change: '+12%',
       trend: 'up'
     },
@@ -143,8 +143,8 @@ export default function Dashboard() {
       title: 'Messages', 
       value: stats.totalMessages, 
       icon: MessageSquare, 
-      color: '#5BBFC0',
-      bgColor: '#5BBFC010',
+      color: '#237395',
+      bgColor: '#23739510',
       change: `${stats.unreadMessages} non lus`,
       trend: stats.unreadMessages > 0 ? 'warning' : 'neutral'
     },
@@ -186,7 +186,7 @@ export default function Dashboard() {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#79DBDC] mx-auto"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#237395] mx-auto"></div>
           <p className="mt-4 text-gray-500">Chargement du tableau de bord...</p>
         </div>
       </div>
@@ -244,12 +244,12 @@ export default function Dashboard() {
           <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <MessageSquare size={18} className="text-[#79DBDC]" />
+                <MessageSquare size={18} className="text-[#237395]" />
                 <h2 className="text-lg font-semibold text-gray-800">Derniers messages</h2>
               </div>
               <button 
                 onClick={() => window.location.href = '/admin/messages'}
-                className="flex items-center gap-1 text-xs text-[#79DBDC] hover:underline"
+                className="flex items-center gap-1 text-xs text-[#237395] hover:underline"
               >
                 Voir tout
                 <ArrowRight size={12} />
@@ -295,7 +295,7 @@ export default function Dashboard() {
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
           <div className="px-6 py-4 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
             <div className="flex items-center gap-2">
-              <Calendar size={18} className="text-[#79DBDC]" />
+              <Calendar size={18} className="text-[#237395]" />
               <h2 className="text-lg font-semibold text-gray-800">Activité récente</h2>
             </div>
           </div>
@@ -310,7 +310,7 @@ export default function Dashboard() {
                 <p className="text-2xl font-bold text-blue-600">{stats.unreadMessages}</p>
                 <button 
                   onClick={() => window.location.href = '/admin/messages'}
-                  className="text-xs text-[#79DBDC] hover:underline"
+                  className="text-xs text-[#237395] hover:underline"
                 >
                   Consulter
                 </button>
@@ -326,20 +326,20 @@ export default function Dashboard() {
                 <p className="text-2xl font-bold text-yellow-600">{stats.pendingBookings}</p>
                 <button 
                   onClick={() => window.location.href = '/admin/bookings'}
-                  className="text-xs text-[#79DBDC] hover:underline"
+                  className="text-xs text-[#237395] hover:underline"
                 >
                   Gérer
                 </button>
               </div>
             </div>
 
-            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-[#79DBDC10] to-transparent rounded-xl">
+            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-[#23739510] to-transparent rounded-xl">
               <div>
                 <p className="text-sm font-medium text-gray-700">Réservations aujourd'hui</p>
                 <p className="text-xs text-gray-400">Interventions prévues</p>
               </div>
               <div className="text-right">
-                <p className="text-2xl font-bold text-[#79DBDC]">{stats.todayBookings}</p>
+                <p className="text-2xl font-bold text-[#237395]">{stats.todayBookings}</p>
               </div>
             </div>
           </div>
@@ -352,7 +352,7 @@ export default function Dashboard() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <button
             onClick={() => window.location.href = '/admin/messages'}
-            className="flex items-center justify-center gap-2 p-3 bg-white rounded-xl border border-gray-200 text-gray-700 hover:border-[#79DBDC] hover:text-[#79DBDC] hover:shadow-md transition-all duration-200"
+            className="flex items-center justify-center gap-2 p-3 bg-white rounded-xl border border-gray-200 text-gray-700 hover:border-[#237395] hover:text-[#237395] hover:shadow-md transition-all duration-200"
           >
             <MessageSquare size={16} />
             <span className="text-sm font-medium">Voir messages</span>
@@ -360,7 +360,7 @@ export default function Dashboard() {
          
           <button
             onClick={() => window.location.href = '/admin/gallery'}
-            className="flex items-center justify-center gap-2 p-3 bg-white rounded-xl border border-gray-200 text-gray-700 hover:border-[#79DBDC] hover:text-[#79DBDC] hover:shadow-md transition-all duration-200"
+            className="flex items-center justify-center gap-2 p-3 bg-white rounded-xl border border-gray-200 text-gray-700 hover:border-[#237395] hover:text-[#237395] hover:shadow-md transition-all duration-200"
           >
             <Calendar size={16} />
             <span className="text-sm font-medium">Galerie</span>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { motion, AnimatePresence, Variants } from 'framer-motion';
 
 interface SplashScreenProps {
@@ -192,7 +192,7 @@ const chamoisTraverseVariants: Variants = {
           exit="exit"
           className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, #1a4a5a 0%, #237395 40%, #2a8ba8 70%, #3a9a9b 100%)',
+            background: 'linear-gradient(135deg, #237395 0%, #237395 40%, #237395 70%, #237395 100%)',
           }}
         >
           {/* Cercles décoratifs en arrière-plan */}
@@ -295,7 +295,7 @@ const chamoisTraverseVariants: Variants = {
             }}
           />
 
-          {/* Chamois qui saute en demi-cercle : droite → centre, puis centre → très à gauche */}
+          {/* Chamois qui saute en demi-cercle : droite à†’ centre, puis centre à†’ très à gauche */}
           <motion.div
             className="absolute z-10"
             initial={{ x: "120vw" }}

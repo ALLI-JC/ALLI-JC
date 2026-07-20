@@ -1,4 +1,4 @@
-/** @type {import('tailwindcss').Config} */
+﻿/** @type {import('tailwindcss').Config} */
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
@@ -11,7 +11,7 @@ export default {
         teal: {
           50: '#e8f9f9',
           100: '#c0f0f0',
-          200: '#79DBDC',
+          200: '#237395',
           300: '#4dcfcf',
           400: '#2bbfbf',
           500: '#1a9999',
@@ -27,3 +27,4 @@ export default {
   },
   plugins: [],
 };
+

@@ -1,4 +1,4 @@
-// pages/admin/Messages.tsx - Version adaptée à votre table
+﻿// pages/admin/Messages.tsx - Version adaptée à votre table
 import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
 import { 
@@ -217,7 +217,7 @@ export default function Messages() {
               onClick={() => setFilter(f.id)}
               className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${
                 filter === f.id 
-                  ? 'bg-[#79DBDC] text-white shadow-md' 
+                  ? 'bg-[#237395] text-white shadow-md' 
                   : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
               }`}
             >
@@ -232,7 +232,7 @@ export default function Messages() {
             placeholder="Rechercher..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="pl-10 pr-4 py-2 border border-gray-200 rounded-xl w-full sm:w-80 focus:outline-none focus:border-[#79DBDC] focus:ring-1 focus:ring-[#79DBDC]"
+            className="pl-10 pr-4 py-2 border border-gray-200 rounded-xl w-full sm:w-80 focus:outline-none focus:border-[#237395] focus:ring-1 focus:ring-[#237395]"
           />
         </div>
       </div>
@@ -241,7 +241,7 @@ export default function Messages() {
       <div className="space-y-3">
         {loading ? (
           <div className="bg-white rounded-xl p-12 text-center">
-            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#79DBDC] mx-auto"></div>
+            <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-[#237395] mx-auto"></div>
             <p className="mt-4 text-gray-500">Chargement...</p>
           </div>
         ) : filteredMessages.length === 0 ? (
@@ -269,7 +269,7 @@ export default function Messages() {
               onClick={() => setSelectedMessage(message)}
             >
               <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-gradient-to-br from-[#79DBDC] to-[#5BBFC0] rounded-xl flex items-center justify-center text-white shrink-0">
+                <div className="w-12 h-12 bg-gradient-to-br from-[#237395] to-[#237395] rounded-xl flex items-center justify-center text-white shrink-0">
                   <User size={20} />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -307,7 +307,7 @@ export default function Messages() {
             <div className="sticky top-0 bg-white p-6 border-b">
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-bold">Message de {selectedMessage.name}</h2>
-                <button onClick={() => setSelectedMessage(null)} className="text-gray-400 hover:text-gray-600 text-2xl">✕</button>
+                <button onClick={() => setSelectedMessage(null)} className="text-gray-400 hover:text-gray-600 text-2xl">àœ•</button>
               </div>
             </div>
             

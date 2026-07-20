@@ -1,4 +1,4 @@
-import { MapPin, Zap } from 'lucide-react';
+﻿import { MapPin, Zap } from 'lucide-react';
 import { motion, useReducedMotion } from 'framer-motion';
 
 const zones = [
@@ -38,7 +38,7 @@ export default function ZoneIntervention() {
     <section className="py-16 bg-[#eef7fa]" id="sec-zone">
       <div className="container mx-auto px-4 max-w-4xl">
 
-        {/* ── En-tête ── */}
+        {/* à”€à”€ En-tête à”€à”€ */}
         <motion.div
           className="text-center mb-10"
           variants={prefersReducedMotion ? {} : stagger}
@@ -47,7 +47,7 @@ export default function ZoneIntervention() {
           viewport={{ once: true, amount: 0.4 }}
         >
           <motion.div
-            className="inline-flex items-center gap-2 text-[#79DBDC] mb-2"
+            className="inline-flex items-center gap-2 text-[#237395] mb-2"
             variants={prefersReducedMotion ? {} : fadeUp}
           >
             <MapPin size={16} />
@@ -58,10 +58,10 @@ export default function ZoneIntervention() {
             className="text-3xl font-serif font-bold text-gray-800 mb-5"
             variants={prefersReducedMotion ? {} : fadeUp}
           >
-            Doubs & <span className="text-[#79DBDC]">Jura</span>
+            Doubs & <span className="text-[#237395]">Jura</span>
           </motion.h2>
 
-          {/* ── Intervention rapide — badge proéminent ── */}
+          {/* à”€à”€ Intervention rapide — badge proéminent à”€à”€ */}
           {/* <motion.div
             variants={prefersReducedMotion ? {} : fadeUp}
             className="inline-flex"
@@ -76,7 +76,7 @@ export default function ZoneIntervention() {
               }}
               transition={{ repeat: Infinity, duration: 2.6, ease: 'easeInOut' }}
               className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full text-white font-semibold text-sm"
-              style={{ background: 'linear-gradient(135deg, #79DBDC 0%, #5BBFC0 100%)' }}
+              style={{ background: 'linear-gradient(135deg, #237395 0%, #237395 100%)' }}
             >
               <motion.span
                 animate={prefersReducedMotion ? {} : { rotate: [0, -15, 15, -10, 0] }}
@@ -89,7 +89,7 @@ export default function ZoneIntervention() {
           </motion.div> */}
         </motion.div>
 
-        {/* ── Grid ── */}
+        {/* à”€à”€ Grid à”€à”€ */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
           {/* Image */}
@@ -133,7 +133,7 @@ export default function ZoneIntervention() {
                 <motion.span
                   key={zone}
                   variants={prefersReducedMotion ? {} : chipVariant}
-                  whileHover={prefersReducedMotion ? {} : { scale: 1.07, borderColor: '#79DBDC', color: '#5BBFC0' }}
+                  whileHover={prefersReducedMotion ? {} : { scale: 1.07, borderColor: '#237395', color: '#237395' }}
                   className="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs text-gray-700 cursor-default"
                   style={{ transition: 'color 0.2s, border-color 0.2s' }}
                 >

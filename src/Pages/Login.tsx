@@ -1,4 +1,4 @@
-  // pages/admin/Login.tsx
+﻿  // pages/admin/Login.tsx
   import { useState } from 'react';
   import { useNavigate } from 'react-router-dom';
   import { Mail, Lock, LogIn, AlertCircle, Sparkles, Eye, EyeOff } from 'lucide-react';
@@ -41,9 +41,9 @@
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 relative overflow-hidden">
         {/* Décorations de fond */}
         <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#79DBDC]/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#5BBFC0]/10 rounded-full blur-3xl"></div>
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#79DBDC]/5 rounded-full blur-3xl"></div>
+          <div className="absolute -top-40 -right-40 w-80 h-80 bg-[#237395]/10 rounded-full blur-3xl"></div>
+          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-[#237395]/10 rounded-full blur-3xl"></div>
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-[#237395]/5 rounded-full blur-3xl"></div>
         </div>
 
         <div className="max-w-md w-full mx-4 z-10">
@@ -51,7 +51,7 @@
           <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden border border-gray-100">
             
             {/* En-tête avec logo */}
-            <div className="bg-gradient-to-r from-[#79DBDC] to-[#5BBFC0] px-8 py-8 text-center relative overflow-hidden">
+            <div className="bg-gradient-to-r from-[#237395] to-[#237395] px-8 py-8 text-center relative overflow-hidden">
               <div className="absolute inset-0 bg-white/10"></div>
               <div className="relative">
                 {/* Logo */}
@@ -65,7 +65,7 @@
                         (e.target as HTMLImageElement).style.display = 'none';
                         const parent = (e.target as HTMLImageElement).parentElement;
                         if (parent) {
-                          parent.innerHTML = '<span class="text-[#79DBDC] font-bold text-3xl">JC</span>';
+                          parent.innerHTML = '<span class="text-[#237395] font-bold text-3xl">JC</span>';
                         }
                       }}
                     />
@@ -107,7 +107,7 @@
                   </label>
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Mail className="h-5 w-5 text-gray-400 group-focus-within:text-[#79DBDC] transition-colors" />
+                      <Mail className="h-5 w-5 text-gray-400 group-focus-within:text-[#237395] transition-colors" />
                     </div>
                     <input
                       id="email"
@@ -117,7 +117,7 @@
                       required
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#79DBDC] focus:ring-2 focus:ring-[#79DBDC]/20 transition-all duration-200"
+                      className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#237395] focus:ring-2 focus:ring-[#237395]/20 transition-all duration-200"
                       placeholder="admin@exemple.com"
                     />
                   </div>
@@ -130,7 +130,7 @@
                   </label>
                   <div className="relative group">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-[#79DBDC] transition-colors" />
+                      <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-[#237395] transition-colors" />
                     </div>
                     <input
                       id="password"
@@ -140,7 +140,7 @@
                       required
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
-                      className="block w-full pl-10 pr-10 py-2.5 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#79DBDC] focus:ring-2 focus:ring-[#79DBDC]/20 transition-all duration-200"
+                      className="block w-full pl-10 pr-10 py-2.5 border border-gray-200 rounded-xl text-gray-900 placeholder-gray-400 focus:outline-none focus:border-[#237395] focus:ring-2 focus:ring-[#237395]/20 transition-all duration-200"
                       placeholder="••••••••"
                     />
                     <button
@@ -156,7 +156,7 @@
                 {/* Options supplémentaires */}
                 <div className="flex items-center justify-between">
                   <label className="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-[#79DBDC] focus:ring-[#79DBDC]" />
+                    <input type="checkbox" className="w-4 h-4 rounded border-gray-300 text-[#237395] focus:ring-[#237395]" />
                     <span className="text-sm text-gray-600">Se souvenir de moi</span>
                   </label>
               
@@ -166,7 +166,7 @@
                 <button
                   type="submit"
                   disabled={loading}
-                  className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-[#79DBDC] to-[#5BBFC0] hover:from-[#5BBFC0] hover:to-[#79DBDC] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#79DBDC] transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-lg hover:shadow-xl"
+                  className="group relative w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent text-sm font-semibold rounded-xl text-white bg-gradient-to-r from-[#237395] to-[#237395] hover:from-[#237395] hover:to-[#237395] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#237395] transition-all duration-200 transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 shadow-lg hover:shadow-xl"
                 >
                   {loading ? (
                     <>

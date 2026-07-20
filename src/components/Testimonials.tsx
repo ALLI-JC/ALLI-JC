@@ -17,7 +17,7 @@ const testimonials = [
     initials: 'PB',
     name: 'Pierre B.',
     location: 'La Rivière-Drugeon',
-    text: '"Ménage de fin de bail réalisé avec soin. L\'état des lieux s\'est très bien passé grâce à lui."',
+    text: '"Ménage de fin de bail réalisé avec soin. L\'état des lieux s\'est très bien passé gràce à lui."',
   },
 ];
 
