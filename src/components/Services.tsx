@@ -329,8 +329,22 @@ export default function Services() {
           </motion.h2>
 
           <motion.p custom={2} variants={fadeInUp} className="text-base md:text-lg text-gray-500 max-w-2xl mx-auto">
-            Des prestations adaptées à tous vos besoins, pour les particuliers comme pour les professionnels
+            Des prestations adaptées à tous vos besoins, pour les particuliers comme pour les professionnels.
           </motion.p>
+
+          <motion.div
+            custom={3}
+            variants={fadeInUp}
+            className="mt-6 flex flex-col items-center justify-center gap-3"
+          >
+            <div className="inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-[#237395]/20 bg-[#237395]/10 px-4 py-2 text-sm font-semibold text-[#237395] shadow-sm">
+              <Shield size={16} className="text-[#237395]" />
+              Crédit d’impôt de 50 % pour les particuliers
+            </div>
+            <p className="max-w-2xl text-sm leading-relaxed text-gray-600">
+              Les prestations de service à la personne peuvent bénéficier de cette réduction, ce qui rend nos interventions plus accessibles.
+            </p>
+          </motion.div>
 
           {/* Badges de qualité */}
           <motion.div

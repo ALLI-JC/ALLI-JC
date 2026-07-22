@@ -185,6 +185,17 @@ export default function Hero({ onDevisClick }: HeroProps) {
             de votre intérieur comme de votre extérieur.
           </motion.p>
 
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="mt-5 inline-flex max-w-2xl flex-wrap items-center gap-2 rounded-2xl border border-[#D2B093]/40 bg-[#D2B093]/15 px-4 py-3 text-sm text-white/95 shadow-lg shadow-black/10 backdrop-blur"
+          >
+            <Sparkles size={16} className="text-[#D2B093]" />
+            <span className="font-semibold">Crédit d’impôt de 50 % pour les particuliers</span>
+            <span className="text-white/80">sur les prestations de service à la personne, sous conditions.</span>
+          </motion.div>
+
           {/* 3 BOUTONS D'ACCÈS RAPIDE - Style élégant */}
           <motion.div
             initial={{ opacity: 0, y: 14 }}
