@@ -141,7 +141,7 @@ export default function Contact() {
             phone: form.phone || 'Non renseigné',
             service: form.service || 'Non précisé',
             message: form.message,
-            to_email: 'jeancharlesbiernat@yahoo.com',
+            to_email: 'contact@lalliejc.fr',
             reply_to: form.email,
           },
         );
@@ -167,7 +167,7 @@ export default function Contact() {
   const infoRows = [
     { icon: MapPin, text: '7 rue de la gare, 25560 La Rivière-Drugeon', href: null },
     { icon: Phone, text: '06 07 97 90 74', href: 'tel:0607979074' },
-    { icon: Mail, text: 'jeancharlesbiernat@yahoo.com', href: 'mailto:jeancharlesbiernat@yahoo.com' },
+    { icon: Mail, text: 'contact@lalliejc.fr', href: 'mailto:contact@lalliejc.fr' },
     { icon: Clock, text: 'Lun–Sam  · 8h–19h', href: null },
   ];
 
