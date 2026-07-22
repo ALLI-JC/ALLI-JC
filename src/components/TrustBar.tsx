@@ -3,7 +3,7 @@ import { ShieldCheck, Clock, Star, Map } from 'lucide-react';
 const items = [
   { icon: ShieldCheck, label: 'Entreprise individuelle assurée' },
   { icon: Clock, label: 'Intervention rapide' },
-  { icon: Star, label: 'Devis gratuit sous 24h' },
+  { icon: Star, label: 'Crédit d’impôt de 50 % pour les particuliers' },
   { icon: Map, label: 'Doubs & Jura uniquement' },
 ];
 

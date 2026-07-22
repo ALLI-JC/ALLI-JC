@@ -14,7 +14,7 @@ const PILLARS = [
   },
   {
     title: 'Transparence',
-    description: 'Des tarifs clairs et sans surprise. Un simulateur de devis pour une première estimation, validé par un devis définitif gratuit après étude personnalisée de votre projet.',
+    description: 'Des tarifs clairs et sans surprise. Un simulateur de devis pour une première estimation, validé par un devis définitif gratuit après étude personnalisée de votre projet, avec un accompagnement clair sur le crédit d’impôt de 50 % pour les particuliers.',
     icon: FileSearch,
   },
 ];
