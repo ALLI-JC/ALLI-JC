@@ -1,4 +1,4 @@
-import { Send, Phone, Sparkles, Building2, Leaf } from 'lucide-react';
+import { Send, Phone, Sparkles, Building2, Leaf, Euro, BadgePercent } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import TrustBar from './TrustBar';
@@ -185,23 +185,65 @@ export default function Hero({ onDevisClick }: HeroProps) {
             de votre intérieur comme de votre extérieur.
           </motion.p>
 
+          {/* CARTE CRÉDIT D'IMPÔT - VERSION GRANDE ET ATTRACTIVE */}
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="mt-5 inline-flex max-w-2xl flex-wrap items-center gap-2 rounded-2xl border border-[#D2B093]/40 bg-[#D2B093]/15 px-4 py-3 text-sm text-white/95 shadow-lg shadow-black/10 backdrop-blur"
+            transition={{ duration: 0.5, delay: 0.12 }}
+            className="mt-6 overflow-hidden rounded-2xl border-2 border-[#D2B093] bg-gradient-to-r from-[#D2B093]/40 via-[#D2B093]/25 to-[#D2B093]/10 p-5 backdrop-blur-xl shadow-[0_18px_45px_rgba(0,0,0,0.3)] shadow-[#D2B093]/10"
           >
-            <Sparkles size={16} className="text-[#D2B093]" />
-            <span className="font-semibold">Crédit d’impôt de 50 % pour les particuliers</span>
-            <span className="text-white/80">sur les prestations de service à la personne, sous conditions.</span>
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+              {/* Icône avec badge */}
+              <div className="relative flex-shrink-0">
+                <div className="rounded-full bg-[#D2B093] p-3.5 shadow-lg shadow-[#D2B093]/40">
+                  <BadgePercent size={28} className="text-white" />
+                </div>
+                <div className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#F8E4C7] text-[8px] font-black text-[#0e2b38]">
+                  50%
+                </div>
+              </div>
+
+              {/* Contenu */}
+              <div className="flex-1">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-bold uppercase tracking-[0.12em] text-[#F8E4C7]">
+                    💰 Avantage fiscal
+                  </span>
+                  <span className="rounded-full bg-[#D2B093]/30 px-3 py-0.5 text-xs font-semibold text-white backdrop-blur-sm">
+                    Jusqu'à 50 %
+                  </span>
+                </div>
+                <h3 className="mt-1 text-xl font-bold text-white sm:text-2xl">
+                  Crédit d'impôt de 50 %
+                </h3>
+                <p className="mt-0.5 text-sm text-white/80">
+                  Réduction applicable sur nos prestations de service à la personne, sous conditions.
+                </p>
+              </div>
+
+      
+            </div>
+
+            {/* Barre de progression stylisée */}
+            <div className="mt-3 flex items-center gap-2">
+              <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-white/20">
+                <motion.div 
+                  className="h-full rounded-full bg-gradient-to-r from-[#D2B093] to-[#F8E4C7]"
+                  initial={{ width: 0 }}
+                  animate={{ width: '50%' }}
+                  transition={{ duration: 1.2, delay: 0.5 }}
+                />
+              </div>
+              <span className="text-[10px] font-bold text-[#D2B093]">50%</span>
+            </div>
           </motion.div>
 
           {/* 3 BOUTONS D'ACCÈS RAPIDE - Style élégant */}
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.15 }}
-            className="mt-6 flex flex-col gap-2 max-w-sm"
+            transition={{ duration: 0.5, delay: 0.18 }}
+            className="mt-5 flex flex-col gap-2 max-w-sm"
           >
             {QUICK_LINKS.map((link) => (
               <motion.a
@@ -230,7 +272,7 @@ export default function Hero({ onDevisClick }: HeroProps) {
           <motion.div
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.5, delay: 0.22 }}
             className="mt-8 flex flex-col gap-3 sm:flex-row"
           >
             <motion.button
