@@ -141,7 +141,7 @@ export default function Contact() {
             phone: form.phone || 'Non renseigné',
             service: form.service || 'Non précisé',
             message: form.message,
-            to_email: 'jeancharlesbiernat@yahoo.com',
+            to_email: 'contact@lalliejc.fr',
             reply_to: form.email,
           },
         );
