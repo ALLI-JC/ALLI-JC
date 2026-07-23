@@ -84,7 +84,7 @@ export default function Footer() {
 
       <footer
         className="relative overflow-hidden"
-        style={{ backgroundColor: '#237395', fontFamily: 'var(--font-roboto)' }}
+        style={{ backgroundColor: '#0e2b38', fontFamily: 'var(--font-roboto)' }}
       >
         {/* Blob décoratif discret */}
         <div

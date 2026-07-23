@@ -460,9 +460,9 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
   if (serviceType === 'terrasse') {
     detailLines.push({ label: `Base ${terraceLevel === 'low' ? 'Niveau faible' : 'Niveau élevé'}`, price: getTerrasseBase() });
     if (finish !== 'none') {
-      const finishLabel = finish === 'bois' ? `Bois (+3,5 €/m²)` : 
-                         finish === 'imperm' ? `Imperméabilisant (+3,5 €/m²)` : 
-                         `Effet mouillé (+6 €/m²)`;
+      const finishLabel = finish === 'bois' ? 'Bois' :
+        finish === 'imperm' ? 'Imperméabilisant' :
+          'Effet mouillé';
       detailLines.push({ label: `Finition ${finishLabel}`, price: getTerrasseFinish() });
     }
     if (discountAmount > 0) {
@@ -556,8 +556,8 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                         whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
                         whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
                         className={`flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 ${serviceType === item.key
-                            ? 'border-[#237395] bg-[#237395]/10 shadow-sm'
-                            : 'border-gray-200 bg-white hover:border-[#237395] hover:bg-gray-50'
+                          ? 'border-[#237395] bg-[#237395]/10 shadow-sm'
+                          : 'border-gray-200 bg-white hover:border-[#237395] hover:bg-gray-50'
                           }`}
                       >
                         <item.icon size={18} className={serviceType === item.key ? 'text-[#237395]' : 'text-gray-500'} />
@@ -681,8 +681,8 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                             <p className="text-xs uppercase tracking-[0.24em] text-gray-500 mb-3">Taille de haies / arbustes</p>
                             <div className="grid gap-3 sm:grid-cols-2">
                               {[
-                                { value: 'small' as HedgeHeight, label: 'Hauteur < 2 m', price: '6 €/m linéaire' },
-                                { value: 'large' as HedgeHeight, label: 'Hauteur > 2 m', price: '13 €/m linéaire' },
+                                { value: 'small' as HedgeHeight, label: 'Hauteur < 2 m' },
+                                { value: 'large' as HedgeHeight, label: 'Hauteur > 2 m' },
                               ].map((option) => (
                                 <label
                                   key={option.value}
@@ -691,7 +691,6 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                                 >
                                   <div>
                                     <div className="text-sm font-semibold text-gray-900">{option.label}</div>
-                                    <div className="text-xs text-gray-500">{option.price}</div>
                                   </div>
                                   <input
                                     type="radio"
@@ -726,7 +725,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                                 className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#237395] focus:outline-none"
                               >
                                 <option value="no">Non — déchets laissés sur place</option>
-                                <option value="yes">Oui — 30 €/m³</option>
+                                <option value="yes">Oui — évacuation des déchets verts</option>
                               </select>
                             </label>
                           </div>
@@ -784,8 +783,8 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                       <p className="text-xs uppercase tracking-[0.24em] text-gray-500 mb-3">Niveau de saleté</p>
                       <div className="grid gap-3 sm:grid-cols-2">
                         {[
-                          { value: 'low' as TerraceLevel, label: 'Niveau faible', subtitle: '6,5 €/m²' },
-                          { value: 'high' as TerraceLevel, label: 'Niveau élevé', subtitle: '12,5 €/m²' },
+                          { value: 'low' as TerraceLevel, label: 'Niveau faible' },
+                          { value: 'high' as TerraceLevel, label: 'Niveau élevé' },
                         ].map((option) => (
                           <label
                             key={option.value}
@@ -794,7 +793,6 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                           >
                             <div>
                               <div className="text-sm font-semibold text-gray-900">{option.label}</div>
-                              <div className="text-xs text-gray-500">{option.subtitle}</div>
                             </div>
                             <input
                               type="radio"
@@ -814,9 +812,9 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                       <div className="grid gap-3 sm:grid-cols-2">
                         {[
                           { value: 'none' as FinishOption, title: 'Aucune', description: 'Sans finition' },
-                          { value: 'bois' as FinishOption, title: 'Terrasse en bois', description: '+3,5 €/m²' },
-                          { value: 'imperm' as FinishOption, title: 'Imperméabilisant', description: '+3,5 €/m²' },
-                          { value: 'wet' as FinishOption, title: 'Effet mouillé', description: '+6 €/m²' },
+                          { value: 'bois' as FinishOption, title: 'Terrasse en bois', description: 'Finition bois' },
+                          { value: 'imperm' as FinishOption, title: 'Imperméabilisant', description: 'Finition imperméabilisante' },
+                          { value: 'wet' as FinishOption, title: 'Effet mouillé', description: 'Finition spéciale' },
                         ].map((option) => (
                           <label
                             key={option.value}
@@ -855,8 +853,8 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                       <p className="text-xs uppercase tracking-[0.24em] text-gray-500 mb-3">Niveau de saleté</p>
                       <div className="grid gap-3 sm:grid-cols-2">
                         {[
-                          { value: 'standard' as CleanLevel, label: 'Standard', subtitle: '4,5 €/m²' },
-                          { value: 'intensif' as CleanLevel, label: 'Intensif', subtitle: '6 €/m²' },
+                          { value: 'standard' as CleanLevel, label: 'Standard' },
+                          { value: 'intensif' as CleanLevel, label: 'Intensif' },
                         ].map((option) => (
                           <label
                             key={option.value}
@@ -865,7 +863,6 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                           >
                             <div>
                               <div className="text-sm font-semibold text-gray-900">{option.label}</div>
-                              <div className="text-xs text-gray-500">{option.subtitle}</div>
                             </div>
                             <input
                               type="radio"
@@ -880,18 +877,26 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                       </div>
                     </div>
 
-                    <label className="space-y-2 text-sm text-gray-700">
-                      Sanitaires / salle de bain
-                      <select
-                        value={sanitaryState}
-                        onChange={(e) => setSanitaryState(e.target.value as 'none' | 'standard' | 'sale')}
-                        className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#237395] focus:outline-none"
-                      >
-                        <option value="none">Aucun</option>
-                        <option value="standard">Standard — 60 €</option>
-                        <option value="sale">Très sale — 130 €</option>
-                      </select>
-                    </label>
+                    {serviceType === 'fin-de-bail' && (
+                      <div className="rounded-2xl bg-gray-50 p-4 border border-gray-200 text-sm text-gray-600 space-y-4">
+                        <p className="font-semibold text-gray-900">Électroménager</p>
+
+                        <label className="space-y-2 text-sm text-gray-700">
+                          Four
+                          <select
+                            value={ovenState}
+                            onChange={(e) => setOvenState(e.target.value as OvenState)}
+                            className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#237395] focus:outline-none"
+                          >
+                            <option value="none">Aucun</option>
+                            <option value="standard">Standard — 40 €</option>
+                            <option value="sale">Très sale — 90 €</option>
+                          </select>
+                        </label>
+
+                      </div>
+                    )}
+
 
                     <div className="rounded-2xl bg-gray-50 p-4 border border-gray-200 text-sm text-gray-600">
                       <p className="font-semibold text-gray-900">Vitres & baies</p>
@@ -932,7 +937,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
             </motion.div>
 
             <motion.div
-              className="bg-gradient-to-br from-[#73d5d6] to-[#237395] rounded-3xl shadow-xl overflow-hidden"
+              className="bg-gradient-to-br from-[#237395] to-[#1a5a78] rounded-3xl shadow-xl overflow-hidden"
               variants={prefersReducedMotion ? {} : cardVariants}
             >
               <div className="p-6 text-white">
