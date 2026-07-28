@@ -1,4 +1,4 @@
-import { Send, Phone, Sparkles, Building2, Leaf } from 'lucide-react';
+﻿import { Send, Phone, Sparkles, Building2, Leaf } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion';
 import TrustBar from './TrustBar';
@@ -139,7 +139,7 @@ export default function Hero({ onDevisClick }: HeroProps) {
               }}
               className={`h-1 rounded-full transition-all duration-300 ${
                 index === activeIndex 
-                  ? 'w-8 bg-[#D2B093]' 
+                  ? 'w-8 bg-[var(--secondary)]' 
                   : 'w-4 bg-white/40 hover:bg-white/60'
               }`}
               aria-label={`Voir slide ${index + 1}`}
@@ -163,7 +163,7 @@ export default function Hero({ onDevisClick }: HeroProps) {
             style={{ fontFamily: 'var(--font-palatino)' }}
           >
             Prendre soin de
-            <span className="block text-[#D2B093]">votre habitat</span>
+            <span className="block text-[var(--secondary)]">votre habitat</span>
           </motion.h1>
 
           {/* Sous-titre */}
@@ -193,12 +193,12 @@ export default function Hero({ onDevisClick }: HeroProps) {
                 className="group relative overflow-hidden rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 backdrop-blur-sm transition-all hover:bg-white/20 hover:border-white/30 hover:shadow-lg hover:shadow-black/20"
               >
                 <div className="flex items-start gap-2.5">
-                  <link.icon size={16} className="mt-0.5 text-[#D2B093] shrink-0" />
+                  <link.icon size={16} className="mt-0.5 text-[var(--secondary)] shrink-0" />
                   <div>
                     <span className="block text-xs font-medium text-white/90 group-hover:text-white">
                       {link.label}
                     </span>
-                    <span className="mt-0.5 block text-[9px] font-medium uppercase tracking-wider text-[#D2B093]">
+                    <span className="mt-0.5 block text-[9px] font-medium uppercase tracking-wider text-[var(--secondary)]">
                       {link.tag}
                     </span>
                   </div>
@@ -230,7 +230,7 @@ export default function Hero({ onDevisClick }: HeroProps) {
               whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
               className="inline-flex items-center justify-center gap-2.5 rounded-full border border-white/30 bg-white/10 px-8 py-4 text-sm font-medium text-white backdrop-blur-sm transition-all hover:bg-white/20 hover:border-white/40"
             >
-              <Phone size={16} className="text-[#D2B093]" />
+              <Phone size={16} className="text-[var(--secondary)]" />
               06 07 97 90 74
             </motion.a>
           </motion.div>

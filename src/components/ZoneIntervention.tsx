@@ -47,7 +47,7 @@ export default function ZoneIntervention() {
           viewport={{ once: true, amount: 0.4 }}
         >
           <motion.div
-            className="inline-flex items-center gap-2 text-[#237395] mb-2"
+            className="inline-flex items-center gap-2 text-[var(--primary)] mb-2"
             variants={prefersReducedMotion ? {} : fadeUp}
           >
             <MapPin size={16} />
@@ -58,7 +58,7 @@ export default function ZoneIntervention() {
             className="text-3xl font-serif font-bold text-gray-800 mb-5"
             variants={prefersReducedMotion ? {} : fadeUp}
           >
-            Doubs & <span className="text-[#237395]">Jura</span>
+            Doubs & <span className="text-[var(--primary)]">Jura</span>
           </motion.h2>
 
           {/* à”€à”€ Intervention rapide — badge proéminent à”€à”€ */}
@@ -76,7 +76,7 @@ export default function ZoneIntervention() {
               }}
               transition={{ repeat: Infinity, duration: 2.6, ease: 'easeInOut' }}
               className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full text-white font-semibold text-sm"
-              style={{ background: 'linear-gradient(135deg, #237395 0%, #237395 100%)' }}
+              style={{ background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%)' }}
             >
               <motion.span
                 animate={prefersReducedMotion ? {} : { rotate: [0, -15, 15, -10, 0] }}
@@ -133,7 +133,7 @@ export default function ZoneIntervention() {
                 <motion.span
                   key={zone}
                   variants={prefersReducedMotion ? {} : chipVariant}
-                  whileHover={prefersReducedMotion ? {} : { scale: 1.07, borderColor: '#237395', color: '#237395' }}
+                  whileHover={prefersReducedMotion ? {} : { scale: 1.07, borderColor: 'var(--primary)', color: 'var(--primary)' }}
                   className="px-3 py-1 bg-white border border-gray-200 rounded-full text-xs text-gray-700 cursor-default"
                   style={{ transition: 'color 0.2s, border-color 0.2s' }}
                 >
@@ -147,3 +147,4 @@ export default function ZoneIntervention() {
     </section>
   );
 }
+

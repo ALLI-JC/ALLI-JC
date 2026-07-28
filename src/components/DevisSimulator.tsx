@@ -494,7 +494,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
       className=""
       id="sec-devis"
     >
-      <div className="absolute top-0 right-0 w-96 h-96 bg-[#237395]/5 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--primary)]/5 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#F5DEB3]/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -510,7 +510,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
             variants={prefersReducedMotion ? {} : fadeUpVariants}
           >
             Simulateur de devis
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#237395] to-[#237395]">
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--primary)]">
               pour votre prestation
             </span>
           </motion.h2>
@@ -535,7 +535,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
               className="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden"
               variants={prefersReducedMotion ? {} : cardVariants}
             >
-              <div className="bg-gradient-to-r from-[#237395] to-[#237395] px-6 py-6 text-white">
+              <div className="bg-gradient-to-r from-[var(--primary)] to-[var(--primary)] px-6 py-6 text-white">
                 <h3 className="text-xl font-bold">Simulateur de devis</h3>
                 <p className="text-white/85 text-sm mt-1">
                   Choisissez votre prestation, ajustez la surface et activez les options.
@@ -556,11 +556,11 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                         whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
                         whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
                         className={`flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 ${serviceType === item.key
-                          ? 'border-[#237395] bg-[#237395]/10 shadow-sm'
-                          : 'border-gray-200 bg-white hover:border-[#237395] hover:bg-gray-50'
+                          ? 'border-[var(--primary)] bg-[var(--primary)]/10 shadow-sm'
+                          : 'border-gray-200 bg-white hover:border-[var(--primary)] hover:bg-gray-50'
                           }`}
                       >
-                        <item.icon size={18} className={serviceType === item.key ? 'text-[#237395]' : 'text-gray-500'} />
+                        <item.icon size={18} className={serviceType === item.key ? 'text-[var(--primary)]' : 'text-gray-500'} />
                         <div>
                           <span className={`block font-semibold ${serviceType === item.key ? 'text-[#0e2b38]' : 'text-gray-700'}`}>
                             {item.label}
@@ -601,7 +601,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                             <p className="text-xs uppercase tracking-[0.24em] text-gray-500">{surfaceMeta.label}</p>
                             <h4 className="mt-2 text-lg font-semibold text-gray-900">{surface} {surfaceMeta.unit}</h4>
                           </div>
-                          <span className="rounded-full bg-[#237395]/10 px-3 py-1 text-xs font-semibold text-[#237395]">
+                          <span className="rounded-full bg-[var(--primary)]/10 px-3 py-1 text-xs font-semibold text-[var(--primary)]">
                             {surfaceMeta.unit}
                           </span>
                         </div>
@@ -614,7 +614,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                             step={5}
                             value={surface}
                             onChange={(e) => setSurface(Number(e.target.value))}
-                            className="w-full h-2 rounded-full accent-[#237395] bg-gray-200"
+                            className="w-full h-2 rounded-full accent-[var(--primary)] bg-gray-200"
                           />
                           <div className="grid grid-cols-3 text-xs text-gray-500">
                             <span>{surfaceMeta.min} {surfaceMeta.unit}</span>
@@ -686,7 +686,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                               ].map((option) => (
                                 <label
                                   key={option.value}
-                                  className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 ${hedgeHeight === option.value ? 'border-[#237395] bg-[#237395]/10' : 'border-gray-200 bg-white'
+                                  className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 ${hedgeHeight === option.value ? 'border-[var(--primary)] bg-[var(--primary)]/10' : 'border-gray-200 bg-white'
                                     }`}
                                 >
                                   <div>
@@ -698,7 +698,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                                     value={option.value}
                                     checked={hedgeHeight === option.value}
                                     onChange={() => setHedgeHeight(option.value)}
-                                    className="h-4 w-4 accent-[#237395]"
+                                    className="h-4 w-4 accent-[var(--primary)]"
                                   />
                                 </label>
                               ))}
@@ -714,7 +714,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                                 min={0}
                                 max={200}
                                 onChange={(e) => setHedgeMeters(Number(e.target.value))}
-                                className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#237395] focus:outline-none"
+                                className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
                               />
                             </label>
                             <label className="space-y-2 text-sm text-gray-700">
@@ -722,7 +722,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                               <select
                                 value={greenWaste ? 'yes' : 'no'}
                                 onChange={(e) => setGreenWaste(e.target.value === 'yes')}
-                                className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#237395] focus:outline-none"
+                                className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
                               >
                                 <option value="no">Non — déchets laissés sur place</option>
                                 <option value="yes">Oui — évacuation des déchets verts</option>
@@ -738,7 +738,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                                 min={0}
                                 step={0.5}
                                 onChange={(e) => setGreenWasteVolume(Number(e.target.value))}
-                                className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#237395] focus:outline-none"
+                                className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
                               />
                             </label>
                           )}
@@ -753,7 +753,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                         <p className="text-xs uppercase tracking-[0.24em] text-gray-500">{surfaceMeta.label}</p>
                         <h4 className="mt-2 text-lg font-semibold text-gray-900">{surface} {surfaceMeta.unit}</h4>
                       </div>
-                      <span className="rounded-full bg-[#237395]/10 px-3 py-1 text-xs font-semibold text-[#237395]">
+                      <span className="rounded-full bg-[var(--primary)]/10 px-3 py-1 text-xs font-semibold text-[var(--primary)]">
                         {surfaceMeta.unit}
                       </span>
                     </div>
@@ -766,7 +766,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                         step={5}
                         value={surface}
                         onChange={(e) => setSurface(Number(e.target.value))}
-                        className="w-full h-2 rounded-full accent-[#237395] bg-gray-200"
+                        className="w-full h-2 rounded-full accent-[var(--primary)] bg-gray-200"
                       />
                       <div className="grid grid-cols-3 text-xs text-gray-500">
                         <span>{surfaceMeta.min} {surfaceMeta.unit}</span>
@@ -788,7 +788,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                         ].map((option) => (
                           <label
                             key={option.value}
-                            className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 ${terraceLevel === option.value ? 'border-[#237395] bg-[#237395]/10' : 'border-gray-200 bg-white'
+                            className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 ${terraceLevel === option.value ? 'border-[var(--primary)] bg-[var(--primary)]/10' : 'border-gray-200 bg-white'
                               }`}
                           >
                             <div>
@@ -800,7 +800,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                               value={option.value}
                               checked={terraceLevel === option.value}
                               onChange={() => setTerraceLevel(option.value)}
-                              className="h-4 w-4 accent-[#237395]"
+                              className="h-4 w-4 accent-[var(--primary)]"
                             />
                           </label>
                         ))}
@@ -818,7 +818,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                         ].map((option) => (
                           <label
                             key={option.value}
-                            className={`flex cursor-pointer flex-col gap-2 rounded-2xl border p-4 ${finish === option.value ? 'border-[#237395] bg-[#237395]/10' : 'border-gray-200 bg-white'
+                            className={`flex cursor-pointer flex-col gap-2 rounded-2xl border p-4 ${finish === option.value ? 'border-[var(--primary)] bg-[var(--primary)]/10' : 'border-gray-200 bg-white'
                               }`}
                           >
                             <div className="flex items-center justify-between">
@@ -829,7 +829,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                                 value={option.value}
                                 checked={finish === option.value}
                                 onChange={() => setFinish(option.value)}
-                                className="h-4 w-4 accent-[#237395]"
+                                className="h-4 w-4 accent-[var(--primary)]"
                               />
                             </div>
                             <span className="text-xs text-gray-500">{option.description}</span>
@@ -858,7 +858,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                         ].map((option) => (
                           <label
                             key={option.value}
-                            className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 ${cleanLevel === option.value ? 'border-[#237395] bg-[#237395]/10' : 'border-gray-200 bg-white'
+                            className={`flex cursor-pointer items-center justify-between gap-3 rounded-2xl border p-4 ${cleanLevel === option.value ? 'border-[var(--primary)] bg-[var(--primary)]/10' : 'border-gray-200 bg-white'
                               }`}
                           >
                             <div>
@@ -870,7 +870,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                               value={option.value}
                               checked={cleanLevel === option.value}
                               onChange={() => setCleanLevel(option.value)}
-                              className="h-4 w-4 accent-[#237395]"
+                              className="h-4 w-4 accent-[var(--primary)]"
                             />
                           </label>
                         ))}
@@ -886,11 +886,36 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                           <select
                             value={ovenState}
                             onChange={(e) => setOvenState(e.target.value as OvenState)}
-                            className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#237395] focus:outline-none"
+                            className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
                           >
                             <option value="none">Aucun</option>
                             <option value="standard">Standard — 40 €</option>
                             <option value="sale">Très sale — 90 €</option>
+                          </select>
+                        </label>
+
+                        <label className="space-y-2 text-sm text-gray-700">
+                          Frigo
+                          <select
+                            value={fridgeState}
+                            onChange={(e) => setFridgeState(e.target.value as FridgeState)}
+                            className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
+                          >
+                            <option value="none">Aucun</option>
+                            <option value="standard">Standard — 30 €</option>
+                            <option value="sale">Très sale — 60 €</option>
+                          </select>
+                        </label>
+
+                        <label className="space-y-2 text-sm text-gray-700">
+                          Micro-ondes
+                          <select
+                            value={microwave ? 'yes' : 'none'}
+                            onChange={(e) => setMicrowave(e.target.value === 'yes')}
+                            className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
+                          >
+                            <option value="none">Aucun</option>
+                            <option value="yes">Présent — 15 €</option>
                           </select>
                         </label>
 
@@ -909,7 +934,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                               value={windowCounts[field.key]}
                               min={0}
                               onChange={(e) => setWindowCounts({ ...windowCounts, [field.key]: Number(e.target.value) })}
-                              className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#237395] focus:outline-none"
+                              className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
                             />
                           </label>
                         ))}
@@ -919,7 +944,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                           type="checkbox"
                           checked={stageWindows}
                           onChange={(e) => setStageWindows(e.target.checked)}
-                          className="h-4 w-4 rounded border-gray-300 text-[#237395]"
+                          className="h-4 w-4 rounded border-gray-300 text-[var(--primary)]"
                         />
                         À l'étage (+2 €/vitre)
                       </label>
@@ -937,7 +962,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
             </motion.div>
 
             <motion.div
-              className="bg-gradient-to-br from-[#237395] to-[#1a5a78] rounded-3xl shadow-xl overflow-hidden"
+              className="bg-gradient-to-br from-[var(--primary)] to-[#1a5a78] rounded-3xl shadow-xl overflow-hidden"
               variants={prefersReducedMotion ? {} : cardVariants}
             >
               <div className="p-6 text-white">
@@ -1028,7 +1053,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                 whileInView="visible"
                 viewport={{ once: true }}
               >
-                <CheckCircle size={16} className="text-[#237395]" />
+                <CheckCircle size={16} className="text-[var(--primary)]" />
                 <span>{text}</span>
               </motion.div>
             ))}

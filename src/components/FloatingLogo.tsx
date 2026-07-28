@@ -156,7 +156,7 @@ export default function FloatingLogoSpin({
       }}
     >
       <motion.div
-        className="relative cursor-pointer rounded-full overflow-hidden bg-gradient-to-br from-[#0e2b38] via-[#237395] to-[#237395] shadow-lg"
+        className="relative cursor-pointer rounded-full overflow-hidden bg-gradient-to-br from-[#0e2b38] via-[var(--primary)] to-[var(--primary)] shadow-lg"
         style={{
           width: size,
           height: size,
@@ -275,7 +275,7 @@ export default function FloatingLogoSpin({
             transition={{ duration: 0.3 }}
           >
             <span className="flex items-center gap-1.5">
-              <span className="text-[#237395] text-sm">à†‘</span>
+              <span className="text-[var(--primary)] text-sm">à†‘</span>
               Retour en haut
             </span>
           </motion.div>
@@ -294,3 +294,4 @@ export default function FloatingLogoSpin({
     </motion.div>
   );
 }
+

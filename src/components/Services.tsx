@@ -24,7 +24,7 @@ const services = [
     mention: 'Résultat immédiat avec traitement anti-mousse inclus',
     features: ['Nettoyage écologique', 'Résultat immédiat', 'Prévention des mousses'],
     category: 'Entretien Extérieur & Espaces Verts',
-    color: 'from-[#237395] to-[#237395]' // Changé en bleu lagon
+    color: 'from-[var(--primary)] to-[var(--primary)]' // Changé en bleu lagon
   },
   {
     icon: Leaf,
@@ -33,7 +33,7 @@ const services = [
     mention: 'Collecte et évacuation complète des déchets verts',
     features: ['Élagage et taille', 'Entretien régulier', 'Collecte déchets verts'],
     category: 'Entretien Extérieur & Espaces Verts',
-    color: 'from-[#237395] to-[#237395]' // Changé en bleu lagon
+    color: 'from-[var(--primary)] to-[var(--primary)]' // Changé en bleu lagon
   },
   {
     icon: Droplets,
@@ -42,7 +42,7 @@ const services = [
     mention: 'Intervention en hauteur jusqu\'au R+2 avec matériel professionnel',
     features: ['Hauteur jusqu\'au R+2', 'Matériel professionnel', 'Sans traces'],
     category: 'Entretien Extérieur & Espaces Verts',
-    color: 'from-[#237395] to-[#237395]' // Changé en bleu lagon
+    color: 'from-[var(--primary)] to-[var(--primary)]' // Changé en bleu lagon
   },
   {
     icon: Sparkles,
@@ -51,7 +51,7 @@ const services = [
     mention: 'Produits écologiques et linge de maison inclus',
     features: ['Linge de maison fourni', 'Aération des pièces', 'Produits écologiques'],
     category: 'Entretien Extérieur & Espaces Verts',
-    color: 'from-[#237395] to-[#237395]' // Changé en bleu lagon
+    color: 'from-[var(--primary)] to-[var(--primary)]' // Changé en bleu lagon
   },
   {
     icon: Building2,
@@ -60,7 +60,7 @@ const services = [
     mention: 'Conforme aux normes en vigueur — satisfaction garantie',
     features: ['Conforme aux normes', 'Rapidité d\'exécution', 'Garantie satisfait'],
     category: 'Nettoyages Spécifiques & Remise en État',
-    color: 'from-[#237395] to-[#237395]' // Changé en bleu lagon
+    color: 'from-[var(--primary)] to-[var(--primary)]' // Changé en bleu lagon
   },
   {
     icon: Home,
@@ -69,7 +69,7 @@ const services = [
     mention: 'Dépoussiérage complet et évacuation des gravats',
     features: ['Dépoussiérage intensif', 'Lavage des sols', 'Évacuation gravats'],
     category: 'Nettoyages Spécifiques & Remise en État',
-    color: 'from-[#237395] to-[#237395]' // Changé en bleu lagon
+    color: 'from-[var(--primary)] to-[var(--primary)]' // Changé en bleu lagon
   },
   {
     icon: Wrench,
@@ -78,7 +78,7 @@ const services = [
     mention: 'Matériel fourni et déplacement inclus',
     features: ['Matériel fourni', 'Déplacement inclus', 'Rapidité d\'intervention'],
     category: 'Nettoyages Spécifiques & Remise en État',
-    color: 'from-[#237395] to-[#237395]' // Changé en bleu lagon
+    color: 'from-[var(--primary)] to-[var(--primary)]' // Changé en bleu lagon
   },
   {
     icon: Store,
@@ -87,7 +87,7 @@ const services = [
     mention: 'Horaires flexibles et intervention discrète',
     features: ['Horaires flexibles', 'Intervention discrète', 'Produits professionnels'],
     category: 'Services Professionnels & Copropriétés',
-    color: 'from-[#237395] to-[#237395]' // Changé en bleu lagon
+    color: 'from-[var(--primary)] to-[var(--primary)]' // Changé en bleu lagon
   },
 ];
 
@@ -138,7 +138,7 @@ interface ServiceCardProps {
   color?: string;
 }
 
-function ServiceCard({ icon: Icon, name, desc, mention, features, index, color = 'from-[#237395] to-[#237395]' }: ServiceCardProps) {
+function ServiceCard({ icon: Icon, name, desc, mention, features, index, color = 'from-[var(--primary)] to-[var(--primary)]' }: ServiceCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const simulatorLink = getSimulatorLink();
 
@@ -154,14 +154,14 @@ function ServiceCard({ icon: Icon, name, desc, mention, features, index, color =
     >
       {/* Background gradient animé au hover */}
       <motion.div
-        className="absolute inset-0 bg-gradient-to-br from-[#237395]/5 via-transparent to-transparent pointer-events-none"
+        className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/5 via-transparent to-transparent pointer-events-none"
         animate={{ opacity: isHovered ? 1 : 0 }}
         transition={{ duration: 0.5 }}
       />
 
       {/* Bande décorative en haut */}
       <motion.div
-        className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#237395] to-[#237395]"
+        className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[var(--primary)] to-[var(--primary)]"
         initial={{ scaleX: 0 }}
         animate={{ scaleX: isHovered ? 1 : 0 }}
         transition={{ duration: 0.4, ease: 'easeOut' }}
@@ -171,7 +171,7 @@ function ServiceCard({ icon: Icon, name, desc, mention, features, index, color =
       {/* Icône avec effet de glow */}
       <div className="relative mb-4">
         <motion.div
-          className="absolute inset-0 bg-gradient-to-br from-[#237395]/20 to-[#237395]/20 rounded-2xl blur-2xl pointer-events-none"
+          className="absolute inset-0 bg-gradient-to-br from-[var(--primary)]/20 to-[var(--primary)]/20 rounded-2xl blur-2xl pointer-events-none"
           animate={{
             opacity: isHovered ? 1 : 0,
             scale: isHovered ? 1.2 : 0.8
@@ -206,9 +206,9 @@ function ServiceCard({ icon: Icon, name, desc, mention, features, index, color =
       </p>
 
       {/* Mention principale */}
-      <div className="flex items-start gap-2 px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-[#237395]/10 to-[#237395]/5 border border-[#237395]/15 mb-3">
-        <Shield size={13} className="text-[#237395] flex-shrink-0 mt-0.5" />
-        <span className="text-xs text-[#237395] leading-snug font-medium">
+      <div className="flex items-start gap-2 px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-[var(--primary)]/10 to-[var(--primary)]/5 border border-[var(--primary)]/15 mb-3">
+        <Shield size={13} className="text-[var(--primary)] flex-shrink-0 mt-0.5" />
+        <span className="text-xs text-[var(--primary)] leading-snug font-medium">
           {mention}
         </span>
       </div>
@@ -231,7 +231,7 @@ function ServiceCard({ icon: Icon, name, desc, mention, features, index, color =
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.06, duration: 0.25 }}
               >
-                <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[#237395] to-[#237395] flex-shrink-0" />
+                <div className="w-1.5 h-1.5 rounded-full bg-gradient-to-r from-[var(--primary)] to-[var(--primary)] flex-shrink-0" />
                 <span>{feature}</span>
               </motion.div>
             ))}
@@ -285,17 +285,17 @@ export default function Services() {
     <section className="relative py-20 md:py-28 overflow-hidden bg-gradient-to-b from-[#eef5f7] to-white" id="sec-services">
 
       {/* Éléments décoratifs */}
-      <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[#237395] to-transparent opacity-30" />
+      <div className="absolute top-0 left-0 w-full h-0.5 bg-gradient-to-r from-transparent via-[var(--primary)] to-transparent opacity-30" />
 
       {/* Cercles décoratifs flous */}
-      <div className="absolute -top-60 -right-60 w-96 h-96 bg-[#237395]/5 rounded-full blur-3xl" />
+      <div className="absolute -top-60 -right-60 w-96 h-96 bg-[var(--primary)]/5 rounded-full blur-3xl" />
       <div className="absolute -bottom-60 -left-60 w-96 h-96 bg-[#F5DEB3]/10 rounded-full blur-3xl" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[#237395]/3 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[var(--primary)]/3 rounded-full blur-3xl pointer-events-none" />
 
       {/* Petits points décoratifs */}
-      <div className="absolute top-20 right-20 w-2 h-2 bg-[#237395]/30 rounded-full hidden lg:block" />
-      <div className="absolute bottom-20 left-20 w-3 h-3 bg-[#237395]/20 rounded-full hidden lg:block" />
-      <div className="absolute top-1/2 right-10 w-1.5 h-1.5 bg-[#237395]/20 rounded-full hidden lg:block" />
+      <div className="absolute top-20 right-20 w-2 h-2 bg-[var(--primary)]/30 rounded-full hidden lg:block" />
+      <div className="absolute bottom-20 left-20 w-3 h-3 bg-[var(--primary)]/20 rounded-full hidden lg:block" />
+      <div className="absolute top-1/2 right-10 w-1.5 h-1.5 bg-[var(--primary)]/20 rounded-full hidden lg:block" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
 
@@ -311,9 +311,9 @@ export default function Services() {
           <motion.div
             custom={0}
             variants={fadeInUp}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#237395]/10 border border-[#237395]/20 text-xs font-medium text-[#237395] tracking-wider uppercase mb-4"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[var(--primary)]/10 border border-[var(--primary)]/20 text-xs font-medium text-[var(--primary)] tracking-wider uppercase mb-4"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#237395]" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--primary)]" />
             Nos prestations
           </motion.div>
 
@@ -323,7 +323,7 @@ export default function Services() {
             className="font-serif text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-4 leading-tight"
           >
             Des services sur mesure
-            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[#237395] to-[#237395]">
+            <span className="block text-transparent bg-clip-text bg-gradient-to-r from-[var(--primary)] to-[var(--primary)]">
               pour votre habitat
             </span>
           </motion.h2>
@@ -337,8 +337,8 @@ export default function Services() {
             variants={fadeInUp}
             className="mt-6 flex flex-col items-center justify-center gap-3"
           >
-            <div className="inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-[#237395]/20 bg-[#237395]/10 px-4 py-2 text-sm font-semibold text-[#237395] shadow-sm">
-              <Shield size={16} className="text-[#237395]" />
+            <div className="inline-flex flex-wrap items-center justify-center gap-2 rounded-full border border-[var(--primary)]/20 bg-[var(--primary)]/10 px-4 py-2 text-sm font-semibold text-[var(--primary)] shadow-sm">
+              <Shield size={16} className="text-[var(--primary)]" />
               Crédit d’impôt de 50 % pour les particuliers
             </div>
             <p className="max-w-2xl text-sm leading-relaxed text-gray-600">
@@ -362,7 +362,7 @@ export default function Services() {
                 key={i}
                 className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-white border border-gray-100/80 text-xs font-medium text-gray-600 shadow-sm hover:shadow-md transition-shadow"
               >
-                <badge.icon size={14} className="text-[#237395]" />
+                <badge.icon size={14} className="text-[var(--primary)]" />
                 {badge.label}
               </span>
             ))}
@@ -390,8 +390,8 @@ export default function Services() {
                   transition={{ duration: 0.5 }}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="p-2 rounded-xl bg-[#237395]/10">
-                      <category.icon size={20} className="text-[#237395]" />
+                    <div className="p-2 rounded-xl bg-[var(--primary)]/10">
+                      <category.icon size={20} className="text-[var(--primary)]" />
                     </div>
                     <h3
                       className="text-xl md:text-2xl font-bold text-gray-800"
@@ -400,7 +400,7 @@ export default function Services() {
                       {category.title}
                     </h3>
                   </div>
-                  <span className="inline-flex items-center rounded-full bg-white border border-[#237395]/20 px-3.5 py-1.5 text-xs font-medium text-[#237395] shadow-sm">
+                  <span className="inline-flex items-center rounded-full bg-white border border-[var(--primary)]/20 px-3.5 py-1.5 text-xs font-medium text-[var(--primary)] shadow-sm">
                     {category.target}
                   </span>
                 </motion.div>
@@ -443,3 +443,4 @@ export default function Services() {
     </section>
   );
 }
+

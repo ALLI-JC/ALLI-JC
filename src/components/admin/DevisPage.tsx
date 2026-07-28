@@ -123,7 +123,7 @@ export default function DevisPage() {
       </div>
 
       {status && (
-        <div className="rounded-2xl border border-[#237395]/20 bg-[#f6feff] px-4 py-3 text-sm text-[#237395]">
+        <div className="rounded-2xl border border-[var(--primary)]/20 bg-[#f6feff] px-4 py-3 text-sm text-[var(--primary)]">
           {status}
         </div>
       )}
@@ -132,7 +132,7 @@ export default function DevisPage() {
         <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <FileText size={18} className="text-[#237395]" />
+              <FileText size={18} className="text-[var(--primary)]" />
               <h2 className="text-lg font-semibold text-gray-900">Liste des tarifs</h2>
             </div>
             <button
@@ -141,7 +141,7 @@ export default function DevisPage() {
                 setDraftPricing(emptyPricingDraft())
                 setEditingPricingId(null)
               }}
-              className="inline-flex items-center gap-2 rounded-full bg-[#237395] px-3 py-2 text-sm font-semibold text-white"
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--primary)] px-3 py-2 text-sm font-semibold text-white"
             >
               <Plus size={15} />
               Ajouter
@@ -170,7 +170,7 @@ export default function DevisPage() {
                     <button
                       type="button"
                       onClick={() => startEditPricing(row)}
-                      className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-[#237395]"
+                      className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-[var(--primary)]"
                     >
                       <Pencil size={14} />
                       Modifier
@@ -201,7 +201,7 @@ export default function DevisPage() {
                 value={draftPricing.key}
                 onChange={(e) => setDraftPricing((prev) => ({ ...prev, key: e.target.value }))}
                 placeholder="ex: hedgeSmallRate"
-                className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#237395] focus:outline-none"
+                className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
               />
             </label>
             <label className="block text-sm text-gray-700">
@@ -210,7 +210,7 @@ export default function DevisPage() {
                 value={draftPricing.label}
                 onChange={(e) => setDraftPricing((prev) => ({ ...prev, label: e.target.value }))}
                 placeholder="ex: Haie petite"
-                className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#237395] focus:outline-none"
+                className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
               />
             </label>
             <div className="grid gap-3 sm:grid-cols-2">
@@ -221,7 +221,7 @@ export default function DevisPage() {
                   step="0.1"
                   value={draftPricing.value}
                   onChange={(e) => setDraftPricing((prev) => ({ ...prev, value: Number(e.target.value) || 0 }))}
-                  className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#237395] focus:outline-none"
+                  className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
                 />
               </label>
               <label className="block text-sm text-gray-700">
@@ -230,7 +230,7 @@ export default function DevisPage() {
                   value={draftPricing.unit}
                   onChange={(e) => setDraftPricing((prev) => ({ ...prev, unit: e.target.value }))}
                   placeholder="€/m²"
-                  className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#237395] focus:outline-none"
+                  className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
                 />
               </label>
             </div>
@@ -240,7 +240,7 @@ export default function DevisPage() {
                 value={draftPricing.category}
                 onChange={(e) => setDraftPricing((prev) => ({ ...prev, category: e.target.value }))}
                 placeholder="jardinage"
-                className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#237395] focus:outline-none"
+                className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
               />
             </label>
             <label className="block text-sm text-gray-700">
@@ -249,13 +249,13 @@ export default function DevisPage() {
                 value={draftPricing.description ?? ''}
                 onChange={(e) => setDraftPricing((prev) => ({ ...prev, description: e.target.value }))}
                 rows={3}
-                className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[#237395] focus:outline-none"
+                className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
               />
             </label>
             <button
               type="button"
               onClick={savePricingRow}
-              className="w-full rounded-2xl bg-[#237395] px-4 py-3 text-sm font-semibold text-white"
+              className="w-full rounded-2xl bg-[var(--primary)] px-4 py-3 text-sm font-semibold text-white"
             >
               {editingPricingId ? 'Enregistrer les modifications' : 'Ajouter au calculateur'}
             </button>
@@ -265,4 +265,5 @@ export default function DevisPage() {
     </div>
   )
 }
+
 

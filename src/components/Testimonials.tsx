@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion';
+﻿import { motion, useReducedMotion } from 'framer-motion';
 
 const testimonials = [
   {
@@ -67,7 +67,7 @@ export default function Testimonials() {
       >
         <motion.div
           className="text-[11px] font-medium uppercase tracking-widest mb-2"
-          style={{ color: '#237395' }}
+          style={{ color: 'var(--primary)' }}
           variants={prefersReducedMotion ? {} : fadeUp}
         >
           Ce qu'ils en disent
@@ -96,7 +96,7 @@ export default function Testimonials() {
             whileHover={prefersReducedMotion ? {} : {
               y: -4,
               boxShadow: '0 12px 32px rgba(35,115,149,0.12)',
-              borderColor: '#237395',
+              borderColor: 'var(--primary)',
             }}
             className="border rounded-xl p-5 bg-white card-hover"
             style={{ 
@@ -133,7 +133,7 @@ export default function Testimonials() {
                 className="w-8 h-8 rounded-full flex items-center justify-center text-[12px] font-medium shrink-0"
                 style={{ 
                   backgroundColor: 'rgba(35,115,149,0.12)',
-                  color: '#237395'
+                  color: 'var(--primary)'
                 }}
                 whileHover={prefersReducedMotion ? {} : { scale: 1.12 }}
                 transition={{ type: 'spring', stiffness: 400, damping: 20 }}

@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion';
+﻿import { motion, useReducedMotion } from 'framer-motion';
 
 // Liste des services (identique au Hero)
 const SERVICES = [
@@ -21,10 +21,10 @@ export default function ServicesMarquee() {
   const items = [...SERVICES, ...SERVICES];
 
   return (
-    <div className="relative overflow-hidden bg-[#237395] py-3.5">
+    <div className="relative overflow-hidden bg-[var(--primary)] py-3.5">
       {/* Fondus sur les bords gauche / droite */}
-      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-[#237395] to-transparent" />
-      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[#237395] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-16 bg-gradient-to-r from-[var(--primary)] to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-16 bg-gradient-to-l from-[var(--primary)] to-transparent" />
 
       <motion.div
         className="flex w-max whitespace-nowrap"
@@ -40,10 +40,12 @@ export default function ServicesMarquee() {
             <span className="px-6 text-sm font-medium text-white/90">
               {label}
             </span>
-            <span className="text-[#D2B093]" aria-hidden="true">•</span>
+            <span className="text-[var(--secondary)]" aria-hidden="true">•</span>
           </span>
         ))}
       </motion.div>
     </div>
   );
 }
+
+

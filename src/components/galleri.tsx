@@ -130,9 +130,9 @@ export default function Gallery() {
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
             >
-              <div className="inline-flex items-center gap-2 bg-[#237395]/10 rounded-full px-4 py-1.5 mb-4">
-                <Camera size={14} className="text-[#237395]" />
-                <span className="text-xs font-medium text-[#237395] uppercase tracking-wider">
+              <div className="inline-flex items-center gap-2 bg-[var(--primary)]/10 rounded-full px-4 py-1.5 mb-4">
+                <Camera size={14} className="text-[var(--primary)]" />
+                <span className="text-xs font-medium text-[var(--primary)] uppercase tracking-wider">
                   Notre travail
                 </span>
               </div>
@@ -167,22 +167,22 @@ export default function Gallery() {
               className="inline-flex flex-wrap items-center justify-center gap-4 px-6 py-3 rounded-2xl border border-gray-100 bg-white shadow-sm text-sm text-gray-500"
             >
               <span className="flex items-center gap-1.5">
-                <Camera size={14} className="text-[#237395]" />
+                <Camera size={14} className="text-[var(--primary)]" />
                 Photos réelles
               </span>
               <span className="w-px h-4 bg-gray-200" />
               <span className="flex items-center gap-1.5">
-                <Shield size={14} className="text-[#237395]" />
+                <Shield size={14} className="text-[var(--primary)]" />
                 Résultats garantis
               </span>
               <span className="w-px h-4 bg-gray-200" />
               <span className="flex items-center gap-1.5">
-                <Award size={14} className="text-[#237395]" />
+                <Award size={14} className="text-[var(--primary)]" />
                 Matériel professionnel
               </span>
               <span className="w-px h-4 bg-gray-200" />
               <span className="flex items-center gap-1.5">
-                <Star size={14} className="text-[#237395]" />
+                <Star size={14} className="text-[var(--primary)]" />
                 Clients satisfaits
               </span>
             </motion.div>
@@ -261,7 +261,7 @@ export default function Gallery() {
                   whileTap={{ scale: 0.95 }}
                   className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-1.5 ${
                     isActive
-                      ? 'bg-gradient-to-r from-[#237395] to-[#237395] text-white shadow-md'
+                      ? 'bg-gradient-to-r from-[var(--primary)] to-[var(--primary)] text-white shadow-md'
                       : 'bg-white text-gray-600 hover:bg-gray-100 border border-gray-200'
                   }`}
                 >
@@ -283,10 +283,10 @@ export default function Gallery() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.25 }}
-              className="flex items-start justify-center gap-1.5 px-4 py-2.5 mb-8 rounded-xl bg-[#237395]/8 border border-[#237395]/20 max-w-sm mx-auto"
+              className="flex items-start justify-center gap-1.5 px-4 py-2.5 mb-8 rounded-xl bg-[var(--primary)]/8 border border-[var(--primary)]/20 max-w-sm mx-auto"
             >
-              <Shield size={13} className="text-[#237395] flex-shrink-0 mt-0.5" />
-              <span className="text-xs text-[#237395] font-medium text-center leading-snug">
+              <Shield size={13} className="text-[var(--primary)] flex-shrink-0 mt-0.5" />
+              <span className="text-xs text-[var(--primary)] font-medium text-center leading-snug">
                 {categoryMentions[selectedCategory] ?? 'Photos réelles de nos interventions'}
               </span>
             </motion.div>
@@ -299,13 +299,13 @@ export default function Gallery() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
-              <Loader2 size={40} className="animate-spin text-[#237395] mb-4" />
+              <Loader2 size={40} className="animate-spin text-[var(--primary)] mb-4" />
               <p className="text-gray-400">Chargement des images...</p>
             </motion.div>
           ) : error ? (
             <div className="text-center py-20">
               <p className="text-red-400">{error}</p>
-              <button onClick={fetchImages} className="mt-4 text-[#237395] hover:underline">
+              <button onClick={fetchImages} className="mt-4 text-[var(--primary)] hover:underline">
                 Réessayer
               </button>
             </div>
@@ -355,7 +355,7 @@ export default function Gallery() {
                           <p className="text-white/70 text-xs mt-1 line-clamp-2">{image.description}</p>
                         )}
                         <div className="flex items-center gap-1 mt-2">
-                          <CheckCircle size={10} className="text-[#237395] flex-shrink-0" />
+                          <CheckCircle size={10} className="text-[var(--primary)] flex-shrink-0" />
                           <span className="text-white/60 text-xs">
                             {categoryMentions[image.category] ?? 'Intervention professionnelle'}
                           </span>
@@ -385,7 +385,7 @@ export default function Gallery() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <CheckCircle size={16} className="text-[#237395] flex-shrink-0" />
+            <CheckCircle size={16} className="text-[var(--primary)] flex-shrink-0" />
             <span>
               Toutes les photos présentées sont issues de vraies interventions réalisées par notre équipe.
             </span>
@@ -464,7 +464,7 @@ export default function Gallery() {
                     <p className="text-white/70 text-sm mt-1">{selectedImage.description}</p>
                   )}
                   <div className="flex items-center justify-center gap-1.5 mt-2">
-                    <Shield size={12} className="text-[#237395]" />
+                    <Shield size={12} className="text-[var(--primary)]" />
                     <span className="text-white/50 text-xs">
                       {categoryMentions[selectedImage.category] ?? 'Intervention professionnelle'}
                     </span>

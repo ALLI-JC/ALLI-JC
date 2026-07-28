@@ -6,10 +6,13 @@
 
 /* ========== VARIABLES CSS — THÈME BLEU PÉTROLE & SABLE ========== */
 @layer base {
-  :root {
-    --primary: #237395;
+:root {
+    --primary: #237395; 
     --primary-dark: #237395;
     --primary-light: #237395;
+    --nav-bg: #1d5265;
+    --btn-gold: #C4A882;
+    --primary-darker: #1a5a78;
     --secondary: #D2B093;
     --secondary-dark: #b8936e;
     --secondary-light: #e8cdb0;
@@ -103,9 +106,9 @@ body {
 /* ========== SCROLLBAR ========== */
 ::-webkit-scrollbar         { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track   { background: #f0ece8; border-radius: 10px; }
-::-webkit-scrollbar-thumb   { background: #237395; border-radius: 10px; transition: background 0.3s ease; }
-::-webkit-scrollbar-thumb:hover { background: #237395; }
-*                            { scrollbar-width: thin; scrollbar-color: #237395 #f0ece8; }
+::-webkit-scrollbar-thumb   { background: var(--primary); border-radius: 10px; transition: background 0.3s ease; }
+::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+*                            { scrollbar-width: thin; scrollbar-color: var(--primary) #f0ece8; }
 
 /* ========== GLASS MORPHISM ========== */
 .glass      { background: rgba(250, 247, 244, 0.8); backdrop-filter: blur(10px); border: 1px solid rgba(35, 115, 149, 0.15); }
@@ -113,42 +116,42 @@ body {
 .glass-card { background: rgba(250, 247, 244, 0.96); backdrop-filter: blur(10px); border-radius: 1rem; border: 1px solid rgba(35, 115, 149, 0.2); box-shadow: 0 8px 32px rgba(35, 115, 149, 0.08); }
 
 /* ========== GRADIENTS ========== */
-.bg-gradient-primary  { background: linear-gradient(135deg, #237395 0%, #237395 100%); }
-.bg-gradient-secondary{ background: linear-gradient(135deg, #D2B093 0%, #b8936e 100%); }
-.bg-gradient-sunset   { background: linear-gradient(135deg, #237395 0%, #D2B093 100%); }
-.text-gradient        { background: linear-gradient(135deg, #237395 0%, #D2B093 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.bg-gradient-primary  { background: linear-gradient(135deg, var(--primary) 0%, var(--primary) 100%); }
+.bg-gradient-secondary{ background: linear-gradient(135deg, var(--secondary) 0%, #b8936e 100%); }
+.bg-gradient-sunset   { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); }
+.text-gradient        { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
 
 /* ========== COMPOSANTS PERSONNALISÉS ========== */
 @layer components {
   /* Boutons */
   .btn         { @apply px-4 py-2.5 rounded-xl font-semibold transition-all duration-200 inline-flex items-center justify-center gap-2; }
-  .btn-primary { background: linear-gradient(135deg, #237395, #237395); @apply text-white shadow-md hover:shadow-lg hover:scale-[1.02] focus:ring-2 focus:ring-offset-2; focus-ring-color: #237395; }
-  .btn-secondary { background: linear-gradient(135deg, #D2B093, #b8936e); @apply text-white shadow-md hover:shadow-lg hover:scale-[1.02]; }
-  .btn-outline  { @apply border-2 border-[#237395] text-[#237395] hover:bg-[#237395] hover:text-white; }
+  .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary)); @apply text-white shadow-md hover:shadow-lg hover:scale-[1.02] focus:ring-2 focus:ring-offset-2; focus-ring-color: var(--primary); }
+  .btn-secondary { background: linear-gradient(135deg, var(--secondary), #b8936e); @apply text-white shadow-md hover:shadow-lg hover:scale-[1.02]; }
+  .btn-outline  { @apply border-2 border-[var(--primary)] text-[var(--primary)] hover:bg-[var(--primary)] hover:text-white; }
 
   /* Cartes */
   .card        { @apply bg-white rounded-2xl shadow-soft transition-all duration-300; }
   .card:hover  { box-shadow: 0 4px 16px rgba(35,115,149,0.12); }
   .card-hover  { @apply bg-white rounded-2xl shadow-soft transition-all duration-300; }
   .card-hover:hover { box-shadow: 0 12px 30px rgba(35,115,149,0.15); transform: translateY(-4px); }
-  .card-primary{ background: linear-gradient(135deg, #237395, #237395); @apply text-white rounded-2xl shadow-soft; }
-  .card-warm   { background: linear-gradient(135deg, #D2B093, #b8936e); @apply text-white rounded-2xl shadow-soft; }
+  .card-primary{ background: linear-gradient(135deg, var(--primary), var(--primary)); @apply text-white rounded-2xl shadow-soft; }
+  .card-warm   { background: linear-gradient(135deg, var(--secondary), #b8936e); @apply text-white rounded-2xl shadow-soft; }
 
   /* Inputs */
   .input {
     @apply w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 bg-white;
     border-color: #d8cdc6;
-    &:focus { --tw-ring-color: #237395; }
+    &:focus { --tw-ring-color: var(--primary); }
   }
 
   /* Badges */
   .badge           { @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold; }
-  .badge-primary   { background: rgba(35,115,149,0.12); color: #237395; }
+  .badge-primary   { background: rgba(35,115,149,0.12); color: var(--primary); }
   .badge-secondary { background: rgba(210,176,147,0.2); color: #7a5c3e; }
 
   /* Loaders */
-  .loader    { @apply border-4 rounded-full w-12 h-12 animate-spin; border-color: #f0ece8; border-top-color: #237395; }
-  .loader-sm { @apply border-2 rounded-full w-6 h-6 animate-spin; border-color: #f0ece8; border-top-color: #237395; }
+  .loader    { @apply border-4 rounded-full w-12 h-12 animate-spin; border-color: #f0ece8; border-top-color: var(--primary); }
+  .loader-sm { @apply border-2 rounded-full w-6 h-6 animate-spin; border-color: #f0ece8; border-top-color: var(--primary); }
 
   /* Skeleton */
   .skeleton {
@@ -181,32 +184,32 @@ body {
 
 /* ========== TOAST ========== */
 .toast         { @apply fixed bottom-4 right-4 px-4 py-3 rounded-xl shadow-hard text-white z-50; }
-.toast-success { background: #237395; }
+.toast-success { background: var(--primary); }
 .toast-error   { @apply bg-red-500; }
 .toast-info    { background: rgba(35,115,149,0.9); }
 
 /* ========== STATS CARDS ========== */
 .stat-card        { @apply bg-white rounded-2xl shadow-soft p-6 transition-all duration-300; }
 .stat-card:hover  { box-shadow: 0 4px 16px rgba(35,115,149,0.12); }
-.stat-icon        { @apply w-12 h-12 rounded-xl flex items-center justify-center; background: rgba(35,115,149,0.1); color: #237395; }
+.stat-icon        { @apply w-12 h-12 rounded-xl flex items-center justify-center; background: rgba(35,115,149,0.1); color: var(--primary); }
 .stat-value       { @apply text-2xl font-bold; color: #1c3a47; }
 .stat-label       { @apply text-sm mt-1; color: #4a6b78; }
 
 /* ========== COULEURS UTILITAIRES ========== */
-.bg-petrol        { background-color: #237395; }
-.bg-petrol-dark   { background-color: #237395; }
-.bg-sand          { background-color: #D2B093; }
+.bg-petrol        { background-color: var(--primary); }
+.bg-petrol-dark   { background-color: var(--primary); }
+.bg-sand          { background-color: var(--secondary); }
 .bg-sand-dark     { background-color: #b8936e; }
-.text-petrol      { color: #237395; }
-.text-sand        { color: #D2B093; }
-.border-petrol    { border-color: #237395; }
-.border-sand      { border-color: #D2B093; }
-.hover\:bg-petrol:hover   { background-color: #237395; }
-.hover\:text-petrol:hover { color: #237395; }
+.text-petrol      { color: var(--primary); }
+.text-sand        { color: var(--secondary); }
+.border-petrol    { border-color: var(--primary); }
+.border-sand      { border-color: var(--secondary); }
+.hover\:bg-petrol:hover   { background-color: var(--primary); }
+.hover\:text-petrol:hover { color: var(--primary); }
 
 /* ========== FOCUS ========== */
 *:focus         { outline: none; }
-*:focus-visible { outline: 2px solid #237395; outline-offset: 2px; }
+*:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 
 /* ========== SELECTION ========== */
 ::selection      { background-color: rgba(35,115,149,0.2); color: #0e2b38; }
@@ -323,3 +326,5 @@ body {
   80% { transform: translateX(-10px); }
   100% { transform: translateX(0); }
 }
+
+
