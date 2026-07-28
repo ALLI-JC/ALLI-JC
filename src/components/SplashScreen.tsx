@@ -192,7 +192,7 @@ const chamoisTraverseVariants: Variants = {
           exit="exit"
           className="fixed inset-0 z-[9999] flex items-center justify-center overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, #237395 0%, #237395 40%, #237395 70%, #237395 100%)',
+            background: 'linear-gradient(135deg, var(--primary) 0%, var(--primary) 40%, var(--primary) 70%, var(--primary) 100%)',
           }}
         >
           {/* Cercles décoratifs en arrière-plan */}
@@ -333,3 +333,4 @@ const chamoisTraverseVariants: Variants = {
     </AnimatePresence>
   );
 }
+

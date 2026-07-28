@@ -162,7 +162,7 @@ export default function Contact() {
   };
 
   const inputClass =
-    'w-full border border-gray-200 rounded-lg px-3 py-2.5 text-[14px] text-gray-900 bg-white focus:outline-none focus:border-[#237395] focus:ring-1 focus:ring-[#237395] transition-colors placeholder-gray-400';
+    'w-full border border-gray-200 rounded-lg px-3 py-2.5 text-[14px] text-gray-900 bg-white focus:outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] transition-colors placeholder-gray-400';
 
   const infoRows = [
     { icon: MapPin, text: '7 rue de la gare, 25560 La Rivière-Drugeon', href: null },
@@ -184,7 +184,7 @@ export default function Contact() {
           viewport={{ once: true, amount: 0.5 }}
         >
           <motion.div
-            className="text-[11px] font-medium uppercase tracking-widest text-[#237395] mb-2"
+            className="text-[11px] font-medium uppercase tracking-widest text-[var(--primary)] mb-2"
             variants={prefersReducedMotion ? {} : fadeUp}
           >
             Parlons de votre projet
@@ -230,14 +230,14 @@ export default function Contact() {
                     variants={prefersReducedMotion ? {} : infoRowItem}
                   >
                     <motion.div
-                      className="w-9 h-9 bg-[#237395]/10 rounded-lg flex items-center justify-center text-[#237395] shrink-0"
+                      className="w-9 h-9 bg-[var(--primary)]/10 rounded-lg flex items-center justify-center text-[var(--primary)] shrink-0"
                       whileHover={prefersReducedMotion ? {} : { scale: 1.12, backgroundColor: 'rgba(121,219,220,0.2)' }}
                       transition={{ type: 'spring', stiffness: 400, damping: 20 }}
                     >
                       <Icon size={16} />
                     </motion.div>
                     {href ? (
-                      <a href={href} className="hover:text-[#237395] transition-colors">{text}</a>
+                      <a href={href} className="hover:text-[var(--primary)] transition-colors">{text}</a>
                     ) : (
                       <span>{text}</span>
                     )}
@@ -250,8 +250,8 @@ export default function Contact() {
                   href="https://wa.me/33607979074"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 bg-[#237395] text-white px-5 py-3 rounded-xl text-sm font-medium shadow-md hover:shadow-lg transition-all"
-                  whileHover={prefersReducedMotion ? {} : { scale: 1.05, backgroundColor: '#237395' }}
+                  className="inline-flex items-center gap-2 bg-[var(--primary)] text-white px-5 py-3 rounded-xl text-sm font-medium shadow-md hover:shadow-lg transition-all"
+                  whileHover={prefersReducedMotion ? {} : { scale: 1.05, backgroundColor: 'var(--primary)' }}
                   whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
                   transition={{ type: 'spring', stiffness: 350, damping: 22 }}
                 >
@@ -263,7 +263,7 @@ export default function Contact() {
             </div>
 
             {/* Bandeau Intervention rapide */}
-            <div className="bg-gradient-to-r from-[#237395]/10 to-transparent rounded-xl p-4">
+            <div className="bg-gradient-to-r from-[var(--primary)]/10 to-transparent rounded-xl p-4">
               <p className="text-sm text-gray-600">
                 <span className="font-semibold">Intervention rapide</span> — Devis gratuit sous 24h
               </p>
@@ -419,3 +419,4 @@ export default function Contact() {
     </section>
   );
 }
+

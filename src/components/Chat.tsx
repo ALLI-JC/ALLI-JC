@@ -85,7 +85,7 @@ function TypingIndicator() {
       {/* Avatar bot */}
       <div
         className="w-7 h-7 rounded-full flex items-center justify-center text-[11px] font-bold text-white flex-shrink-0"
-        style={{ background: '#237395' }}
+        style={{ background: 'var(--primary)' }}
       >
         JC
       </div>
@@ -94,9 +94,9 @@ function TypingIndicator() {
         style={{ background: 'white', borderColor: 'rgba(35,115,149,0.15)' }}
       >
         <div className="flex gap-1 items-center">
-          <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: '#237395', opacity: 0.7, animationDelay: '0ms' }} />
-          <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: '#237395', opacity: 0.7, animationDelay: '180ms' }} />
-          <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: '#237395', opacity: 0.7, animationDelay: '360ms' }} />
+          <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: 'var(--primary)', opacity: 0.7, animationDelay: '0ms' }} />
+          <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: 'var(--primary)', opacity: 0.7, animationDelay: '180ms' }} />
+          <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: 'var(--primary)', opacity: 0.7, animationDelay: '360ms' }} />
         </div>
       </div>
     </div>
@@ -115,7 +115,7 @@ function ChatMessage({ msg }: { msg: Message }) {
       {isBot && (
         <div
           className="w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-bold text-white flex-shrink-0 shadow-sm"
-          style={{ background: '#237395' }}
+          style={{ background: 'var(--primary)' }}
         >
           JC
         </div>
@@ -131,7 +131,7 @@ function ChatMessage({ msg }: { msg: Message }) {
           style={
             isBot
               ? { background: 'white', color: '#1a2e38', border: '1px solid rgba(35,115,149,0.14)' }
-              : { background: '#237395', color: 'white' }
+              : { background: 'var(--primary)', color: 'white' }
           }
         >
           {msg.content.split("\n").map((line, i, arr) => (
@@ -309,7 +309,7 @@ export default function Chat() {
       <div className="fixed bottom-7 right-7 flex flex-col items-center gap-2 z-[1000]">
         <button
           className="relative w-14 h-14 rounded-full border-none cursor-pointer flex items-center justify-center shadow-xl transition-all duration-200 hover:scale-105 active:scale-95"
-          style={{ background: '#237395' }}
+          style={{ background: 'var(--primary)' }}
           onClick={openChat}
           aria-label="Ouvrir le chat L'allié JC"
         >
@@ -317,7 +317,7 @@ export default function Chat() {
           {unread > 0 && (
             <span
               className="absolute -top-1 -right-1 w-5 h-5 rounded-full text-white text-[11px] font-semibold flex items-center justify-center border-2 border-white animate-in zoom-in duration-300"
-              style={{ background: '#D2B093' }}
+              style={{ background: 'var(--secondary)' }}
             >
               {unread}
             </span>
@@ -325,7 +325,7 @@ export default function Chat() {
         </button>
         <div
           className="text-xs font-medium px-2.5 py-1 rounded-full shadow-sm whitespace-nowrap border"
-          style={{ background: 'white', color: '#237395', borderColor: 'rgba(35,115,149,0.18)' }}
+          style={{ background: 'white', color: 'var(--primary)', borderColor: 'rgba(35,115,149,0.18)' }}
         >
           Une question ?
         </div>
@@ -344,7 +344,7 @@ export default function Chat() {
       {/* à”€à”€ Header à”€à”€ */}
       <header
         className="px-4 py-3.5 flex items-center gap-3 flex-shrink-0"
-        style={{ background: '#237395' }}
+        style={{ background: 'var(--primary)' }}
       >
         {/* Avatar / Logo */}
         <div
@@ -362,7 +362,7 @@ export default function Chat() {
           <span className="text-[11px] flex items-center gap-1.5 mt-0.5" style={{ color: 'rgba(210,176,147,0.9)' }}>
             <span
               className="w-1.5 h-1.5 rounded-full animate-pulse"
-              style={{ background: '#D2B093', boxShadow: '0 0 0 2px rgba(210,176,147,0.3)' }}
+              style={{ background: 'var(--secondary)', boxShadow: '0 0 0 2px rgba(210,176,147,0.3)' }}
             />
             En ligne  · répond rapidement
           </span>
@@ -408,7 +408,7 @@ export default function Chat() {
       </header>
 
       {/* à”€à”€ Filet doré sous le header à”€à”€ */}
-      <div className="h-[2px] flex-shrink-0" style={{ background: 'linear-gradient(to right, #D2B093, rgba(210,176,147,0.2))' }} />
+      <div className="h-[2px] flex-shrink-0" style={{ background: 'linear-gradient(to right, var(--secondary), rgba(210,176,147,0.2))' }} />
 
       {/* à”€à”€ Messages à”€à”€ */}
       <main
@@ -468,7 +468,7 @@ export default function Chat() {
               background: '#f4f8fa',
               color: '#1a2e38',
             }}
-            onFocus={e => { e.currentTarget.style.borderColor = '#237395'; e.currentTarget.style.background = 'white'; }}
+            onFocus={e => { e.currentTarget.style.borderColor = 'var(--primary)'; e.currentTarget.style.background = 'white'; }}
             onBlur={e =>  { e.currentTarget.style.borderColor = 'rgba(35,115,149,0.2)'; e.currentTarget.style.background = '#f4f8fa'; }}
             value={input}
             onChange={(e) => {
@@ -484,9 +484,9 @@ export default function Chat() {
           />
           <button
             className="w-9 h-9 rounded-full border-none cursor-pointer flex items-center justify-center flex-shrink-0 transition-all duration-150 hover:scale-105 active:scale-95 disabled:opacity-40 disabled:cursor-not-allowed"
-            style={{ background: '#237395', color: 'white' }}
-            onMouseEnter={e => { if (!e.currentTarget.disabled) e.currentTarget.style.background = '#237395'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = '#237395'; }}
+            style={{ background: 'var(--primary)', color: 'white' }}
+            onMouseEnter={e => { if (!e.currentTarget.disabled) e.currentTarget.style.background = 'var(--primary)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'var(--primary)'; }}
             onClick={() => sendMessage(input)}
             disabled={!input.trim() || loading}
             aria-label="Envoyer"
@@ -503,7 +503,7 @@ export default function Chat() {
           <a
             href="tel:0607979074"
             className="transition-colors duration-150 hover:opacity-100"
-            style={{ color: '#D2B093' }}
+            style={{ color: 'var(--secondary)' }}
           >
             06 07 97 90 74
           </a>
@@ -511,7 +511,7 @@ export default function Chat() {
           <a
             href="mailto:jeancharlesbiernat@yahoo.com"
             className="transition-colors duration-150 hover:opacity-100"
-            style={{ color: '#D2B093' }}
+            style={{ color: 'var(--secondary)' }}
           >
             Email
           </a>
@@ -522,3 +522,5 @@ export default function Chat() {
     </div>
   );
 }
+
+

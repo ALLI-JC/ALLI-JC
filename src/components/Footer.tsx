@@ -1,4 +1,4 @@
-import { motion, useReducedMotion } from 'framer-motion';
+﻿import { motion, useReducedMotion } from 'framer-motion';
 import { Phone, MapPin, ExternalLink } from 'lucide-react';
 
 // ─── Logo placeholder ────────────────────────────────────────────────────────
@@ -17,7 +17,7 @@ function Logo() {
       </div>
       <div>
         <div className="font-serif text-[19px] text-white leading-tight">L'Allié JC</div>
-        <div className="text-[11px] text-[#D2B093] tracking-wide">Multiservices · Doubs &amp; Jura</div>
+        <div className="text-[11px] text-[var(--secondary)] tracking-wide">Multiservices · Doubs &amp; Jura</div>
       </div>
     </div>
   );
@@ -70,7 +70,7 @@ export default function Footer() {
       <div className="relative">
         <div
           className="text-center py-3.5 text-[11px] relative z-10 border-b border-white/15"
-          style={{ backgroundColor: '#D2B093', color: '#ffffff', fontFamily: 'var(--font-roboto)' }}
+          style={{ backgroundColor: 'var(--secondary)', color: '#ffffff', fontFamily: 'var(--font-roboto)' }}
         >
           © 2026 L'Allié JC · Tous droits réservés ·{' '}
           <a
@@ -84,7 +84,7 @@ export default function Footer() {
 
       <footer
         className="relative overflow-hidden"
-        style={{ backgroundColor: '#0e2b38', fontFamily: 'var(--font-roboto)' }}
+        style={{ backgroundColor: 'var(--primary)', fontFamily: 'var(--font-roboto)' }}
       >
         {/* Blob décoratif discret */}
         <div
@@ -119,7 +119,7 @@ export default function Footer() {
               {/* Ligne dorée signature */}
               <motion.div
                 className="mt-6 h-[2px] w-12 rounded-full origin-left"
-                style={{ background: '#D2B093' }}
+                style={{ background: 'var(--secondary)' }}
                 variants={prefersReducedMotion ? {} : dividerVariants}
                 initial="hidden"
                 whileInView="visible"
@@ -137,7 +137,7 @@ export default function Footer() {
             >
               <h4
                 className="text-[11px] font-semibold uppercase tracking-widest mb-4"
-                style={{ color: '#D2B093' }}
+                style={{ color: 'var(--secondary)' }}
               >
                 Services
               </h4>
@@ -155,7 +155,7 @@ export default function Footer() {
                     className="flex items-center gap-2 text-[12.5px]"
                     style={{ color: 'rgba(255,255,255,0.6)' }}
                   >
-                    <span style={{ color: '#D2B093', fontSize: '10px' }}>—</span>
+                    <span style={{ color: 'var(--secondary)', fontSize: '10px' }}>—</span>
                     {s}
                   </motion.li>
                 ))}
@@ -172,7 +172,7 @@ export default function Footer() {
             >
               <h4
                 className="text-[11px] font-semibold uppercase tracking-widest mb-4"
-                style={{ color: '#D2B093' }}
+                style={{ color: 'var(--secondary)' }}
               >
                 Contact
               </h4>
@@ -191,7 +191,7 @@ export default function Footer() {
                     className="flex items-center gap-2.5 text-[12.5px]"
                     style={{ color: 'rgba(255,255,255,0.6)' }}
                   >
-                    <Icon size={13} style={{ color: '#D2B093', flexShrink: 0 }} />
+                    <Icon size={13} style={{ color: 'var(--secondary)', flexShrink: 0 }} />
                     {href ? (
                       <a
                         href={href}
@@ -211,7 +211,7 @@ export default function Footer() {
                 href="#sec-devis"
                 className="inline-flex items-center gap-2 text-[12px] font-semibold px-4 py-2.5 rounded-lg border"
                 style={{
-                  color: '#D2B093',
+                  color: 'var(--secondary)',
                   borderColor: 'rgba(210,176,147,0.4)',
                   backgroundColor: 'rgba(210,176,147,0.07)',
                 }}
@@ -233,3 +233,4 @@ export default function Footer() {
     </>
   );
 }
+

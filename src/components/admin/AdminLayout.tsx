@@ -97,7 +97,7 @@ export default function AdminLayout() {
       {isMobile && !sidebarOpen && (
         <button
           onClick={() => setSidebarOpen(true)}
-          className="fixed top-4 left-4 z-50 p-2.5 bg-gradient-to-br from-[#237395] to-[#237395] text-white rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
+          className="fixed top-4 left-4 z-50 p-2.5 bg-gradient-to-br from-[var(--primary)] to-[var(--primary)] text-white rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105 active:scale-95"
           aria-label="Menu"
         >
           <Menu size={20} />
@@ -106,7 +106,7 @@ export default function AdminLayout() {
 
       {/* Sidebar - toujours visible sur desktop, toggle sur mobile */}
       <aside 
-        className={`fixed inset-y-0 left-0 z-40 bg-gradient-to-br from-[#237395] via-[#6BCFD0] to-[#237395] shadow-2xl transition-transform duration-300 ease-in-out w-72 ${
+        className={`fixed inset-y-0 left-0 z-40 bg-gradient-to-br from-[var(--primary)] via-[#6BCFD0] to-[var(--primary)] shadow-2xl transition-transform duration-300 ease-in-out w-72 ${
           isMobile 
             ? (sidebarOpen ? 'translate-x-0' : '-translate-x-full')
             : 'translate-x-0'
@@ -126,7 +126,7 @@ export default function AdminLayout() {
                       (e.target as HTMLImageElement).style.display = 'none';
                       const parent = (e.target as HTMLImageElement).parentElement;
                       if (parent) {
-                        parent.innerHTML = '<span class="text-[#237395] font-bold text-lg">JC</span>';
+                        parent.innerHTML = '<span class="text-[var(--primary)] font-bold text-lg">JC</span>';
                       }
                     }}
                   />
@@ -239,7 +239,7 @@ export default function AdminLayout() {
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
                   className="flex items-center gap-2 p-1.5 rounded-xl hover:bg-gray-100 transition-all group"
                 >
-                  <div className="w-8 h-8 bg-gradient-to-br from-[#237395] to-[#237395] rounded-lg flex items-center justify-center text-white font-semibold text-sm shadow-md group-hover:scale-105 transition-transform">
+                  <div className="w-8 h-8 bg-gradient-to-br from-[var(--primary)] to-[var(--primary)] rounded-lg flex items-center justify-center text-white font-semibold text-sm shadow-md group-hover:scale-105 transition-transform">
                     {userName ? userName.charAt(0).toUpperCase() : 'A'}
                   </div>
                   <div className="hidden md:block text-left">
@@ -256,15 +256,15 @@ export default function AdminLayout() {
                   <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden animate-slideDown z-50">
                     <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-[#FFFBF5] to-[#F5DEB3]">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 bg-gradient-to-br from-[#237395] to-[#237395] rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-md">
+                        <div className="w-12 h-12 bg-gradient-to-br from-[var(--primary)] to-[var(--primary)] rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-md">
                           {userName ? userName.charAt(0).toUpperCase() : 'A'}
                         </div>
                         <div className="flex-1 min-w-0">
                           <p className="font-semibold text-gray-800 truncate">{userName || 'Administrateur'}</p>
                           <p className="text-xs text-gray-500 truncate">{userEmail}</p>
-                          <div className="inline-flex items-center gap-1 mt-1 px-1.5 py-0.5 bg-[#237395]/20 rounded-full">
+                          <div className="inline-flex items-center gap-1 mt-1 px-1.5 py-0.5 bg-[var(--primary)]/20 rounded-full">
                             <div className="w-1 h-1 bg-green-500 rounded-full"></div>
-                            <span className="text-xs text-[#237395] font-medium">Admin</span>
+                            <span className="text-xs text-[var(--primary)] font-medium">Admin</span>
                           </div>
                         </div>
                       </div>
@@ -357,3 +357,4 @@ export default function AdminLayout() {
     </div>
   )
 }
+

@@ -137,9 +137,9 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
       <nav
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled 
-            ? 'bg-[#1d5265]/95 backdrop-blur-xl shadow-lg' 
-            : 'bg-[#1d5265]/90 backdrop-blur-md'
-        } border-b border-[#D2B093]/15`}
+            ? 'bg-[#237395]/95 backdrop-blur-xl shadow-lg' 
+            : 'bg-[#237395]/90 backdrop-blur-md'
+        } border-b border-[var(--secondary)]/15`}
         style={{ fontFamily: 'var(--font-roboto)' }}
       >
         <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
@@ -164,10 +164,10 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                   key={link.href}
                   href={link.href}
                   onClick={(e) => handleLinkClick(e, link.href)}
-                  className="group relative text-sm xl:text-base font-medium text-white hover:text-[#D2B093] transition-colors duration-200 whitespace-nowrap"
+                  className="group relative text-sm xl:text-base font-medium text-white hover:text-[var(--secondary)] transition-colors duration-200 whitespace-nowrap"
                 >
                   {link.label}
-                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[#D2B093] transition-all duration-300 group-hover:w-full"></span>
+                  <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-[var(--secondary)] transition-all duration-300 group-hover:w-full"></span>
                 </a>
               ))}
             </div>
@@ -176,7 +176,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
             <div className="hidden lg:flex items-center gap-3 xl:gap-4">
               <a
                 href="tel:0607979074"
-                className="flex items-center gap-1.5 xl:gap-2 px-3 xl:px-4 py-1.5 xl:py-2 text-white hover:text-[#D2B093] transition-colors rounded-lg hover:bg-white/10"
+                className="flex items-center gap-1.5 xl:gap-2 px-3 xl:px-4 py-1.5 xl:py-2 text-white hover:text-[var(--secondary)] transition-colors rounded-lg hover:bg-white/10"
               >
                 <Phone size={15} className="flex-shrink-0" />
                 <span className="text-xs xl:text-sm font-medium hidden 2xl:inline">06 07 97 90 74</span>
@@ -187,7 +187,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                 onClick={onDevisClick}
                 className="flex items-center gap-2 px-4 xl:px-6 py-2 xl:py-2.5 rounded-xl text-xs xl:text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300 whitespace-nowrap"
                 style={{
-                  backgroundColor: '#C4A882',
+                  backgroundColor: 'var(--btn-gold)',
                   color: '#FFFFFF',
                 }}
               >
@@ -200,7 +200,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
             <div className="hidden md:flex lg:hidden items-center gap-2">
               <a
                 href="tel:0607979074"
-                className="p-2 text-white hover:text-[#D2B093] transition-colors rounded-lg hover:bg-white/10"
+                className="p-2 text-white hover:text-[var(--secondary)] transition-colors rounded-lg hover:bg-white/10"
                 aria-label="Appeler"
               >
                 <Phone size={18} />
@@ -209,7 +209,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                 onClick={onDevisClick}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold shadow-md hover:shadow-lg transition-all duration-300"
                 style={{
-                  backgroundColor: '#C4A882',
+                  backgroundColor: 'var(--btn-gold)',
                   color: '#FFFFFF',
                 }}
               >
@@ -247,7 +247,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                 onClick={onDevisClick}
                 className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold shadow-md hover:shadow-lg transition-all duration-300"
                 style={{
-                  backgroundColor: '#C4A882',
+                  backgroundColor: 'var(--btn-gold)',
                   color: '#FFFFFF',
                 }}
               >
@@ -332,7 +332,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                     key={link.href}
                     href={link.href}
                     onClick={(e) => handleLinkClick(e, link.href)}
-                    className="flex items-center gap-3 py-3 px-4 text-base font-medium text-[#4A5B5E] hover:text-[#237395] hover:bg-[#237395]/5 rounded-xl transition-all duration-200"
+                    className="flex items-center gap-3 py-3 px-4 text-base font-medium text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/5 rounded-xl transition-all duration-200"
                   >
                     {link.label}
                   </a>
@@ -344,17 +344,17 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                 <div className="space-y-2">
                   <a
                     href="tel:0607979074"
-                    className="flex items-center gap-3 py-3 px-4 text-[#4A5B5E] hover:text-[#237395] hover:bg-[#237395]/5 rounded-xl transition-colors"
+                    className="flex items-center gap-3 py-3 px-4 text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/5 rounded-xl transition-colors"
                   >
-                    <Phone size={18} className="text-[#237395] flex-shrink-0" />
+                    <Phone size={18} className="text-[var(--primary)] flex-shrink-0" />
                     <span className="font-medium text-sm">06 07 97 90 74</span>
                   </a>
 
                   <a
                     href="mailto:jeancharlesbiernat@yahoo.com"
-                    className="flex items-center gap-3 py-3 px-4 text-[#4A5B5E] hover:text-[#237395] hover:bg-[#237395]/5 rounded-xl transition-colors"
+                    className="flex items-center gap-3 py-3 px-4 text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/5 rounded-xl transition-colors"
                   >
-                    <Mail size={18} className="text-[#237395] flex-shrink-0" />
+                    <Mail size={18} className="text-[var(--primary)] flex-shrink-0" />
                     <span className="text-sm break-all">jeancharlesbiernat@yahoo.com</span>
                   </a>
                 </div>
@@ -363,7 +363,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                 {user.isAuthenticated ? (
                   <>
                     <div className="flex items-center gap-3 px-4 py-3 bg-gray-50 rounded-xl">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#237395] to-[#1a5a78] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--primary)] to-[var(--primary-darker)] flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
                         {user.name.charAt(0).toUpperCase()}
                       </div>
                       <div className="flex-1 min-w-0">
@@ -374,18 +374,18 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
 
                     <button
                       onClick={handleProfile}
-                      className="w-full flex items-center gap-3 py-3 px-4 text-[#4A5B5E] hover:text-[#237395] hover:bg-[#237395]/5 rounded-xl transition-colors"
+                      className="w-full flex items-center gap-3 py-3 px-4 text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/5 rounded-xl transition-colors"
                     >
-                      <UserCircle size={18} className="text-[#237395] flex-shrink-0" />
+                      <UserCircle size={18} className="text-[var(--primary)] flex-shrink-0" />
                       <span className="font-medium">Mon profil</span>
                     </button>
 
                     {user.role === 'admin' && (
                       <button
                         onClick={handleDashboard}
-                        className="w-full flex items-center gap-3 py-3 px-4 text-[#4A5B5E] hover:text-[#237395] hover:bg-[#237395]/5 rounded-xl transition-colors"
+                        className="w-full flex items-center gap-3 py-3 px-4 text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/5 rounded-xl transition-colors"
                       >
-                        <Settings size={18} className="text-[#237395] flex-shrink-0" />
+                        <Settings size={18} className="text-[var(--primary)] flex-shrink-0" />
                         <span className="font-medium">Administration</span>
                       </button>
                     )}
@@ -404,9 +404,9 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                       handleLogin();
                       setMobileMenuOpen(false);
                     }}
-                    className="w-full flex items-center gap-3 py-3 px-4 text-[#4A5B5E] hover:text-[#237395] hover:bg-[#237395]/5 rounded-xl transition-colors"
+                    className="w-full flex items-center gap-3 py-3 px-4 text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/5 rounded-xl transition-colors"
                   >
-                    <User size={18} className="text-[#237395] flex-shrink-0" />
+                    <User size={18} className="text-[var(--primary)] flex-shrink-0" />
                     <span className="font-medium">Se connecter</span>
                   </button>
                 )}
@@ -418,7 +418,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                   }}
                   className="w-full flex items-center justify-center gap-2 px-5 py-4 rounded-xl text-sm font-semibold shadow-md hover:shadow-lg transition-all duration-300"
                   style={{
-                    backgroundColor: '#C4A882',
+                    backgroundColor: 'var(--btn-gold)',
                     color: '#FFFFFF',
                   }}
                 >
