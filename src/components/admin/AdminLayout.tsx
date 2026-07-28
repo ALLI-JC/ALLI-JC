@@ -106,7 +106,7 @@ export default function AdminLayout() {
 
       {/* Sidebar - toujours visible sur desktop, toggle sur mobile */}
       <aside 
-        className={`fixed inset-y-0 left-0 z-40 bg-gradient-to-br from-[var(--primary)] via-[#6BCFD0] to-[var(--primary)] shadow-2xl transition-transform duration-300 ease-in-out w-72 ${
+        className={`fixed inset-y-0 left-0 z-40 bg-[#237395] shadow-2xl transition-transform duration-300 ease-in-out w-72 ${
           isMobile 
             ? (sidebarOpen ? 'translate-x-0' : '-translate-x-full')
             : 'translate-x-0'
