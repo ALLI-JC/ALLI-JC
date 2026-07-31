@@ -32,21 +32,22 @@ function PublicSite() {
     document.getElementById('sec-contact')?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  return (
-    <div className="font-sans min-h-screen bg-[radial-gradient(circle_at_top,_rgba(35,115,149,0.08),_transparent_24%),_linear-gradient(180deg,_#f7f3ee,_#ede4d6)] text-[#0e2b38]">
-      <Navbar onDevisClick={scrollToDevis} />
-      <Hero onDevisClick={scrollToDevis} />
+  // return (
+  //   <div className="font-sans min-h-screen bg-[radial-gradient(circle_at_top,_rgba(35,115,149,0.08),_transparent_24%),_linear-gradient(180deg,_#f7f3ee,_#ede4d6)] text-[#0e2b38]">
+  //     <Navbar onDevisClick={scrollToDevis} />
+  //     <Hero onDevisClick={scrollToDevis} />
       
-      <Services />
-      <DevisSimulator onConfirm={scrollToContact} />
-      <Gallery />
-      <ZoneIntervention />
-      <Testimonials />
-      <Contact />
-      <Footer />
+  //     <Services />
+  //     <DevisSimulator onConfirm={scrollToContact} />
+  //     <Gallery />
+  //     <ZoneIntervention />
+  //     <Testimonials />
+  //     <Contact />
+  //     <Footer />
    
-    </div>
-  )
+  //   </div>
+  // )
+  return ;
 }
 
 export default function App() {
@@ -66,7 +67,8 @@ export default function App() {
   }
 
   if (location.pathname === '/' && showSplash) {
-    return <SplashScreen onComplete={handleSplashComplete} />
+    // return <SplashScreen onComplete={handleSplashComplete} />
+    return ;
   }
 
   // Sinon, on montre l'application normale
@@ -74,15 +76,15 @@ export default function App() {
     <Routes>
       <Route path="/" element={
         <>
-          <PublicSite />
+          {/* <PublicSite />
             <FloatingLogo 
               src="/shamois.png" 
            
-            />
+            /> */}
         </>
       } />
       
-      <Route path="/login" element={<Login />} />
+      {/* <Route path="/login" element={<Login />} />
       
       <Route element={<ProtectedRoute />}>
         <Route path="/admin" element={<AdminLayout />}>
@@ -94,16 +96,16 @@ export default function App() {
           <Route path="messages" element={<Messages />} />
           <Route path="gallery" element={<GalleryManagement />} />
         </Route>
-      </Route>
+      </Route> */}
       
       <Route path="*" element={
         <>
-          <PublicSite />
+          {/* <PublicSite />
           <FloatingLogo 
             src="/alliéjc-logo-3.png" 
             size={70} 
             offset={120}
-          />
+          /> */}
         </>
       } />
     </Routes>
