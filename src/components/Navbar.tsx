@@ -148,13 +148,13 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
 
             {/* Logo - responsive */}
             <div
-              className="flex items-center cursor-pointer group flex-shrink-0"
+              className="flex items-center justify-center cursor-pointer group flex-shrink-0 px-3 sm:px-4"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
               <img
                 src="/alliéjc-logo-horizontal.png"
                 alt="Allié JC"
-                className="w-[110px] xs:w-[125px] sm:w-[145px] md:w-[170px] lg:w-[190px] xl:w-[210px] object-contain py-0.5 sm:py-1"
+                className="w-[76px] xs:w-[90px] sm:w-[110px] md:w-[135px] lg:w-[155px] xl:w-[175px] object-contain py-1.5 sm:py-2"
               />
             </div>
 
@@ -309,7 +309,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
           >
             {/* En-tête du menu mobile */}
             <div className="flex items-center justify-between p-4 border-b border-gray-100 sticky top-0 bg-white z-10">
-              <div className="flex items-center gap-2">
+              <div className="flex items-center justify-center px-1.5 py-1">
                 <img
                   src="/alliéjc-logo-horizontal.png"
                   alt="Allié JC"
