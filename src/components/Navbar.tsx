@@ -152,9 +152,9 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
               <img
-                src="/alliéjc-logo-3.png"
+                src="/alliéjc-logo-horizontal.png"
                 alt="Allié JC"
-                className="w-[100px] xs:w-[120px] sm:w-[140px] md:w-[170px] lg:w-[200px] xl:w-[220px] object-contain py-0.5 sm:py-1"
+                className="w-[110px] xs:w-[125px] sm:w-[145px] md:w-[170px] lg:w-[190px] xl:w-[210px] object-contain py-0.5 sm:py-1"
               />
             </div>
 
@@ -311,7 +311,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
             <div className="flex items-center justify-between p-4 border-b border-gray-100 sticky top-0 bg-white z-10">
               <div className="flex items-center gap-2">
                 <img
-                  src="/alliéjc-logo-3.png"
+                  src="/alliéjc-logo-horizontal.png"
                   alt="Allié JC"
                   className="h-8 w-auto object-contain"
                 />

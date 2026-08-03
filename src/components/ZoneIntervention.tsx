@@ -69,9 +69,9 @@ export default function ZoneIntervention() {
             <motion.div
               animate={prefersReducedMotion ? {} : {
                 boxShadow: [
-                  '0 0 0px 0px rgba(121,219,220,0)',
-                  '0 0 18px 4px rgba(121,219,220,0.45)',
-                  '0 0 0px 0px rgba(121,219,220,0)',
+                  '0 0 0px 0px rgba(35,115,149,0)',
+                  '0 0 18px 4px rgba(35,115,149,0.45)',
+                  '0 0 0px 0px rgba(35,115,149,0)',
                 ],
               }}
               transition={{ repeat: Infinity, duration: 2.6, ease: 'easeInOut' }}

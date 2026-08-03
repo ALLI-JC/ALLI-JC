@@ -218,7 +218,7 @@ export default function Hero({ onDevisClick }: HeroProps) {
               onClick={onDevisClick}
               whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
               whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
-              className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-[#C4A882] px-8 py-4 text-sm font-medium text-white transition-all hover:bg-[#D4B896] hover:shadow-lg hover:shadow-[#C4A882]/25"
+              className="group inline-flex items-center justify-center gap-2.5 rounded-full bg-[var(--secondary)] px-8 py-4 text-sm font-medium text-white transition-all hover:bg-[#b88d6f] hover:shadow-lg hover:shadow-[rgba(210,176,147,0.25)]"
             >
               <Send size={16} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               Demander un devis gratuit

@@ -251,7 +251,7 @@ function ServiceCard({ icon: Icon, name, desc, mention, features, index, color =
           >
             <motion.a
               href={simulatorLink}
-              className="group/link flex items-center gap-1.5 text-sm font-medium text-[#0e2b38] hover:text-[#C4A882] transition-colors"
+              className="group/link flex items-center gap-1.5 text-sm font-medium text-[#0e2b38] hover:text-[var(--secondary)] transition-colors"
               onClick={(e) => e.stopPropagation()}
             >
               <span>En savoir plus</span>
@@ -267,7 +267,7 @@ function ServiceCard({ icon: Icon, name, desc, mention, features, index, color =
 
             <motion.a
               href={simulatorLink}
-              className="group/link flex items-center gap-1.5 text-sm font-medium text-[#C4A882] hover:text-[#D4B896] transition-colors"
+              className="group/link flex items-center gap-1.5 text-sm font-medium text-[var(--secondary)] hover:text-[#b88d6f] transition-colors"
               onClick={(e) => e.stopPropagation()}
             >
               <Calculator size={14} />
@@ -289,7 +289,7 @@ export default function Services() {
 
       {/* Cercles décoratifs flous */}
       <div className="absolute -top-60 -right-60 w-96 h-96 bg-[var(--primary)]/5 rounded-full blur-3xl" />
-      <div className="absolute -bottom-60 -left-60 w-96 h-96 bg-[#F5DEB3]/10 rounded-full blur-3xl" />
+      <div className="absolute -bottom-60 -left-60 w-96 h-96 bg-[var(--secondary)]/10 rounded-full blur-3xl" />
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-[var(--primary)]/3 rounded-full blur-3xl pointer-events-none" />
 
       {/* Petits points décoratifs */}
@@ -432,7 +432,7 @@ export default function Services() {
         >
           <a
             href="/#sec-devis"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[#C4A882] text-white font-medium shadow-lg shadow-[#C4A882]/25 hover:shadow-xl hover:shadow-[#C4A882]/30 transition-all hover:scale-105 hover:bg-[#D4B896]"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-[var(--secondary)] text-white font-medium shadow-lg shadow-[rgba(210,176,147,0.25)] hover:shadow-xl hover:shadow-[rgba(210,176,147,0.30)] transition-all hover:scale-105 hover:bg-[#b88d6f]"
           >
             <span>Obtenir un devis personnalisé</span>
             <ChevronRight size={18} />

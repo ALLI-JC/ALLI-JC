@@ -231,7 +231,7 @@ export default function Contact() {
                   >
                     <motion.div
                       className="w-9 h-9 bg-[var(--primary)]/10 rounded-lg flex items-center justify-center text-[var(--primary)] shrink-0"
-                      whileHover={prefersReducedMotion ? {} : { scale: 1.12, backgroundColor: 'rgba(121,219,220,0.2)' }}
+                      whileHover={prefersReducedMotion ? {} : { scale: 1.12, backgroundColor: 'rgba(35,115,149,0.2)' }}
                       transition={{ type: 'spring', stiffness: 400, damping: 20 }}
                     >
                       <Icon size={16} />
@@ -388,10 +388,10 @@ export default function Contact() {
                 <motion.button
                   type="submit"
                   disabled={status === 'sending'}
-                  className="w-full flex items-center justify-center gap-2 bg-[#C4A882] text-white rounded-xl py-3.5 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#D4B896] transition-colors"
+                  className="w-full flex items-center justify-center gap-2 bg-[var(--secondary)] text-white rounded-xl py-3.5 text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#b88d6f] transition-colors"
                   whileHover={status === 'sending' || prefersReducedMotion
                     ? {}
-                    : { scale: 1.02, boxShadow: '0 8px 28px rgba(196,168,130,0.35)' }}
+                    : { scale: 1.02, boxShadow: '0 8px 28px rgba(210,176,147,0.35)' }}
                   whileTap={status === 'sending' || prefersReducedMotion ? {} : { scale: 0.97 }}
                   transition={{ type: 'spring', stiffness: 350, damping: 22 }}
                 >
