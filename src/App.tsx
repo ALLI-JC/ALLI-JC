@@ -31,7 +31,7 @@ function PublicSite() {
   }
 
   return (
-    <div id="top" className="font-sans min-h-screen bg-[radial-gradient(circle_at_top,_rgba(35,115,149,0.08),_transparent_24%),_linear-gradient(180deg,_#f7f3ee,_#ede4d6)] text-[#0e2b38]">
+    <div id="top" className="brand-page font-sans min-h-screen text-[#0e2b38]">
       <Navbar onDevisClick={scrollToDevis} />
       <Hero onDevisClick={scrollToDevis} />
       

@@ -24,7 +24,7 @@ export default function ReassurancePillars() {
     <section className="relative overflow-hidden border-t border-[#e7ddd2]/80">
       {/* Éléments décoratifs */}
       <div className="absolute -bottom-20 -right-20 w-64 h-64 bg-[var(--primary)]/5 rounded-full blur-3xl" />
-      <div className="absolute -top-20 -left-20 w-64 h-64 bg-[#F5DEB3]/10 rounded-full blur-3xl" />
+      <div className="absolute -top-20 -left-20 w-64 h-64 bg-[var(--secondary)]/10 rounded-full blur-3xl" />
       
       <div className="relative mx-auto max-w-7xl px-6 py-12 sm:px-8 lg:px-10 lg:py-16">
         {/* En-tête */}

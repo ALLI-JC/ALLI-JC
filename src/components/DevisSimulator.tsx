@@ -495,7 +495,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
       id="sec-devis"
     >
       <div className="absolute top-0 right-0 w-96 h-96 bg-[var(--primary)]/5 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#F5DEB3]/20 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute bottom-0 left-0 w-96 h-96 bg-[var(--secondary)]/20 rounded-full blur-3xl pointer-events-none" />
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
@@ -580,14 +580,14 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                         <button
                           type="button"
                           onClick={() => setHasTonteSurface(true)}
-                          className={`rounded-full px-4 py-2 text-sm font-semibold transition ${hasTonteSurface ? 'bg-[#C4A882] text-white shadow-sm' : 'bg-white text-gray-700 border border-gray-200'}`}
+                          className={`rounded-full px-4 py-2 text-sm font-semibold transition ${hasTonteSurface ? 'bg-[var(--secondary)] text-white shadow-sm' : 'bg-white text-gray-700 border border-gray-200'}`}
                         >
                           Oui
                         </button>
                         <button
                           type="button"
                           onClick={() => setHasTonteSurface(false)}
-                          className={`rounded-full px-4 py-2 text-sm font-semibold transition ${!hasTonteSurface ? 'bg-[#C4A882] text-white shadow-sm' : 'bg-white text-gray-700 border border-gray-200'}`}
+                          className={`rounded-full px-4 py-2 text-sm font-semibold transition ${!hasTonteSurface ? 'bg-[var(--secondary)] text-white shadow-sm' : 'bg-white text-gray-700 border border-gray-200'}`}
                         >
                           Non
                         </button>
@@ -632,14 +632,14 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                           <button
                             type="button"
                             onClick={() => setHasHedgeSurface(true)}
-                            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${hasHedgeSurface ? 'bg-[#C4A882] text-white shadow-sm' : 'bg-white text-gray-700 border border-gray-200'}`}
+                          className={`rounded-full px-4 py-2 text-sm font-semibold transition ${hasHedgeSurface ? 'bg-[var(--secondary)] text-white shadow-sm' : 'bg-white text-gray-700 border border-gray-200'}`}
                           >
                             Oui
                           </button>
                           <button
                             type="button"
                             onClick={() => setHasHedgeSurface(false)}
-                            className={`rounded-full px-4 py-2 text-sm font-semibold transition ${!hasHedgeSurface ? 'bg-[#C4A882] text-white shadow-sm' : 'bg-white text-gray-700 border border-gray-200'}`}
+                          className={`rounded-full px-4 py-2 text-sm font-semibold transition ${!hasHedgeSurface ? 'bg-[var(--secondary)] text-white shadow-sm' : 'bg-white text-gray-700 border border-gray-200'}`}
                           >
                             Non
                           </button>
@@ -648,13 +648,13 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
 
                       {hasHedgeSurface && (
                         <div className="mt-5 space-y-5">
-                          <div className="rounded-2xl border border-[#E8DCCB] bg-[#F9F2E8] p-4 shadow-sm">
+                          <div className="rounded-2xl border border-[var(--secondary)]/30 bg-[var(--secondary)]/10 p-4 shadow-sm">
                             <div className="flex flex-wrap gap-4 items-center justify-between">
                               <div>
                                 <p className="text-xs uppercase tracking-[0.24em] text-gray-500">Longueur de haies</p>
                                 <h4 className="mt-2 text-lg font-semibold text-gray-900">{hedgeMeters} m</h4>
                               </div>
-                              <span className="rounded-full bg-[#C4A882]/15 px-3 py-1 text-xs font-semibold text-[#9A7442]">
+                              <span className="rounded-full bg-[var(--secondary)]/15 px-3 py-1 text-xs font-semibold text-[#7a5c3e]">
                                 m lin.
                               </span>
                             </div>
@@ -667,7 +667,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                                 step={1}
                                 value={hedgeMeters}
                                 onChange={(e) => setHedgeMeters(Number(e.target.value))}
-                                className="w-full h-2 rounded-full accent-[#C4A882] bg-gray-200"
+                                className="w-full h-2 rounded-full accent-[var(--secondary)] bg-gray-200"
                               />
                               <div className="grid grid-cols-3 text-xs text-gray-500">
                                 <span>0 m</span>
@@ -983,7 +983,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
             </motion.div>
 
             <motion.div
-              className="bg-gradient-to-br from-[var(--primary)] to-[#1a5a78] rounded-3xl shadow-xl overflow-hidden"
+              className="bg-gradient-to-br from-[var(--primary)] to-[var(--primary-dark)] rounded-3xl shadow-xl overflow-hidden"
               variants={prefersReducedMotion ? {} : cardVariants}
             >
               <div className="p-6 text-white">
@@ -1048,9 +1048,9 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
 
                 <motion.button
                   onClick={onConfirm}
-                  whileHover={prefersReducedMotion ? {} : { scale: 1.03, boxShadow: '0 8px 30px rgba(196,168,130,0.35)' }}
+                  whileHover={prefersReducedMotion ? {} : { scale: 1.03, boxShadow: '0 8px 30px rgba(210,176,147,0.35)' }}
                   whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
-                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[#C4A882] to-[#D4B896] text-white py-3.5 rounded-2xl text-sm font-semibold hover:shadow-lg transition-all"
+                  className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--secondary)] to-[#b88d6f] text-white py-3.5 rounded-2xl text-sm font-semibold hover:shadow-lg transition-all"
                 >
                   <Send size={16} />
                   Confirmer et recevoir un devis

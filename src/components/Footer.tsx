@@ -1,28 +1,6 @@
 ﻿import { motion, useReducedMotion } from 'framer-motion';
 import { Phone, MapPin, ExternalLink } from 'lucide-react';
 
-// ─── Logo placeholder ────────────────────────────────────────────────────────
-// Remplacez ce composant par votre vrai logo : <img src="/logo.svg" alt="L'Allié JC" />
-function Logo() {
-  return (
-    <div className="flex items-center gap-3">
-      {/* Slot image logo — remplacer par <img src="/logo.svg" … /> */}
-      <div
-        className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 border border-white/20"
-        style={{ background: 'rgba(255,255,255,0.10)' }}
-        aria-label="Logo L'Allié JC"
-      >
-        {/* Initiales de fallback */}
-        <span className="font-serif text-[15px] font-bold text-white leading-none select-none">JC</span>
-      </div>
-      <div>
-        <div className="font-serif text-[19px] text-white leading-tight">L'Allié JC</div>
-        <div className="text-[11px] text-[var(--secondary)] tracking-wide">Multiservices · Doubs &amp; Jura</div>
-      </div>
-    </div>
-  );
-}
-
 const services = [
   'Nettoyage haute pression',
   'Jardinage & espaces verts',
@@ -107,9 +85,12 @@ export default function Footer() {
               whileInView="visible"
               viewport={{ once: true, amount: 0.3 }}
             >
-              <div className="realtive mb-5">
-                {/* <Logo /> */}
-                <img src="/alliéjc-logo-4.png" alt="L'Allié JC" className="absolute left-0 top-10 h-[320px] w-auto" />
+              <div className="mb-5">
+                <img
+                  src="/alliéjc-logo-2.png"
+                  alt="L'Allié JC — Multiservices Habitat"
+                  className="h-auto w-full max-w-[260px] object-contain"
+                />
               </div>
               <p className="text-[12.5px] leading-[1.8]" style={{ color: 'rgba(255,255,255,0.55)' }}>
                 Entreprise individuelle fondée en juin 2026 par Jean Charles Biernat. Interventions

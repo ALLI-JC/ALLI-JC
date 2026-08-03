@@ -254,7 +254,7 @@ export default function AdminLayout() {
                 {/* Dropdown menu */}
                 {isProfileOpen && (
                   <div className="absolute right-0 mt-2 w-72 bg-white rounded-xl shadow-xl border border-gray-100 overflow-hidden animate-slideDown z-50">
-                    <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-[#FFFBF5] to-[#F5DEB3]">
+                    <div className="p-4 border-b border-gray-100 bg-gradient-to-r from-[#fffaf6] to-[var(--secondary)]/35">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-gradient-to-br from-[var(--primary)] to-[var(--primary)] rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-md">
                           {userName ? userName.charAt(0).toUpperCase() : 'A'}

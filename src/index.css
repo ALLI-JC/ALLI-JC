@@ -4,18 +4,20 @@
 @tailwind components;
 @tailwind utilities;
 
-/* ========== VARIABLES CSS — THÈME BLEU PÉTROLE & SABLE ========== */
+/* ========== CHARTE GRAPHIQUE L'ALLIÉ JC ========== */
 @layer base {
 :root {
-    --primary: #237395; 
-    --primary-dark: #237395;
-    --primary-light: #237395;
-    --nav-bg: #1d5265;
-    --btn-gold: #C4A882;
-    --primary-darker: #1a5a78;
+    /* Blue Lagoon — couleur principale de la charte */
+    --primary: #237395;
+    --primary-dark: #1d627f;
+    --primary-light: #4c91ad;
+    --primary-darker: #174d65;
+    --nav-bg: #237395;
+    /* Sable — couleur secondaire de la charte */
     --secondary: #D2B093;
-    --secondary-dark: #b8936e;
-    --secondary-light: #e8cdb0;
+    --secondary-dark: #b88d6f;
+    --secondary-light: #ead4c2;
+    --btn-gold: #D2B093;
     --accent: #D2B093;
     --success: #237395;
     --danger: #c96b6b;
@@ -33,8 +35,18 @@
 
 body {
   min-height: 100vh;
-  background: radial-gradient(circle at top, rgba(35,115,149,0.06), transparent 28%), #f7f3ee;
+  font-family: var(--font-roboto);
+  background: radial-gradient(circle at top, rgba(35,115,149,0.06), transparent 28%), #fffaf6;
   color: #0e2b38;
+}
+
+/* Roboto pour l'interface, Palatino Linotype pour les titres. */
+.font-sans { font-family: var(--font-roboto) !important; }
+.font-serif { font-family: var(--font-palatino) !important; }
+
+.brand-page {
+  background: radial-gradient(circle at top, rgba(35,115,149,0.08), transparent 24%),
+    linear-gradient(180deg, #fffaf6 0%, #f4e9df 100%);
 }
 
 /* ========== ANIMATIONS ========== */
@@ -141,8 +153,8 @@ body {
   .input {
     @apply w-full px-4 py-2.5 border rounded-xl focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200 bg-white;
     border-color: #d8cdc6;
-    &:focus { --tw-ring-color: var(--primary); }
   }
+  .input:focus { --tw-ring-color: var(--primary); }
 
   /* Badges */
   .badge           { @apply inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold; }
