@@ -97,6 +97,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
   }, [mobileMenuOpen]);
 
   const navLinks = [
+    { href: "#top", label: "Accueil" },
     { href: "#sec-services", label: "Services" },
     { href: "#sec-gallery", label: "Galerie" },
     { href: "#sec-devis", label: "Tarifs" },

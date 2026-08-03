@@ -879,7 +879,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
 
                     {serviceType === 'fin-de-bail' && (
                       <div className="rounded-2xl bg-gray-50 p-4 border border-gray-200 text-sm text-gray-600 space-y-4">
-                        <p className="font-semibold text-gray-900">Électroménager</p>
+                        <p className="font-semibold text-gray-900">Cuisine & électroménager</p>
 
                         <label className="space-y-2 text-sm text-gray-700">
                           Four
@@ -895,15 +895,15 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                         </label>
 
                         <label className="space-y-2 text-sm text-gray-700">
-                          Frigo
+                          Réfrigérateur
                           <select
                             value={fridgeState}
                             onChange={(e) => setFridgeState(e.target.value as FridgeState)}
                             className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
                           >
                             <option value="none">Aucun</option>
-                            <option value="standard">Standard — 30 €</option>
-                            <option value="sale">Très sale — 60 €</option>
+                            <option value="standard">État standard / entretien — 30 €</option>
+                            <option value="sale">Très sale / encrassé / moisissure — 60 €</option>
                           </select>
                         </label>
 
@@ -919,6 +919,27 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                           </select>
                         </label>
 
+                      </div>
+                    )}
+
+                    {serviceType === 'fin-de-bail' && (
+                      <div className="rounded-2xl bg-gray-50 p-4 border border-gray-200 text-sm text-gray-600 space-y-4">
+                        <div>
+                          <p className="font-semibold text-gray-900">Sanitaires & salle de bain</p>
+                          <p className="mt-1 text-xs text-gray-500">Salle de bain et toilettes</p>
+                        </div>
+                        <label className="space-y-2 text-sm text-gray-700">
+                          État des sanitaires
+                          <select
+                            value={sanitaryState}
+                            onChange={(e) => setSanitaryState(e.target.value as 'none' | 'standard' | 'sale')}
+                            className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
+                          >
+                            <option value="none">Non inclus</option>
+                            <option value="standard">État standard / entretien — 60 €</option>
+                            <option value="sale">Très sale / tartre & calcaire — 130 €</option>
+                          </select>
+                        </label>
                       </div>
                     )}
 
