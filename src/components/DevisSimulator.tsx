@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect, type ElementType } from 'react';
-import { Send, TrendingUp, Info, CheckCircle, Home, Waves, Leaf, Building2 } from 'lucide-react';
+import { Send, TrendingUp, Info, CheckCircle, Home, Waves, Leaf, Building2, X } from 'lucide-react';
 import {
   motion,
   AnimatePresence,
@@ -196,10 +196,6 @@ const surfaceConfig: Record<ServiceType, { label: string; unit: string; min: num
   'fin-de-chantier': { label: 'Surface du chantier', unit: 'm²', min: 20, max: 300 },
 };
 
-interface DevisSimulatorProps {
-  onConfirm: () => void;
-}
-
 const sectionVariants: any = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.12 } },
@@ -236,7 +232,7 @@ const detailLineVariants: any = {
   exit: { opacity: 0, height: 0, transition: { duration: 0.18 } },
 };
 
-export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
+export default function DevisSimulator() {
   const prefersReducedMotion = useReducedMotion();
 
   const [serviceType, setServiceType] = useState<ServiceType>('jardinage');
@@ -264,6 +260,10 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
     velux: 0,
   });
   const [stageWindows, setStageWindows] = useState<boolean>(false);
+  const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const [quoteForm, setQuoteForm] = useState({ name: '', email: '', phone: '' });
+  const [quoteStatus, setQuoteStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
+  const [quoteError, setQuoteError] = useState('');
   const [pricing, setPricing] = useState<CalculatorPricing>(() => {
     if (typeof window === 'undefined') return defaultPricing;
 
@@ -359,12 +359,15 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
   const round = (value: number) => Math.round(value * 100) / 100;
 
   const getJardinageBase = () => {
+    if (!hasTonteSurface) return 0;
     if (surface < 100) return pricing.jardinageLowSurface;
     if (surface <= 400) return round(surface * pricing.jardinageMediumRate);
     return round(surface * pricing.jardinageHighRate);
   };
 
-  const getHedgePrice = () => hedgeMeters * (hedgeHeight === 'small' ? pricing.hedgeSmallRate : pricing.hedgeLargeRate);
+  const getHedgePrice = () => hasHedgeSurface
+    ? hedgeMeters * (hedgeHeight === 'small' ? pricing.hedgeSmallRate : pricing.hedgeLargeRate)
+    : 0;
   const getGreenWastePrice = () => (greenWaste ? round(greenWasteVolume * pricing.greenWasteRate) : 0);
 
   const getTerrasseBase = () => {
@@ -452,8 +455,8 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
   const detailLines: Array<{ label: string; price: number }> = [];
 
   if (serviceType === 'jardinage') {
-    detailLines.push({ label: 'Tonte de pelouse', price: getJardinageBase() });
-    detailLines.push({ label: `Haies ${hedgeHeight === 'small' ? '6 €/m' : '13 €/m'}`, price: getHedgePrice() });
+    if (hasTonteSurface) detailLines.push({ label: 'Tonte de pelouse', price: getJardinageBase() });
+    if (hasHedgeSurface) detailLines.push({ label: 'Taille de haies', price: getHedgePrice() });
     detailLines.push({ label: 'Évacuation déchets verts', price: getGreenWastePrice() });
   }
 
@@ -488,6 +491,64 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
     { key: 'porte2' as WindowKey, label: 'Porte fenêtre 2 vantaux' },
     { key: 'velux' as WindowKey, label: 'Velux de toit' },
   ];
+
+  const serviceLabel = serviceTypes.find((service) => service.key === serviceType)?.label ?? serviceType;
+  const estimateBreakdown = detailLines.filter((line) => line.price !== 0);
+
+  const openQuoteModal = () => {
+    setQuoteError('');
+    setQuoteStatus('idle');
+    setIsQuoteModalOpen(true);
+  };
+
+  const closeQuoteModal = () => {
+    if (quoteStatus !== 'submitting') setIsQuoteModalOpen(false);
+  };
+
+  const handleQuoteSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const name = quoteForm.name.trim();
+    const email = quoteForm.email.trim();
+    const phone = quoteForm.phone.trim();
+
+    if (!name || !email || !phone) {
+      setQuoteError('Veuillez renseigner votre nom, votre e-mail et votre numéro de téléphone.');
+      return;
+    }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setQuoteError('Veuillez saisir une adresse e-mail valide.');
+      return;
+    }
+
+    setQuoteStatus('submitting');
+    setQuoteError('');
+
+    const estimateMessage = [
+      'Nouvelle demande issue du simulateur de devis.',
+      `Téléphone : ${phone}`,
+      `Prestation : ${serviceLabel}`,
+      ...estimateBreakdown.map((line) => `${line.label} : ${formatPrice(line.price)}`),
+      `Total estimé : ${formatPrice(totalPrice)}`,
+    ].join('\n');
+
+    const { error } = await supabase.from('contact_messages').insert({
+      name,
+      email,
+      message: estimateMessage,
+      status: 'unread',
+      created_at: new Date().toISOString(),
+    });
+
+    if (error) {
+      console.error('Erreur lors de l’enregistrement de la demande de devis :', error);
+      setQuoteError('Votre demande n’a pas pu être enregistrée. Veuillez réessayer.');
+      setQuoteStatus('error');
+      return;
+    }
+
+    setQuoteStatus('success');
+  };
 
   return (
     <section
@@ -889,8 +950,8 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                             className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
                           >
                             <option value="none">Aucun</option>
-                            <option value="standard">Standard — 40 €</option>
-                            <option value="sale">Très sale — 90 €</option>
+                            <option value="standard">Standard</option>
+                            <option value="sale">Très sale</option>
                           </select>
                         </label>
 
@@ -902,8 +963,8 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                             className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
                           >
                             <option value="none">Aucun</option>
-                            <option value="standard">État standard / entretien — 30 €</option>
-                            <option value="sale">Très sale / encrassé / moisissure — 60 €</option>
+                            <option value="standard">État standard / entretien</option>
+                            <option value="sale">Très sale / encrassé / moisissure</option>
                           </select>
                         </label>
 
@@ -915,7 +976,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                             className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
                           >
                             <option value="none">Aucun</option>
-                            <option value="yes">Présent — 15 €</option>
+                            <option value="yes">Présent</option>
                           </select>
                         </label>
 
@@ -936,8 +997,8 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                             className="w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
                           >
                             <option value="none">Non inclus</option>
-                            <option value="standard">État standard / entretien — 60 €</option>
-                            <option value="sale">Très sale / tartre & calcaire — 130 €</option>
+                            <option value="standard">État standard / entretien</option>
+                            <option value="sale">Très sale / tartre & calcaire</option>
                           </select>
                         </label>
                       </div>
@@ -967,7 +1028,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                           onChange={(e) => setStageWindows(e.target.checked)}
                           className="h-4 w-4 rounded border-gray-300 text-[var(--primary)]"
                         />
-                        À l'étage (+2 €/vitre)
+                        À l'étage
                       </label>
                     </div>
 
@@ -993,10 +1054,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                 </div>
 
                 <div className="space-y-3 mb-6">
-                  <div className="flex justify-between text-sm text-white/80">
-                    <span>Base de calcul</span>
-                    <span>{formatPrice(baseTotal)}</span>
-                  </div>
+
 
                   {detailLines.map((line) => (
                     <AnimatePresence key={line.label} mode="wait">
@@ -1047,7 +1105,7 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
                 </div>
 
                 <motion.button
-                  onClick={onConfirm}
+                  onClick={openQuoteModal}
                   whileHover={prefersReducedMotion ? {} : { scale: 1.03, boxShadow: '0 8px 30px rgba(210,176,147,0.35)' }}
                   whileTap={prefersReducedMotion ? {} : { scale: 0.97 }}
                   className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--secondary)] to-[#b88d6f] text-white py-3.5 rounded-2xl text-sm font-semibold hover:shadow-lg transition-all"
@@ -1082,6 +1140,67 @@ export default function DevisSimulator({ onConfirm }: DevisSimulatorProps) {
           <ReassurancePillars />
         </motion.div>
       </div>
+      <AnimatePresence>
+        {isQuoteModalOpen && (
+          <motion.div
+            className="fixed inset-0 z-[100] flex items-center justify-center bg-[#0e2b38]/70 p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onMouseDown={closeQuoteModal}
+          >
+            <motion.div
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="quote-modal-title"
+              className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-3xl bg-white p-6 shadow-2xl"
+              initial={{ opacity: 0, y: 20, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 20, scale: 0.98 }}
+              onMouseDown={(event) => event.stopPropagation()}
+            >
+              <button type="button" onClick={closeQuoteModal} aria-label="Fermer" className="absolute right-4 top-4 rounded-full p-2 text-gray-500 hover:bg-gray-100">
+                <X size={20} />
+              </button>
+              {quoteStatus === 'success' ? (
+                <div className="py-8 text-center">
+                  <CheckCircle className="mx-auto text-[var(--primary)]" size={44} />
+                  <h3 id="quote-modal-title" className="mt-4 text-xl font-bold text-gray-900">Demande envoyée</h3>
+                  <p className="mt-2 text-sm text-gray-600">Merci, nous vous recontacterons rapidement pour finaliser votre devis.</p>
+                  <button type="button" onClick={closeQuoteModal} className="mt-6 rounded-2xl bg-[var(--primary)] px-5 py-3 text-sm font-semibold text-white">Fermer</button>
+                </div>
+              ) : (
+                <form onSubmit={handleQuoteSubmit} className="space-y-5">
+                  <div>
+                    <h3 id="quote-modal-title" className="text-xl font-bold text-gray-900">Recevoir mon devis</h3>
+                    <p className="mt-1 text-sm text-gray-600">Vos coordonnées et votre estimation seront transmises à notre équipe.</p>
+                  </div>
+                  <div className="rounded-2xl bg-gray-50 p-4 text-sm text-gray-700">
+                    <p className="font-semibold text-gray-900">Récapitulatif de votre estimation</p>
+                    <div className="mt-3 space-y-1">
+                      {estimateBreakdown.map((line) => (
+                        <p key={line.label} className="flex justify-between gap-4">
+                          <span>{line.label}</span>
+                          <span className="whitespace-nowrap font-medium">{formatPrice(line.price)}</span>
+                        </p>
+                      ))}
+                      <p className="flex justify-between gap-4 border-t border-gray-200 pt-2 text-base font-bold text-[var(--primary)]">
+                        <span>Total TTC</span>
+                        <span>{formatPrice(totalPrice)}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <label className="block text-sm font-medium text-gray-700">Nom complet<input required value={quoteForm.name} onChange={(event) => setQuoteForm({ ...quoteForm, name: event.target.value })} className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-[var(--primary)] focus:outline-none" /></label>
+                  <label className="block text-sm font-medium text-gray-700">E-mail<input required type="email" value={quoteForm.email} onChange={(event) => setQuoteForm({ ...quoteForm, email: event.target.value })} className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-[var(--primary)] focus:outline-none" /></label>
+                  <label className="block text-sm font-medium text-gray-700">Numéro de téléphone<input required type="tel" value={quoteForm.phone} onChange={(event) => setQuoteForm({ ...quoteForm, phone: event.target.value })} className="mt-1 w-full rounded-xl border border-gray-300 px-4 py-3 focus:border-[var(--primary)] focus:outline-none" /></label>
+                  {quoteError && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{quoteError}</p>}
+                  <button disabled={quoteStatus === 'submitting'} className="w-full rounded-2xl bg-[var(--secondary)] px-5 py-3.5 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-60">{quoteStatus === 'submitting' ? 'Envoi en cours…' : 'Envoyer ma demande'}</button>
+                </form>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

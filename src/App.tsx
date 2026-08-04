@@ -26,17 +26,13 @@ function PublicSite() {
     document.getElementById('sec-devis')?.scrollIntoView({ behavior: 'smooth' })
   }
 
-  const scrollToContact = () => {
-    document.getElementById('sec-contact')?.scrollIntoView({ behavior: 'smooth' })
-  }
-
   return (
     <div id="top" className="brand-page font-sans min-h-screen text-[#0e2b38]">
       <Navbar onDevisClick={scrollToDevis} />
       <Hero onDevisClick={scrollToDevis} />
       
       <Services />
-      <DevisSimulator onConfirm={scrollToContact} />
+      <DevisSimulator />
       <Gallery />
       <ZoneIntervention />
       <Testimonials />
