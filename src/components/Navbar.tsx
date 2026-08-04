@@ -61,7 +61,7 @@ const useAuth = () => {
 export default function Navbar({ onDevisClick }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [, setUserMenuOpen] = useState(false);
   const navigate = useNavigate();
   const { user, logout } = useAuth();
 
