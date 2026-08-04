@@ -1,5 +1,5 @@
 ﻿import { useState, useEffect, type ElementType } from 'react';
-import { Send, TrendingUp, Info, CheckCircle, Home, Waves, Leaf, Building2, X } from 'lucide-react';
+import { Send, TrendingUp, Info, CheckCircle, Home, Waves, Leaf, Building2, Trash2 } from 'lucide-react';
 import {
   motion,
   AnimatePresence,
@@ -16,6 +16,13 @@ type CleanLevel = 'standard' | 'intensif';
 type OvenState = 'none' | 'standard' | 'sale';
 type FridgeState = 'none' | 'standard' | 'sale';
 type WindowKey = 'standard' | 'salleBain' | 'baies' | 'porte1' | 'porte2' | 'velux';
+
+interface OrderItem {
+  id: string;
+  serviceLabel: string;
+  lines: Array<{ label: string; price: number }>;
+  total: number;
+}
 
 interface CalculatorPricing {
   jardinageLowSurface: number;
@@ -264,6 +271,7 @@ export default function DevisSimulator() {
   const [quoteForm, setQuoteForm] = useState({ name: '', email: '', phone: '' });
   const [quoteStatus, setQuoteStatus] = useState<'idle' | 'submitting' | 'success' | 'error'>('idle');
   const [quoteError, setQuoteError] = useState('');
+  const [orderItems, setOrderItems] = useState<OrderItem[]>([]);
   const [pricing, setPricing] = useState<CalculatorPricing>(() => {
     if (typeof window === 'undefined') return defaultPricing;
 
@@ -494,6 +502,33 @@ export default function DevisSimulator() {
 
   const serviceLabel = serviceTypes.find((service) => service.key === serviceType)?.label ?? serviceType;
   const estimateBreakdown = detailLines.filter((line) => line.price !== 0);
+  const currentOrderItem: OrderItem = {
+    id: `current-${serviceType}`,
+    serviceLabel,
+    lines: estimateBreakdown,
+    total: totalPrice,
+  };
+  const orderTotal = round(orderItems.reduce((sum, item) => sum + item.total, 0));
+  const quoteItems = [...orderItems, currentOrderItem];
+  const quoteTotal = round(quoteItems.reduce((sum, item) => sum + item.total, 0));
+
+  const addCurrentServiceToOrder = () => {
+    if (totalPrice <= 0) return;
+    setOrderItems((items) => [
+      ...items,
+      { ...currentOrderItem, id: `${Date.now()}-${items.length}` },
+    ]);
+  };
+
+  const changeService = (nextService: ServiceType) => {
+    if (nextService === serviceType) return;
+    addCurrentServiceToOrder();
+    setServiceType(nextService);
+  };
+
+  const removeOrderItem = (id: string) => {
+    setOrderItems((items) => items.filter((item) => item.id !== id));
+  };
 
   const openQuoteModal = () => {
     setQuoteError('');
@@ -527,9 +562,12 @@ export default function DevisSimulator() {
     const estimateMessage = [
       'Nouvelle demande issue du simulateur de devis.',
       `Téléphone : ${phone}`,
-      `Prestation : ${serviceLabel}`,
-      ...estimateBreakdown.map((line) => `${line.label} : ${formatPrice(line.price)}`),
-      `Total estimé : ${formatPrice(totalPrice)}`,
+      ...quoteItems.flatMap((item) => [
+        `--- ${item.serviceLabel} ---`,
+        ...item.lines.map((line) => `${line.label} : ${formatPrice(line.price)}`),
+        `Sous-total : ${formatPrice(item.total)}`,
+      ]),
+      `Total estimé : ${formatPrice(quoteTotal)}`,
     ].join('\n');
 
     const { error } = await supabase.from('contact_messages').insert({
@@ -613,7 +651,7 @@ export default function DevisSimulator() {
                       <motion.button
                         key={item.key}
                         type="button"
-                        onClick={() => setServiceType(item.key)}
+                        onClick={() => changeService(item.key)}
                         whileHover={prefersReducedMotion ? {} : { scale: 1.02 }}
                         whileTap={prefersReducedMotion ? {} : { scale: 0.98 }}
                         className={`flex items-start gap-3 rounded-2xl border p-4 text-left transition-all duration-200 ${serviceType === item.key
@@ -1075,7 +1113,7 @@ export default function DevisSimulator() {
 
                   <div className="border-t border-white/30 pt-3">
                     <div className="flex justify-between items-center">
-                      <span className="font-medium">Total TTC</span>
+                      <span className="font-medium">Cette prestation</span>
                       <div className="text-right">
                         <AnimatePresence mode="wait">
                           <motion.span
@@ -1095,6 +1133,27 @@ export default function DevisSimulator() {
                   </div>
                 </div>
 
+                {orderItems.length > 0 && (
+                  <div className="mb-5 rounded-2xl bg-white/10 p-4">
+                    <p className="text-sm font-semibold">Prestations ajoutées ({orderItems.length})</p>
+                    <div className="mt-3 space-y-2 text-sm text-white/85">
+                      {orderItems.map((item) => (
+                        <div key={item.id} className="flex items-center justify-between gap-3">
+                          <span>{item.serviceLabel}</span>
+                          <span className="flex items-center gap-2 whitespace-nowrap">
+                            {formatPrice(item.total)}
+                            <button type="button" onClick={() => removeOrderItem(item.id)} aria-label={`Retirer ${item.serviceLabel}`} className="rounded p-1 hover:bg-white/20"><Trash2 size={14} /></button>
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="mt-3 flex justify-between border-t border-white/20 pt-3 text-base font-bold">
+                      <span>Total du devis en cours</span>
+                      <span>{formatPrice(round(orderTotal + totalPrice))}</span>
+                    </div>
+                  </div>
+                )}
+
                 <div className="bg-white/20 rounded-2xl p-4 mb-5">
                   <div className="flex items-start gap-2">
                     <Info size={14} className="text-white flex-shrink-0 mt-0.5" />
@@ -1111,7 +1170,7 @@ export default function DevisSimulator() {
                   className="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-[var(--secondary)] to-[#b88d6f] text-white py-3.5 rounded-2xl text-sm font-semibold hover:shadow-lg transition-all"
                 >
                   <Send size={16} />
-                  Confirmer et recevoir un devis
+                  Confirmer le devis et envoyer ma demande
                 </motion.button>
 
                 <p className="text-center text-xs text-white/60 mt-4">
@@ -1159,8 +1218,8 @@ export default function DevisSimulator() {
               exit={{ opacity: 0, y: 20, scale: 0.98 }}
               onMouseDown={(event) => event.stopPropagation()}
             >
-              <button type="button" onClick={closeQuoteModal} aria-label="Fermer" className="absolute right-4 top-4 rounded-full p-2 text-gray-500 hover:bg-gray-100">
-                <X size={20} />
+              <button type="button" onClick={closeQuoteModal} className="absolute right-4 top-4 rounded-xl px-3 py-2 text-sm font-bold text-gray-600 hover:bg-gray-100">
+                Fermer
               </button>
               {quoteStatus === 'success' ? (
                 <div className="py-8 text-center">
@@ -1172,21 +1231,30 @@ export default function DevisSimulator() {
               ) : (
                 <form onSubmit={handleQuoteSubmit} className="space-y-5">
                   <div>
-                    <h3 id="quote-modal-title" className="text-xl font-bold text-gray-900">Recevoir mon devis</h3>
-                    <p className="mt-1 text-sm text-gray-600">Vos coordonnées et votre estimation seront transmises à notre équipe.</p>
+                    <h3 id="quote-modal-title" className="text-xl font-extrabold text-gray-900">Recevoir mon devis</h3>
+                    <p className="mt-1 text-sm text-gray-600">Vos coordonnées et les prestations ajoutées seront transmises à notre équipe.</p>
                   </div>
                   <div className="rounded-2xl bg-gray-50 p-4 text-sm text-gray-700">
-                    <p className="font-semibold text-gray-900">Récapitulatif de votre estimation</p>
-                    <div className="mt-3 space-y-1">
-                      {estimateBreakdown.map((line) => (
-                        <p key={line.label} className="flex justify-between gap-4">
-                          <span>{line.label}</span>
-                          <span className="whitespace-nowrap font-medium">{formatPrice(line.price)}</span>
-                        </p>
+                    <p className="font-bold text-gray-900">Récapitulatif de votre devis</p>
+                    <div className="mt-3 space-y-4">
+                      {quoteItems.map((item) => (
+                        <div key={item.id} className="space-y-1">
+                          <p className="font-semibold text-gray-900">{item.serviceLabel}</p>
+                          {item.lines.map((line) => (
+                            <p key={`${item.id}-${line.label}`} className="flex justify-between gap-4">
+                              <span>{line.label}</span>
+                              <span className="whitespace-nowrap font-medium">{formatPrice(line.price)}</span>
+                            </p>
+                          ))}
+                          <p className="flex justify-between gap-4 text-sm font-semibold">
+                            <span>Sous-total</span>
+                            <span>{formatPrice(item.total)}</span>
+                          </p>
+                        </div>
                       ))}
                       <p className="flex justify-between gap-4 border-t border-gray-200 pt-2 text-base font-bold text-[var(--primary)]">
                         <span>Total TTC</span>
-                        <span>{formatPrice(totalPrice)}</span>
+                        <span>{formatPrice(quoteTotal)}</span>
                       </p>
                     </div>
                   </div>
