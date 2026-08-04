@@ -307,7 +307,7 @@ export default function Messages() {
             <div className="sticky top-0 bg-white p-6 border-b">
               <div className="flex justify-between items-center">
                 <h2 className="text-xl font-bold">Message de {selectedMessage.name}</h2>
-                <button onClick={() => setSelectedMessage(null)} className="text-gray-400 hover:text-gray-600 text-2xl">àœ•</button>
+                <button onClick={() => setSelectedMessage(null)} className="text-gray-400 hover:text-gray-600">Fermer</button>
               </div>
             </div>
             

@@ -171,7 +171,7 @@ export default function DevisPage() {
   return (
     <div className="space-y-6">
       <div className="mb-2">
-        <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Gestion des devis</h1>
+        <h1 className="text-2xl md:text-3xl font-extrabold text-gray-800">Gestion des devis</h1>
       </div>
 
       {status && (
@@ -185,7 +185,7 @@ export default function DevisPage() {
           <div className="flex items-center gap-2">
             <FileText size={18} className="text-[var(--primary)]" />
             <div>
-              <h2 className="text-lg font-semibold text-gray-900">Estimations envoyées par les clients</h2>
+              <h2 className="text-lg font-bold text-gray-900">Estimations envoyées par les clients</h2>
               <p className="text-sm text-gray-500">Demandes reçues depuis le simulateur de devis.</p>
             </div>
           </div>
