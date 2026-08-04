@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
-import { Plus, Pencil, FileText } from 'lucide-react'
+import { Plus, Pencil, FileText, Mail, Phone, User, Trash2 } from 'lucide-react'
 
 interface PricingRow {
   id?: string
@@ -12,6 +12,15 @@ interface PricingRow {
   description?: string | null
   created_at?: string
   updated_at?: string
+}
+
+interface QuoteRequest {
+  id: string
+  name: string
+  email: string
+  message: string
+  status: string
+  created_at: string
 }
 
 const emptyPricingDraft = (): PricingRow => ({
@@ -29,9 +38,12 @@ export default function DevisPage() {
   const [editingPricingId, setEditingPricingId] = useState<string | null>(null)
   const [status, setStatus] = useState('')
   const [loading, setLoading] = useState(true)
+  const [quoteRequests, setQuoteRequests] = useState<QuoteRequest[]>([])
+  const [quotesLoading, setQuotesLoading] = useState(true)
 
   useEffect(() => {
     fetchPricingRows()
+    fetchQuoteRequests()
   }, [])
 
   async function fetchPricingRows() {
@@ -48,13 +60,54 @@ export default function DevisPage() {
       }
 
       setPricingRows(data || [])
-      setStatus(data?.length ? `Chargement de ${data.length} tarif(s) depuis Supabase.` : 'Aucun tarif enregistré.')
     } catch (error) {
       console.error(error)
       setStatus('La table calculator_pricing n’existe pas encore. Veuillez créer la table avec la requête SQL fournie.')
     } finally {
       setLoading(false)
     }
+  }
+
+  async function fetchQuoteRequests() {
+    setQuotesLoading(true)
+    try {
+      const { data, error } = await supabase
+        .from('contact_messages')
+        .select('id, name, email, message, status, created_at')
+        .order('created_at', { ascending: false })
+
+      if (error) throw error
+
+      setQuoteRequests((data || []).filter((message) =>
+        message.message?.startsWith('Nouvelle demande issue du simulateur de devis.'),
+      ))
+    } catch (error) {
+      console.error('Impossible de charger les demandes de devis :', error)
+    } finally {
+      setQuotesLoading(false)
+    }
+  }
+
+  const formatDate = (date: string) => new Intl.DateTimeFormat('fr-FR', {
+    dateStyle: 'medium',
+    timeStyle: 'short',
+  }).format(new Date(date))
+
+  async function deleteQuoteRequest(quote: QuoteRequest) {
+    if (!window.confirm(`Supprimer définitivement la demande de devis de ${quote.name} ?`)) return
+
+    const { error } = await supabase
+      .from('contact_messages')
+      .delete()
+      .eq('id', quote.id)
+
+    if (error) {
+      console.error('Impossible de supprimer la demande de devis :', error)
+      setStatus('La suppression a échoué. Vérifiez vos permissions Supabase.')
+      return
+    }
+
+    setQuoteRequests((current) => current.filter((request) => request.id !== quote.id))
   }
 
   async function savePricingRow() {
@@ -119,7 +172,6 @@ export default function DevisPage() {
     <div className="space-y-6">
       <div className="mb-2">
         <h1 className="text-2xl md:text-3xl font-bold text-gray-800">Gestion des devis</h1>
-        <p className="text-gray-500 mt-1">Ajoutez et modifiez les tarifs du calculateur de devis depuis cette page dédiée.</p>
       </div>
 
       {status && (
@@ -128,140 +180,65 @@ export default function DevisPage() {
         </div>
       )}
 
-      <div className="grid gap-6 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <FileText size={18} className="text-[var(--primary)]" />
-              <h2 className="text-lg font-semibold text-gray-900">Liste des tarifs</h2>
+      <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <FileText size={18} className="text-[var(--primary)]" />
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">Estimations envoyées par les clients</h2>
+              <p className="text-sm text-gray-500">Demandes reçues depuis le simulateur de devis.</p>
             </div>
-            <button
-              type="button"
-              onClick={() => {
-                setDraftPricing(emptyPricingDraft())
-                setEditingPricingId(null)
-              }}
-              className="inline-flex items-center gap-2 rounded-full bg-[var(--primary)] px-3 py-2 text-sm font-semibold text-white"
-            >
-              <Plus size={15} />
-              Ajouter
-            </button>
           </div>
+          <button type="button" onClick={fetchQuoteRequests} className="rounded-full border border-gray-200 px-3 py-2 text-sm font-semibold text-[var(--primary)]">
+            Actualiser
+          </button>
+        </div>
 
-          <div className="mt-4 space-y-3">
-            {loading ? (
-              <div className="rounded-2xl border border-dashed border-gray-200 p-6 text-center text-sm text-gray-500">
-                Chargement des tarifs…
-              </div>
-            ) : pricingRows.length === 0 ? (
-              <div className="rounded-2xl border border-dashed border-gray-200 p-6 text-center text-sm text-gray-500">
-                Aucune ligne de tarif enregistrée.
-              </div>
-            ) : (
-              pricingRows.map((row) => (
-                <div key={row.id || row.key} className="rounded-2xl border border-gray-200 bg-gray-50 p-4">
-                  <div className="flex items-start justify-between gap-3">
-                    <div>
-                      <p className="text-sm font-semibold text-gray-900">{row.label}</p>
-                      <p className="text-xs uppercase tracking-[0.2em] text-gray-500">{row.category}</p>
-                      <p className="mt-1 text-sm text-gray-700">{row.value} {row.unit}</p>
-                      {row.description && <p className="mt-1 text-xs text-gray-500">{row.description}</p>}
-                    </div>
+        <div className="mt-4 grid gap-4 xl:grid-cols-2">
+          {quotesLoading ? (
+            <div className="rounded-2xl border border-dashed border-gray-200 p-6 text-center text-sm text-gray-500 xl:col-span-2">Chargement des demandes…</div>
+          ) : quoteRequests.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-gray-200 p-6 text-center text-sm text-gray-500 xl:col-span-2">Aucune estimation client reçue pour le moment.</div>
+          ) : quoteRequests.map((quote) => {
+            const lines = quote.message.split('\n')
+            const phone = lines.find((line) => line.startsWith('Téléphone :'))?.replace('Téléphone :', '').trim()
+            const estimateLines = lines.filter((line) => !line.startsWith('Nouvelle demande') && !line.startsWith('Téléphone :'))
+
+            return (
+              <article key={quote.id} className="rounded-2xl border border-gray-200 bg-gray-50 p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="flex items-center gap-2 font-semibold text-gray-900"><User size={15} />{quote.name}</p>
+                    <p className="mt-1 text-xs text-gray-500">{formatDate(quote.created_at)}</p>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700">{quote.status === 'unread' ? 'Nouveau' : 'Lu'}</span>
                     <button
                       type="button"
-                      onClick={() => startEditPricing(row)}
-                      className="inline-flex items-center gap-2 rounded-full border border-gray-200 bg-white px-3 py-2 text-sm font-semibold text-[var(--primary)]"
+                      onClick={() => deleteQuoteRequest(quote)}
+                      aria-label={`Supprimer la demande de ${quote.name}`}
+                      title="Supprimer"
+                      className="rounded-full p-2 text-red-600 hover:bg-red-50"
                     >
-                      <Pencil size={14} />
-                      Modifier
+                      <Trash2 size={16} />
                     </button>
                   </div>
                 </div>
-              ))
-            )}
-          </div>
-        </div>
-
-        <div className="rounded-3xl border border-gray-200 bg-white p-5 shadow-sm">
-          <div className="flex items-center justify-between gap-2">
-            <h2 className="text-lg font-semibold text-gray-900">
-              {editingPricingId ? 'Modifier un tarif' : 'Ajouter un tarif'}
-            </h2>
-            {(editingPricingId || draftPricing.key || draftPricing.label) && (
-              <button type="button" onClick={cancelPricingDraft} className="text-sm font-semibold text-gray-500">
-                Annuler
-              </button>
-            )}
-          </div>
-
-          <div className="mt-4 space-y-3">
-            <label className="block text-sm text-gray-700">
-              Clé de référence
-              <input
-                value={draftPricing.key}
-                onChange={(e) => setDraftPricing((prev) => ({ ...prev, key: e.target.value }))}
-                placeholder="ex: hedgeSmallRate"
-                className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
-              />
-            </label>
-            <label className="block text-sm text-gray-700">
-              Libellé
-              <input
-                value={draftPricing.label}
-                onChange={(e) => setDraftPricing((prev) => ({ ...prev, label: e.target.value }))}
-                placeholder="ex: Haie petite"
-                className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
-              />
-            </label>
-            <div className="grid gap-3 sm:grid-cols-2">
-              <label className="block text-sm text-gray-700">
-                Valeur
-                <input
-                  type="number"
-                  step="0.1"
-                  value={draftPricing.value}
-                  onChange={(e) => setDraftPricing((prev) => ({ ...prev, value: Number(e.target.value) || 0 }))}
-                  className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
-                />
-              </label>
-              <label className="block text-sm text-gray-700">
-                Unité
-                <input
-                  value={draftPricing.unit}
-                  onChange={(e) => setDraftPricing((prev) => ({ ...prev, unit: e.target.value }))}
-                  placeholder="€/m²"
-                  className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
-                />
-              </label>
-            </div>
-            <label className="block text-sm text-gray-700">
-              Catégorie
-              <input
-                value={draftPricing.category}
-                onChange={(e) => setDraftPricing((prev) => ({ ...prev, category: e.target.value }))}
-                placeholder="jardinage"
-                className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
-              />
-            </label>
-            <label className="block text-sm text-gray-700">
-              Description
-              <textarea
-                value={draftPricing.description ?? ''}
-                onChange={(e) => setDraftPricing((prev) => ({ ...prev, description: e.target.value }))}
-                rows={3}
-                className="mt-1 w-full rounded-2xl border border-gray-200 px-4 py-3 text-sm focus:border-[var(--primary)] focus:outline-none"
-              />
-            </label>
-            <button
-              type="button"
-              onClick={savePricingRow}
-              className="w-full rounded-2xl bg-[var(--primary)] px-4 py-3 text-sm font-semibold text-white"
-            >
-              {editingPricingId ? 'Enregistrer les modifications' : 'Ajouter au calculateur'}
-            </button>
-          </div>
+                <div className="mt-3 space-y-1 text-sm text-gray-700">
+                  <p className="flex items-center gap-2"><Mail size={14} />{quote.email}</p>
+                  {phone && <p className="flex items-center gap-2"><Phone size={14} />{phone}</p>}
+                </div>
+                <div className="mt-4 rounded-xl border border-gray-200 bg-white p-3 text-sm text-gray-700">
+                  {estimateLines.map((line) => (
+                    <p key={line} className={line.startsWith('Total estimé :') ? 'mt-2 border-t border-gray-100 pt-2 font-bold text-[var(--primary)]' : ''}>{line}</p>
+                  ))}
+                </div>
+              </article>
+            )
+          })}
         </div>
       </div>
+
     </div>
   )
 }
