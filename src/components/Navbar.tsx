@@ -143,23 +143,23 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
         } border-b border-[var(--secondary)]/15`}
         style={{ fontFamily: 'var(--font-roboto)' }}
       >
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14 sm:h-16 md:h-20">
+        <div className="max-w-7xl mx-auto px-3 sm:px-5 md:px-6 lg:px-8">
+          <div className="flex min-w-0 items-center justify-between h-14 sm:h-[4.5rem] md:h-20">
 
             {/* Logo - responsive */}
             <div
-              className="flex h-full w-[88px] xs:w-[104px] sm:w-[128px] md:w-[154px] lg:w-[176px] xl:w-[196px] items-center justify-center cursor-pointer group flex-shrink-0"
+              className="flex h-full w-20 sm:w-32 md:w-36 lg:w-40 xl:w-48 items-center justify-start cursor-pointer group flex-shrink-0"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             >
               <img
                 src="/alliéjc-logo-horizontal.png"
                 alt="Allié JC"
-                className="w-[60px] xs:w-[72px] sm:w-[88px] md:w-[110px] lg:w-[130px] xl:w-[150px] object-contain"
+                className="w-16 sm:w-24 md:w-28 lg:w-32 xl:w-36 object-contain"
               />
             </div>
 
             {/* Navigation Desktop - MENUS REINTEGRES */}
-            <div className="hidden lg:flex items-center gap-6 xl:gap-8 2xl:gap-10">
+            <div className="hidden xl:flex items-center gap-6 2xl:gap-10">
               {navLinks.map((link) => (
                 <a
                   key={link.href}
@@ -174,7 +174,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
             </div>
 
             {/* Boutons Desktop */}
-            <div className="hidden lg:flex items-center gap-3 xl:gap-4">
+            <div className="hidden xl:flex items-center gap-3 2xl:gap-4">
               <a
                 href="tel:0607979074"
                 className="flex items-center gap-1.5 xl:gap-2 px-3 xl:px-4 py-1.5 xl:py-2 text-white hover:text-[var(--secondary)] transition-colors rounded-lg hover:bg-white/10"
@@ -198,7 +198,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
             </div>
 
             {/* Boutons Tablette (md à lg) */}
-            <div className="hidden md:flex lg:hidden items-center gap-2">
+            <div className="hidden md:flex xl:hidden items-center gap-2">
               <a
                 href="tel:0607979074"
                 className="p-2 text-white hover:text-[var(--secondary)] transition-colors rounded-lg hover:bg-white/10"
@@ -219,7 +219,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
               </button>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="relative w-9 h-9 flex items-center justify-center rounded-lg text-white hover:bg-white/10 transition-colors focus:outline-none flex-shrink-0"
+                className="relative h-11 w-11 flex items-center justify-center rounded-xl text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white/70 flex-shrink-0"
                 aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
               >
                 <div className="relative w-5 h-4">
@@ -243,10 +243,10 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
             </div>
 
             {/* Boutons Mobile (sm) */}
-            <div className="sm:hidden flex items-center gap-2">
+            <div className="sm:hidden flex items-center gap-1.5">
               <button
                 onClick={onDevisClick}
-                className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-xs font-semibold shadow-md hover:shadow-lg transition-all duration-300"
+                className="flex h-10 items-center gap-1 px-3 rounded-xl text-xs font-semibold shadow-md hover:shadow-lg transition-all duration-300 whitespace-nowrap"
                 style={{
                   backgroundColor: 'var(--btn-gold)',
                   color: '#FFFFFF',
@@ -257,7 +257,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
               </button>
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="relative w-8 h-8 flex items-center justify-center rounded-lg text-white hover:bg-white/10 transition-colors focus:outline-none flex-shrink-0"
+                className="relative w-10 h-10 flex items-center justify-center rounded-xl text-white hover:bg-white/10 transition-colors focus:outline-none focus:ring-2 focus:ring-white/70 flex-shrink-0"
                 aria-label={mobileMenuOpen ? "Fermer le menu" : "Ouvrir le menu"}
               >
                 <div className="relative w-4 h-3.5">
@@ -305,7 +305,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-white shadow-2xl z-50 overflow-y-auto"
+            className="fixed top-0 right-0 h-[100dvh] w-[min(90vw,24rem)] bg-white shadow-2xl z-50 overflow-y-auto"
           >
             {/* En-tête du menu mobile */}
             <div className="flex items-center justify-between p-4 border-b border-gray-100 sticky top-0 bg-white z-10">
@@ -318,7 +318,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
               </div>
               <button
                 onClick={() => setMobileMenuOpen(false)}
-                className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                className="min-h-11 min-w-11 p-2 rounded-xl hover:bg-gray-100 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--primary)]/40"
                 aria-label="Fermer le menu"
               >
                 <X size={24} className="text-gray-600" />
@@ -333,7 +333,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                     key={link.href}
                     href={link.href}
                     onClick={(e) => handleLinkClick(e, link.href)}
-                    className="flex items-center gap-3 py-3 px-4 text-base font-medium text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/5 rounded-xl transition-all duration-200"
+                    className="flex min-h-12 items-center gap-3 py-3 px-4 text-base font-medium text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/5 rounded-xl transition-all duration-200"
                   >
                     {link.label}
                   </a>
@@ -433,7 +433,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
       </AnimatePresence>
 
       {/* Spacer pour la navbar fixe */}
-      <div className="h-14 sm:h-16 md:h-20"></div>
+      <div className="h-14 sm:h-[4.5rem] md:h-20"></div>
     </>
   );
 }
