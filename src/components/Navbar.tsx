@@ -140,10 +140,10 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
           scrolled 
             ? 'bg-[#237395]/95 backdrop-blur-xl shadow-lg' 
             : 'bg-[#237395]/90 backdrop-blur-md'
-        } border-b border-[var(--secondary)]/15`}
+        } border-b border-[var(--secondary)]/15 overflow-x-clip`}
         style={{ fontFamily: 'var(--font-roboto)' }}
       >
-        <div className="max-w-7xl mx-auto px-3 sm:px-5 md:px-6 lg:px-8">
+        <div className="w-full max-w-7xl mx-auto px-3 sm:px-5 md:px-6 lg:px-8">
           <div className="flex min-w-0 items-center justify-between h-14 sm:h-[4.5rem] md:h-20">
 
             {/* Logo - responsive */}
@@ -305,7 +305,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-            className="fixed top-0 right-0 h-[100dvh] w-[min(90vw,24rem)] bg-white shadow-2xl z-50 overflow-y-auto"
+            className="fixed top-0 right-0 h-[100dvh] w-[90vw] max-w-sm bg-white shadow-2xl z-50 overflow-y-auto overscroll-contain"
           >
             {/* En-tête du menu mobile */}
             <div className="flex items-center justify-between p-4 border-b border-gray-100 sticky top-0 bg-white z-10">
@@ -325,7 +325,7 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
               </button>
             </div>
 
-            <div className="p-4 space-y-4">
+            <div className="p-4 pb-[max(1rem,env(safe-area-inset-bottom))] space-y-4">
               {/* Navigation links */}
               <div className="space-y-1">
                 {navLinks.map((link) => (
