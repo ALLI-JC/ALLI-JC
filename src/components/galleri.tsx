@@ -13,7 +13,15 @@ interface GalleryImage {
   category: string
   order: number
   featured: boolean
+  media_type?: 'image' | 'video'
   created_at: string
+}
+
+const VIDEO_EXTENSIONS = ['mp4', 'webm', 'ogg']
+
+function isVideoUrl(url: string) {
+  const ext = url.split('.').pop()?.split('?')[0]?.toLowerCase()
+  return ext ? VIDEO_EXTENSIONS.includes(ext) : false
 }
 
 const categories = [
@@ -220,12 +228,23 @@ export default function Gallery() {
                     whileTap={{ scale: 0.97 }}
                     className="relative overflow-hidden rounded-xl cursor-pointer bg-gray-100 aspect-square group"
                   >
-                    <img
-                      src={image.thumbnail_url || image.image_url}
-                      alt={image.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    />
+                    {isVideoUrl(image.thumbnail_url || image.image_url) ? (
+                      <video
+                        muted
+                        loop
+                        playsInline
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      >
+                        <source src={image.thumbnail_url || image.image_url} />
+                      </video>
+                    ) : (
+                      <img
+                        src={image.thumbnail_url || image.image_url}
+                        alt={image.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       <div className="absolute bottom-0 left-0 right-0 p-3">
                         <p className="text-white text-xs font-medium">{image.title}</p>
@@ -340,12 +359,23 @@ export default function Gallery() {
                     whileTap={{ scale: 0.97 }}
                     className="group relative overflow-hidden rounded-xl cursor-pointer bg-gray-100 aspect-square"
                   >
-                    <img
-                      src={image.thumbnail_url || image.image_url}
-                      alt={image.title}
-                      loading="lazy"
-                      className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
-                    />
+                    {isVideoUrl(image.thumbnail_url || image.image_url) ? (
+                      <video
+                        muted
+                        loop
+                        playsInline
+                        className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                      >
+                        <source src={image.thumbnail_url || image.image_url} />
+                      </video>
+                    ) : (
+                      <img
+                        src={image.thumbnail_url || image.image_url}
+                        alt={image.title}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                      />
+                    )}
 
                     {/* Overlay au hover */}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300">
@@ -439,16 +469,27 @@ export default function Gallery() {
               onClick={(e) => e.stopPropagation()}
             >
               <AnimatePresence mode="wait">
-                <motion.img
-                  key={selectedImage.id}
-                  src={selectedImage.image_url}
-                  alt={selectedImage.title}
-                  className="max-w-full max-h-[85vh] object-contain rounded-lg"
-                  initial={{ opacity: 0, scale: 0.96, y: 12 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.96, y: -12 }}
-                 
-                />
+                {isVideoUrl(selectedImage.image_url) ? (
+                  <motion.video
+                    key={selectedImage.id}
+                    controls
+                    src={selectedImage.image_url}
+                    className="max-w-full max-h-[85vh] object-contain rounded-lg"
+                    initial={{ opacity: 0, scale: 0.96, y: 12 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.96, y: -12 }}
+                  />
+                ) : (
+                  <motion.img
+                    key={selectedImage.id}
+                    src={selectedImage.image_url}
+                    alt={selectedImage.title}
+                    className="max-w-full max-h-[85vh] object-contain rounded-lg"
+                    initial={{ opacity: 0, scale: 0.96, y: 12 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.96, y: -12 }}
+                  />
+                )}
               </AnimatePresence>
 
               {/* Légende */}

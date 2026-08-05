@@ -18,8 +18,24 @@ interface GalleryImage {
   category: string
   order: number
   featured: boolean
+  media_type?: 'image' | 'video'
   created_at: string
   updated_at?: string
+}
+
+const IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp']
+const VIDEO_MIME_TYPES = ['video/mp4', 'video/webm', 'video/ogg']
+const VIDEO_EXTENSIONS = ['mp4', 'webm', 'ogg']
+
+function getMediaTypeFromFile(file: File): 'image' | 'video' {
+  if (VIDEO_MIME_TYPES.includes(file.type)) return 'video'
+  const ext = file.name.split('.').pop()?.toLowerCase()
+  return ext && VIDEO_EXTENSIONS.includes(ext) ? 'video' : 'image'
+}
+
+function isVideoUrl(url: string) {
+  const ext = url.split('.').pop()?.split('?')[0]?.toLowerCase()
+  return ext ? VIDEO_EXTENSIONS.includes(ext) : false
 }
 
 const categories = [
@@ -114,11 +130,21 @@ function ImageModal({ image, onClose, onNext, onPrev, hasNext, hasPrev }: {
 
       {/* Image */}
       <div className="max-w-[90vw] max-h-[90vh] relative" onClick={e => e.stopPropagation()}>
-        <img
-          src={image.image_url}
-          alt={image.title}
-          className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl"
-        />
+        {isVideoUrl(image.image_url) ? (
+          <video
+            controls
+            className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl"
+          >
+            <source src={image.image_url} />
+            Votre navigateur ne supporte pas la lecture de cette vidéo.
+          </video>
+        ) : (
+          <img
+            src={image.image_url}
+            alt={image.title}
+            className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl"
+          />
+        )}
         
         {/* Caption */}
         <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-6 rounded-b-2xl">
@@ -193,12 +219,23 @@ function ImageCard({ image, index, onEdit, onDelete, onToggleFeatured, onPreview
     >
       {/* Image Container */}
       <div className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
-        <img
-          src={image.image_url}
-          alt={image.title}
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          loading="lazy"
-        />
+        {isVideoUrl(image.image_url) ? (
+          <video
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          >
+            <source src={image.thumbnail_url || image.image_url} />
+          </video>
+        ) : (
+          <img
+            src={image.thumbnail_url || image.image_url}
+            alt={image.title}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+            loading="lazy"
+          />
+        )}
         
         {/* Overlay Gradient */}
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-all duration-500">
@@ -302,6 +339,12 @@ function EditModal({ image, onClose, onSave, isEditing }: {
   const [uploading, setUploading] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
+  const previewIsVideo = selectedFile
+    ? getMediaTypeFromFile(selectedFile) === 'video'
+    : image?.image_url
+      ? isVideoUrl(image.image_url)
+      : false
+
   useEffect(() => {
     if (image) {
       setFormData({
@@ -326,7 +369,12 @@ function EditModal({ image, onClose, onSave, isEditing }: {
   const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (file) {
-      if (file.size > 5 * 1024 * 1024) {
+      const ext = file.name.split('.').pop()?.toLowerCase() || ''
+      const isAccepted = IMAGE_MIME_TYPES.includes(file.type) || VIDEO_MIME_TYPES.includes(file.type) || VIDEO_EXTENSIONS.includes(ext)
+      if (!isAccepted) {
+        return
+      }
+      if (file.size > 50 * 1024 * 1024) {
         return
       }
       setSelectedFile(file)
@@ -351,7 +399,7 @@ function EditModal({ image, onClose, onSave, isEditing }: {
         <div className="relative bg-gradient-to-r from-[var(--primary)] to-[var(--primary)] px-6 py-5">
           <h2 className="text-xl font-bold text-white flex items-center gap-2">
             {isEditing ? <Edit size={22} /> : <Plus size={22} />}
-            {isEditing ? 'Modifier l\'image' : 'Ajouter une image'}
+            {isEditing ? 'Modifier le média' : 'Ajouter un média'}
           </h2>
           <button
             onClick={onClose}
@@ -374,11 +422,19 @@ function EditModal({ image, onClose, onSave, isEditing }: {
             >
               {previewUrl ? (
                 <div className="relative group">
-                  <img
-                    src={previewUrl}
-                    alt="Aperçu"
-                    className="max-h-56 w-full object-contain rounded-xl"
-                  />
+                  {previewIsVideo ? (
+                    <video
+                      src={previewUrl}
+                      controls
+                      className="max-h-56 w-full object-contain rounded-xl bg-black"
+                    />
+                  ) : (
+                    <img
+                      src={previewUrl}
+                      alt="Aperçu"
+                      className="max-h-56 w-full object-contain rounded-xl"
+                    />
+                  )}
                   <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center gap-3">
                     <button
                       type="button"
@@ -409,15 +465,15 @@ function EditModal({ image, onClose, onSave, isEditing }: {
                     <Upload size={32} className="text-[var(--primary)]" />
                   </div>
                   <p className="text-gray-600 font-medium">
-                    {isEditing ? 'Changer l\'image' : 'Cliquez pour sélectionner'}
+                    {isEditing ? 'Changer le média' : 'Cliquez pour sélectionner'}
                   </p>
-                  <p className="text-xs text-gray-400 mt-1">JPEG, PNG, WebP • Max 5MB</p>
+                  <p className="text-xs text-gray-400 mt-1">JPEG, PNG, WebP, MP4, WEBM, OGG • Max 50MB</p>
                 </button>
               )}
               <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/jpeg,image/png,image/webp"
+                accept="image/jpeg,image/png,image/webp,video/mp4,video/webm,video/ogg"
                 onChange={handleFileSelect}
                 className="hidden"
               />
@@ -572,8 +628,8 @@ export default function GalleryManagement() {
   }
 
   async function uploadImage(file: File): Promise<string> {
-    if (file.size > 5 * 1024 * 1024) {
-      throw new Error('Le fichier ne doit pas dépasser 5MB')
+    if (file.size > 50 * 1024 * 1024) {
+      throw new Error('Le fichier ne doit pas dépasser 50MB')
     }
 
     const fileExt = file.name.split('.').pop()
@@ -801,7 +857,7 @@ export default function GalleryManagement() {
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-4">
             <div>
               <h1 className="text-3xl lg:text-4xl font-bold bg-gradient-to-r from-[var(--primary)] to-[var(--primary)] bg-clip-text text-transparent">
-                Galerie d'images
+                Galerie médias
               </h1>
               <p className="text-gray-500 mt-2">
                 {stats.total} image{stats.total > 1 ? 's' : ''} • {stats.featured} à la une
@@ -816,7 +872,7 @@ export default function GalleryManagement() {
               className="flex items-center gap-2 bg-gradient-to-r from-[var(--primary)] to-[var(--primary)] text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all transform hover:scale-105"
             >
               <Plus size={20} />
-              Ajouter une image
+              Ajouter un média
             </button>
           </div>
         </div>
@@ -916,11 +972,21 @@ export default function GalleryManagement() {
                 <div key={image.id} className="bg-white rounded-xl p-4 shadow-md hover:shadow-lg transition">
                   {/* Vue liste simplifiée */}
                   <div className="flex gap-4">
-                    <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-100">
-                      <img src={image.image_url} alt={image.title} className="w-full h-full object-cover" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-gray-800">{image.title}</h3>
+                            <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-100">
+                        {isVideoUrl(image.image_url) ? (
+                          <video
+                            src={image.image_url}
+                            muted
+                            loop
+                            playsInline
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <img src={image.image_url} alt={image.title} className="w-full h-full object-cover" />
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="font-semibold text-gray-800">{image.title}</h3>
                       <p className="text-sm text-gray-500 mt-1">{image.description}</p>
                       <div className="flex gap-2 mt-2">
                         <button onClick={() => toggleFeatured(image)} className="text-xs text-yellow-500">⭐</button>
