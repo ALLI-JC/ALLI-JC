@@ -5,8 +5,15 @@ import {
   AnimatePresence,
   useReducedMotion,
 } from 'framer-motion';
+import emailjs from '@emailjs/browser';
 import ReassurancePillars from './ReassurancePillars';
 import { supabase } from '../lib/supabaseClient';
+
+const EMAILJS_CONFIG = {
+  publicKey: import.meta.env.VITE_EMAILJS_PUBLIC_KEY,
+  serviceId: import.meta.env.VITE_EMAILJS_SERVICE_ID,
+  templateId: import.meta.env.VITE_EMAILJS_DEVIS_TEMPLATE_ID,
+};
 
 type ServiceType = 'jardinage' | 'terrasse' | 'fin-de-bail' | 'fin-de-chantier';
 type HedgeHeight = 'small' | 'large';
@@ -578,8 +585,43 @@ export default function DevisSimulator() {
       created_at: new Date().toISOString(),
     });
 
-    if (error) {
-      console.error('Erreur lors de l’enregistrement de la demande de devis :', error);
+    if (error) console.error('Erreur lors de l’enregistrement de la demande de devis :', error);
+
+    let emailjsSuccess = false;
+    try {
+      if (EMAILJS_CONFIG.publicKey && EMAILJS_CONFIG.serviceId && EMAILJS_CONFIG.templateId) {
+        emailjs.init(EMAILJS_CONFIG.publicKey);
+        const result = await emailjs.send(
+          EMAILJS_CONFIG.serviceId,
+          EMAILJS_CONFIG.templateId,
+          {
+            name, email, phone,
+            services: quoteItems.map((item) => item.serviceLabel).join(', '),
+            details_html: quoteItems.map((item) => `
+              <h3 style="margin:16px 0 6px;color:#1f2937;font-size:15px">${item.serviceLabel}</h3>
+              <table style="width:100%;border-collapse:collapse;font-size:14px">
+                ${item.lines.map((line) => `
+                <tr>
+                  <td style="padding:6px 0;border-bottom:1px solid #eee;color:#4b5563">${line.label}</td>
+                  <td style="padding:6px 0;border-bottom:1px solid #eee;text-align:right;white-space:nowrap">${formatPrice(line.price)}</td>
+                </tr>`).join('')}
+                <tr>
+                  <td style="padding:6px 0;font-weight:bold">Sous-total</td>
+                  <td style="padding:6px 0;text-align:right;font-weight:bold;white-space:nowrap">${formatPrice(item.total)}</td>
+                </tr>
+              </table>`).join(''),
+            total: formatPrice(quoteTotal),
+            date: new Date().toLocaleString('fr-FR', { dateStyle: 'full', timeStyle: 'short' }),
+            message: estimateMessage,
+            to_email: 'contact@lalliejc.fr',
+            reply_to: email,
+          },
+        );
+        if (result.status === 200) emailjsSuccess = true;
+      }
+    } catch (emailError) { console.error('Erreur EmailJS:', emailError); }
+
+    if (error && !emailjsSuccess) {
       setQuoteError('Votre demande n’a pas pu être enregistrée. Veuillez réessayer.');
       setQuoteStatus('error');
       return;
