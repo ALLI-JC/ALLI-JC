@@ -1,1 +1,2 @@
-erica
+VITE_SUPABASE_URL=https://auhgtrlfvvntegmbvvrw.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_0EO_DTxfp36i-8NAXw0gmg_8kV9k2EF
