@@ -1,0 +1,12 @@
+VITE_SUPABASE_URL=https://auhgtrlfvvntegmbvvrw.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=sb_publishable_0EO_DTxfp36i-8NAXw0gmg_8kV9k2EF
+
+# EmailJS (https://dashboard.emailjs.com)
+# Account > General > Public Key
+VITE_EMAILJS_PUBLIC_KEY=yQiXLQw97VdJSAV0_
+# Email Services > Service ID (ex: service_xxxxxxx)
+VITE_EMAILJS_SERVICE_ID=service_6bxmwxp
+# Email Templates > Template ID (ex: template_xxxxxxx)
+VITE_EMAILJS_TEMPLATE_ID=template_y3fhlox
+# Template dédié au simulateur de devis (Email Templates > Template ID)
+VITE_EMAILJS_DEVIS_TEMPLATE_ID=votre_template_devis_id
