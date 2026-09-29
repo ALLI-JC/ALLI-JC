@@ -352,11 +352,11 @@ export default function Navbar({ onDevisClick }: NavbarProps) {
                   </a>
 
                   <a
-                    href="mailto:jeancharlesbiernat@yahoo.com"
+                    href="mailto:contact@lalliejc.fr"
                     className="flex items-center gap-3 py-3 px-4 text-[var(--text-secondary)] hover:text-[var(--primary)] hover:bg-[var(--primary)]/5 rounded-xl transition-colors"
                   >
                     <Mail size={18} className="text-[var(--primary)] flex-shrink-0" />
-                    <span className="text-sm break-all">jeancharlesbiernat@yahoo.com</span>
+                    <span className="text-sm break-all">contact@lalliejc.fr</span>
                   </a>
                 </div>
 
