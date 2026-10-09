@@ -233,6 +233,7 @@ export default function Gallery() {
                         muted
                         loop
                         playsInline
+                        preload="none"
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       >
                         <source src={image.thumbnail_url || image.image_url} />
@@ -364,6 +365,7 @@ export default function Gallery() {
                         muted
                         loop
                         playsInline
+                        preload="none"
                         className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
                       >
                         <source src={image.thumbnail_url || image.image_url} />
@@ -473,6 +475,8 @@ export default function Gallery() {
                   <motion.video
                     key={selectedImage.id}
                     controls
+                    preload="metadata"
+                    poster={selectedImage.thumbnail_url && !isVideoUrl(selectedImage.thumbnail_url) ? selectedImage.thumbnail_url : undefined}
                     src={selectedImage.image_url}
                     className="max-w-full max-h-[85vh] object-contain rounded-lg"
                     initial={{ opacity: 0, scale: 0.96, y: 12 }}
