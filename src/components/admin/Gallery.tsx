@@ -1,6 +1,7 @@
 ﻿// pages/admin/Gallery.tsx
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { supabase } from '../../lib/supabaseClient'
+import { compressImage, videoPoster } from '../../lib/mediaCompression'
 import { 
   Plus, Trash2, Edit, Image as ImageIcon, Upload, 
   X, Move, Star, Eye, EyeOff, Loader2, 
@@ -133,6 +134,8 @@ function ImageModal({ image, onClose, onNext, onPrev, hasNext, hasPrev }: {
         {isVideoUrl(image.image_url) ? (
           <video
             controls
+            preload="metadata"
+            poster={image.thumbnail_url && !isVideoUrl(image.thumbnail_url) ? image.thumbnail_url : undefined}
             className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl"
           >
             <source src={image.image_url} />
@@ -219,11 +222,12 @@ function ImageCard({ image, index, onEdit, onDelete, onToggleFeatured, onPreview
     >
       {/* Image Container */}
       <div className="relative aspect-square bg-gradient-to-br from-gray-100 to-gray-200 overflow-hidden">
-        {isVideoUrl(image.image_url) ? (
+        {isVideoUrl(image.thumbnail_url || image.image_url) ? (
           <video
             muted
             loop
             playsInline
+            preload="none"
             className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
           >
             <source src={image.thumbnail_url || image.image_url} />
@@ -627,17 +631,11 @@ export default function GalleryManagement() {
     }
   }
 
-  async function uploadImage(file: File): Promise<string> {
-    if (file.size > 50 * 1024 * 1024) {
-      throw new Error('Le fichier ne doit pas dépasser 50MB')
-    }
-
-    const fileExt = file.name.split('.').pop()
-    const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
-    
+  async function uploadToStorage(fileName: string, body: Blob): Promise<string> {
+    // Noms de fichiers uniques → on peut laisser le navigateur/CDN cacher 1 an
     const { error: uploadError } = await supabase.storage
       .from('gallery')
-      .upload(fileName, file)
+      .upload(fileName, body, { cacheControl: '31536000', contentType: body.type || undefined })
 
     if (uploadError) throw uploadError
 
@@ -648,12 +646,37 @@ export default function GalleryManagement() {
     return publicUrl
   }
 
+  async function uploadImage(file: File): Promise<{ imageUrl: string; thumbnailUrl: string | null }> {
+    if (file.size > 50 * 1024 * 1024) {
+      throw new Error('Le fichier ne doit pas dépasser 50MB')
+    }
+
+    const baseName = `${Date.now()}-${Math.random().toString(36).substring(7)}`
+
+    if (getMediaTypeFromFile(file) === 'video') {
+      const fileExt = file.name.split('.').pop()
+      const imageUrl = await uploadToStorage(`${baseName}.${fileExt}`, file)
+      // Poster image pour que les grilles n'aient pas à télécharger la vidéo
+      const thumbnailUrl = await videoPoster(file)
+        .then(poster => uploadToStorage(`thumb-${baseName}.webp`, poster))
+        .catch(() => null)
+      return { imageUrl, thumbnailUrl }
+    }
+
+    const { full, thumb } = await compressImage(file)
+    const fullExt = full === file ? file.name.split('.').pop() : 'webp'
+    const imageUrl = await uploadToStorage(`${baseName}.${fullExt}`, full)
+    const thumbnailUrl = await uploadToStorage(`thumb-${baseName}.webp`, thumb)
+    return { imageUrl, thumbnailUrl }
+  }
+
   async function handleSave(formData: any, file?: File) {
     try {
       let imageUrl = editingImage?.image_url || ''
-      
+      let thumbnailUrl: string | null = editingImage?.thumbnail_url || null
+
       if (file) {
-        imageUrl = await uploadImage(file)
+        ({ imageUrl, thumbnailUrl } = await uploadImage(file))
       }
 
       if (editingImage) {
@@ -667,7 +690,7 @@ export default function GalleryManagement() {
         
         if (file) {
           updateData.image_url = imageUrl
-          updateData.thumbnail_url = imageUrl
+          updateData.thumbnail_url = thumbnailUrl
         }
         
         const { error } = await supabase
@@ -688,7 +711,7 @@ export default function GalleryManagement() {
             category: formData.category,
             featured: formData.featured,
             image_url: imageUrl,
-            thumbnail_url: imageUrl,
+            thumbnail_url: thumbnailUrl,
             order: maxOrder + 1
           })
 
@@ -708,9 +731,12 @@ export default function GalleryManagement() {
     if (!confirm(`Supprimer "${image.title}" ?`)) return
 
     try {
-      const fileName = image.image_url.split('/').pop()?.split('?')[0]
-      if (fileName) {
-        await supabase.storage.from('gallery').remove([fileName])
+      const fileNames = [image.image_url, image.thumbnail_url]
+        .filter((url): url is string => !!url)
+        .map(url => url.split('/').pop()?.split('?')[0])
+        .filter((name): name is string => !!name)
+      if (fileNames.length > 0) {
+        await supabase.storage.from('gallery').remove([...new Set(fileNames)])
       }
 
       const { error } = await supabase
@@ -973,16 +999,17 @@ export default function GalleryManagement() {
                   {/* Vue liste simplifiée */}
                   <div className="flex gap-4">
                             <div className="w-20 h-20 rounded-lg overflow-hidden bg-gray-100">
-                        {isVideoUrl(image.image_url) ? (
+                        {isVideoUrl(image.thumbnail_url || image.image_url) ? (
                           <video
-                            src={image.image_url}
+                            src={image.thumbnail_url || image.image_url}
                             muted
                             loop
                             playsInline
+                            preload="none"
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <img src={image.image_url} alt={image.title} className="w-full h-full object-cover" />
+                          <img src={image.thumbnail_url || image.image_url} alt={image.title} loading="lazy" className="w-full h-full object-cover" />
                         )}
                       </div>
                       <div className="flex-1">
